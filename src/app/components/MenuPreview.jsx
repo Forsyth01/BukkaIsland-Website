@@ -8,8 +8,10 @@ import { db } from "@/lib/firebase";
 
 export default function MenuPreview() {
   const [dishes, setDishes] = useState([]);
+  const [is2xl, setIs2xl] = useState(false);
 
   useEffect(() => {
+    // Fetch dishes from Firestore
     const fetchDishes = async () => {
       const q = query(collection(db, "dishes"), orderBy("createdAt", "desc"));
       const snapshot = await getDocs(q);
@@ -21,10 +23,22 @@ export default function MenuPreview() {
     };
 
     fetchDishes();
+
+    // Detect 2xl screens
+    const handleResize = () => {
+      setIs2xl(window.innerWidth >= 1536); // Tailwind 2xl breakpoint
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Optionally, you can show only "popular" dishes
-  const popularDishes = dishes.filter((dish) => dish.popular).slice(0, 6);
+  // Only show popular dishes
+  const popularDishes = dishes.filter((dish) => dish.popular);
+
+  // Determine how many dishes to display
+  const displayedDishes = popularDishes.slice(0, is2xl ? 4 : 3);
 
   return (
     <section className="py-16 bg-orange-50" id="menu-preview">
@@ -33,9 +47,9 @@ export default function MenuPreview() {
           Popular Dishes
         </h2>
 
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {popularDishes.length > 0 ? (
-            popularDishes.map((dish, i) => (
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+          {displayedDishes.length > 0 ? (
+            displayedDishes.map((dish, i) => (
               <motion.div
                 key={dish.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -73,7 +87,6 @@ export default function MenuPreview() {
           </Link>
         </div>
       </div>
-    </section> 
+    </section>
   );
 }
- 
