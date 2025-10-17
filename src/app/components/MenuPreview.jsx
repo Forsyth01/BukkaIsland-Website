@@ -67,7 +67,7 @@ export default function MenuPreview() {
                   <h3 className="text-lg font-semibold">{dish.name}</h3>
                   <p className="text-orange-600 font-medium mt-1">{dish.price}</p>
                   <p className="text-gray-500 text-sm mt-1">{dish.category}</p>
-                </div>
+                </div>  
               </motion.div>
             ))
           ) : (
