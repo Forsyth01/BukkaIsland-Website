@@ -73,7 +73,7 @@ export default function AddDishPage() {
         price,
         desc,
         prepTime,
-        popular, 
+        popular,
         imageUrl,
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now()
