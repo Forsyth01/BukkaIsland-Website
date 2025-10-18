@@ -194,3 +194,6 @@ export default function AddDishPage() {
     </div>
   );
 }
+
+// ✅ Prevent Next.js from prerendering this page
+export const dynamic = "force-dynamic";
