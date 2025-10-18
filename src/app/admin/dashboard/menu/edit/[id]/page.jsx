@@ -2,7 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { doc, getDoc, updateDoc, collection, getDocs, addDoc, Timestamp } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  collection,
+  getDocs,
+  addDoc,
+  Timestamp,
+} from "firebase/firestore";
 import { db } from "@/lib/firebaseClient";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -15,10 +23,10 @@ export default function EditDishPage() {
   const [categories, setCategories] = useState([]);
   const [price, setPrice] = useState("");
   const [desc, setDesc] = useState("");
-  const [prepTime, setPrepTime] = useState("");
   const [popular, setPopular] = useState(false);
   const [image, setImage] = useState(null);
-  const [existingImage, setExistingImage] = useState("");
+  const [preview, setPreview] = useState(""); // this will show the image preview
+  const [orderLink, setOrderLink] = useState("");
   const [loading, setLoading] = useState(false);
   const [newCategory, setNewCategory] = useState("");
   const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
@@ -34,9 +42,9 @@ export default function EditDishPage() {
         setCategory(data.category);
         setPrice(data.price);
         setDesc(data.desc);
-        setPrepTime(data.prepTime || "");
         setPopular(data.popular || false);
-        setExistingImage(data.imageUrl);
+        setPreview(data.imageUrl || "");
+        setOrderLink(data.orderLink || "");
       }
     };
     fetchDish();
@@ -46,17 +54,19 @@ export default function EditDishPage() {
   useEffect(() => {
     const fetchCategories = async () => {
       const snapshot = await getDocs(collection(db, "categories"));
-      const catList = snapshot.docs.map(doc => doc.data().name);
+      const catList = snapshot.docs.map((doc) => doc.data().name);
       setCategories(catList);
-      if (!category && catList.length > 0) setCategory(catList[0]);
     };
     fetchCategories();
-  }, [category]);
+  }, []);
 
   const uploadToCloudinary = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET);
+    formData.append(
+      "upload_preset",
+      process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
+    );
 
     const res = await fetch(
       `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
@@ -81,11 +91,36 @@ export default function EditDishPage() {
     }
   };
 
+  const isValidUrl = (url) => {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validation
+    if (!dishName.trim()) return toast.error("Dish name is required");
+    if (!category.trim()) return toast.error("Category is required");
+    if (!price || isNaN(price)) return toast.error("Price must be a number");
+    if (orderLink && !isValidUrl(orderLink))
+      return toast.error("Order link must be a valid URL");
+
     setLoading(true);
     try {
-      let imageUrl = existingImage;
+      let imageUrl = preview; // use current preview as imageUrl
       if (image) {
         imageUrl = await uploadToCloudinary(image);
       }
@@ -95,14 +130,14 @@ export default function EditDishPage() {
         category,
         price,
         desc,
-        prepTime,
         popular,
         imageUrl,
+        orderLink,
         updatedAt: Timestamp.now(),
       });
 
       toast.success("Dish updated successfully!");
-     router.push("/admin/dashboard?tab=menu");
+      router.push("/admin/dashboard?tab=menu");
     } catch (err) {
       console.error(err);
       toast.error("Error updating dish");
@@ -125,7 +160,7 @@ export default function EditDishPage() {
           required
         />
 
-        {/* Category dropdown with Add Category option */}
+        {/* Category dropdown */}
         <select
           value={category}
           onChange={(e) => {
@@ -140,6 +175,9 @@ export default function EditDishPage() {
           className="border px-4 py-2 rounded-md"
           required={!showNewCategoryInput}
         >
+          <option value="" disabled>
+            Select a category
+          </option>
           {categories.map((cat, idx) => (
             <option key={idx} value={cat}>
               {cat}
@@ -170,19 +208,13 @@ export default function EditDishPage() {
 
         <input
           type="text"
-          placeholder="Price"
+          placeholder="Price in $"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
           className="border px-4 py-2 rounded-md"
           required
         />
-        <input
-          type="text"
-          placeholder="Prep Time"
-          value={prepTime}
-          onChange={(e) => setPrepTime(e.target.value)}
-          className="border px-4 py-2 rounded-md"
-        />
+
         <textarea
           placeholder="Description"
           value={desc}
@@ -191,6 +223,15 @@ export default function EditDishPage() {
           className="border px-4 py-2 rounded-md"
           required
         />
+
+        <input
+          type="text"
+          placeholder="Order Link (e.g. DoorDash URL)"
+          value={orderLink}
+          onChange={(e) => setOrderLink(e.target.value)}
+          className="border px-4 py-2 rounded-md"
+        />
+
         <label className="flex items-center gap-2">
           <input
             type="checkbox"
@@ -202,15 +243,11 @@ export default function EditDishPage() {
 
         <div>
           <p className="text-gray-600 mb-1">Dish Image:</p>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setImage(e.target.files[0])}
-          />
-          {existingImage && !image && (
+          <input type="file" accept="image/*" onChange={handleImageChange} />
+          {preview && (
             <img
-              src={existingImage}
-              alt="Existing Dish"
+              src={preview}
+              alt="Dish Preview"
               className="mt-2 w-40 h-40 object-cover rounded-md"
             />
           )}

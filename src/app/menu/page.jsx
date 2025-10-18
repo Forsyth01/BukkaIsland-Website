@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { Filter, ChefHat, Star } from "lucide-react";
 import { useState, useEffect } from "react";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
@@ -27,7 +28,7 @@ export default function MenuPage() {
       setCategories(["All", ...Array.from(catSet)]);
       setDishes(dishesData);
 
-      // ✨ Add a small delay for a smooth loading animation
+      // ✨ Small delay for smooth loading animation
       setTimeout(() => setLoading(false), 1500);
     };
 
@@ -42,7 +43,7 @@ export default function MenuPage() {
   return (
     <section className="relative min-h-screen bg-[#fff5eb] text-gray-900 px-6 md:px-16 py-20 overflow-hidden">
       <div className="max-w-6xl mx-auto text-center">
-        {/* 🍲 Title and Subtitle (Always visible) */}
+        {/* 🍲 Title */}
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -57,7 +58,7 @@ export default function MenuPage() {
           Discover our mouthwatering meals, freshly made every day!
         </p>
 
-        {/* 🧂 Sticky Filter Buttons (Always visible) */}
+        {/* 🧂 Category Filter Buttons */}
         <div className="sticky top-0 z-20 flex flex-wrap justify-center gap-4 mb-12 bg-[#fff5eb] py-4">
           {categories.map((cat) => (
             <motion.button
@@ -121,6 +122,7 @@ export default function MenuPage() {
                     </div>
                   )}
 
+                  {/* Dish Image */}
                   <div className="relative h-56 overflow-hidden">
                     <Image
                       src={dish.imageUrl}
@@ -131,6 +133,7 @@ export default function MenuPage() {
                     />
                   </div>
 
+                  {/* Dish Details */}
                   <div className="p-6 flex flex-col justify-between">
                     <div>
                       <h3 className="text-2xl font-bold text-orange-700 mb-2">
@@ -141,16 +144,33 @@ export default function MenuPage() {
                       </p>
                     </div>
 
+                    {/* Price + Order Button */}
                     <div className="flex justify-between items-center mt-4">
                       <span className="text-orange-600 font-semibold">
                         {dish.price}
                       </span>
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        className="bg-orange-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-orange-700 transition"
-                      >
-                        Order Now
-                      </motion.button>
+
+                      {dish.orderLink ? (
+                        <Link
+                          href={dish.orderLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            className="bg-orange-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-orange-700 transition"
+                          >
+                            Order Now
+                          </motion.button>
+                        </Link>
+                      ) : (
+                        <motion.button
+                          disabled
+                          className="bg-gray-400 text-white px-4 py-2 rounded-full text-sm font-medium cursor-not-allowed"
+                        >
+                          Not Available
+                        </motion.button>
+                      )}
                     </div>
                   </div>
                 </motion.div>
