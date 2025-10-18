@@ -1,16 +1,18 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Filter, ChefHat, Star } from "lucide-react";
 import { useState, useEffect } from "react";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebaseClient";
+import LoadingAnimation from "@/app/components/LoadingAnimation";
 
 export default function MenuPage() {
   const [categories, setCategories] = useState(["All"]);
   const [activeCategory, setActiveCategory] = useState("All");
   const [dishes, setDishes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchDishes = async () => {
@@ -21,10 +23,12 @@ export default function MenuPage() {
         ...doc.data(),
       }));
 
-      // Extract categories dynamically
       const catSet = new Set(dishesData.map((d) => d.category));
       setCategories(["All", ...Array.from(catSet)]);
       setDishes(dishesData);
+
+      // ✨ Add a small delay for a smooth loading animation
+      setTimeout(() => setLoading(false), 1500);
     };
 
     fetchDishes();
@@ -36,9 +40,9 @@ export default function MenuPage() {
       : dishes.filter((dish) => dish.category === activeCategory);
 
   return (
-    <section className="min-h-screen bg-[#fff5eb] text-gray-900 px-6 md:px-16 py-20">
+    <section className="relative min-h-screen bg-[#fff5eb] text-gray-900 px-6 md:px-16 py-20 overflow-hidden">
       <div className="max-w-6xl mx-auto text-center">
-        {/* Title */}
+        {/* 🍲 Title and Subtitle (Always visible) */}
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -53,7 +57,7 @@ export default function MenuPage() {
           Discover our mouthwatering meals, freshly made every day!
         </p>
 
-        {/* Sticky Filter Buttons */}
+        {/* 🧂 Sticky Filter Buttons (Always visible) */}
         <div className="sticky top-0 z-20 flex flex-wrap justify-center gap-4 mb-12 bg-[#fff5eb] py-4">
           {categories.map((cat) => (
             <motion.button
@@ -72,57 +76,88 @@ export default function MenuPage() {
           ))}
         </div>
 
-        {/* Menu Grid */}
-        <motion.div layout className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredDishes.map((dish, i) => (
+        {/* 🍽️ Menu Grid + Loader */}
+        <div className="relative min-h-[300px]">
+          {/* Loader */}
+          <AnimatePresence>
+            {loading && (
+              <motion.div
+                key="loader"
+                initial={{ opacity: 1 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="absolute inset-0 z-50 flex items-center justify-center bg-[#fff5eb]"
+              >
+                <LoadingAnimation message="Loading our tasty dishes..." />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Dishes Grid */}
+          {!loading && (
             <motion.div
-              key={dish.id}
               layout
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4 }}
-              whileHover={{ scale: 1.05 }}
-              className="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col relative group"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8"
             >
-              {/* Popular Badge */}
-              {dish.popular && (
-                <div className="absolute top-3 left-3 bg-orange-600 text-white px-3 py-1 rounded-full text-xs flex items-center gap-1 z-10">
-                  <Star className="w-3 h-3" />
-                  Popular
-                </div>
-              )}
+              {filteredDishes.map((dish, i) => (
+                <motion.div
+                  key={dish.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, delay: i * 0.05 }}
+                  whileHover={{ scale: 1.05 }}
+                  className="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col relative group"
+                >
+                  {/* Popular Badge */}
+                  {dish.popular && (
+                    <div className="absolute top-3 left-3 bg-orange-600 text-white px-3 py-1 rounded-full text-xs flex items-center gap-1 z-10">
+                      <Star className="w-3 h-3" />
+                      Popular
+                    </div>
+                  )}
 
-              <div className="relative h-56 overflow-hidden">
-                <Image
-                  src={dish.imageUrl}
-                  alt={dish.name}
-                  width={400}
-                  height={300}
-                  className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
-                />
-              </div>
+                  <div className="relative h-56 overflow-hidden">
+                    <Image
+                      src={dish.imageUrl}
+                      alt={dish.name}
+                      width={400}
+                      height={300}
+                      className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
+                    />
+                  </div>
 
-              <div className="p-6 flex flex-col justify-between">
-                <div>
-                  <h3 className="text-2xl font-bold text-orange-700 mb-2">
-                    {dish.name}
-                  </h3>
-                  <p className="text-gray-600 text-sm line-clamp-3">{dish.desc}</p>
-                </div>
+                  <div className="p-6 flex flex-col justify-between">
+                    <div>
+                      <h3 className="text-2xl font-bold text-orange-700 mb-2">
+                        {dish.name}
+                      </h3>
+                      <p className="text-gray-600 text-sm line-clamp-3">
+                        {dish.desc}
+                      </p>
+                    </div>
 
-                <div className="flex justify-between items-center mt-4">
-                  <span className="text-orange-600 font-semibold">{dish.price}</span>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    className="bg-orange-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-orange-700 transition"
-                  >
-                    Order Now
-                  </motion.button>
-                </div>
-              </div>
+                    <div className="flex justify-between items-center mt-4">
+                      <span className="text-orange-600 font-semibold">
+                        {dish.price}
+                      </span>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        className="bg-orange-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-orange-700 transition"
+                      >
+                        Order Now
+                      </motion.button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
             </motion.div>
-          ))}
-        </motion.div>
+          )}
+        </div>
       </div>
     </section>
   );

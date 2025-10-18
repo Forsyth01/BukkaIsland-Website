@@ -213,5 +213,3 @@ export default function CreateBlogPage() {
   );
 }
 
-// 👇 Prevent Next.js from prerendering this page
-export const dynamic = "force-dynamic";

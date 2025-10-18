@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Utensils } from "lucide-react";
+import LoadingAnimation from "./LoadingAnimation";
 
 export default function Hero() {
   return (
@@ -38,7 +39,7 @@ export default function Hero() {
           Street flavors, island vibes 🌴 — experience authentic Nigerian meals
           from our food truck!
         </motion.p>
-
+        {/* <LoadingAnimation /> */}
         <motion.a
           href="#menu"
           whileHover={{ scale: 1.05 }}

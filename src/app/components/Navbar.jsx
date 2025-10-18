@@ -47,7 +47,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Brand */}
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-orange-600 flex items-center justify-center text-white font-bold shadow">
+            {/* <div className="w-10 h-10 rounded-full bg-orange-600 flex items-center justify-center text-white font-bold shadow">
               BI
             </div>
             <div className="hidden sm:block">
@@ -55,6 +55,14 @@ export default function Navbar() {
                 BukkaIsland
               </span>
               <div className="text-xs text-gray-500 -mt-0.5">Street food truck</div>
+            </div> */}
+            {/* <img src="/logo/bukka_logo.png" alt="" className="" /> */}
+              <div className="w-14 h-14 rounded-full bg-black flex items-center justify-center text-white font-bold shadow">
+             <img src="/logo/bukka_logo1.png" alt="" className="p-2 " />
+            </div>
+            <div className="hidden sm:block">
+             
+              {/* <div className="text-xs text-gray-500 -mt-0.5">Street food truck</div> */}
             </div>
           </Link>
 

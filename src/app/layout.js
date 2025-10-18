@@ -1,6 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "./components/Navbar";
 import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
@@ -14,19 +13,45 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "BukkaIsland",
-  description: "Unforgettable Naija Chow. From Mainland, to Island, to Houston TX",
+  title: "BukkaIsland | Unforgettable Naija Chow",
+  description:
+    "From Mainland to Island to Houston TX — experience authentic Naija flavors with BukkaIsland.",
+  keywords: [
+    "Naija food",
+    "African cuisine",
+    "Nigerian restaurant",
+    "Houston food",
+    "BukkaIsland",
+  ],
+  authors: [{ name: "BukkaIsland Team" }],
+  openGraph: {
+    title: "BukkaIsland | Unforgettable Naija Chow",
+    description:
+      "From Mainland to Island to Houston TX — experience authentic Naija flavors with BukkaIsland.",
+    url: "https://bukkaisland.com",
+    siteName: "BukkaIsland",
+    images: [
+      {
+        url: "/og-image.jpg", // add this to your /public folder
+        width: 1200,
+        height: 630,
+        alt: "BukkaIsland - Unforgettable Naija Chow",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  icons: {
+    icon: "/bukka_logo.png",
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {/* <Navbar/> */}
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
-          <Toaster position="top-right" />
+        <Toaster position="top-right" />
       </body>
     </html>
   );

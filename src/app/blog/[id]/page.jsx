@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft, Clock, Calendar } from "lucide-react";
+import LoadingAnimation from "@/app/components/LoadingAnimation"; // ✅ Import here
 
 export default function BlogDetail() {
   const { id } = useParams();
@@ -34,15 +35,9 @@ export default function BlogDetail() {
     if (id) fetchPost();
   }, [id]);
 
+  // ✅ Use your loading animation instead of spinner
   if (loading) {
-    return (
-      <div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-orange-50 via-white to-amber-50">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-gray-600 font-medium">Loading post...</p>
-        </div>
-      </div>
-    );
+    return <LoadingAnimation text="Loading your blog post..." />;
   }
 
   if (!post) {
@@ -60,7 +55,7 @@ export default function BlogDetail() {
 
   return (
     <section className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
-      {/* Hero Section with Image */}
+      {/* Hero Section */}
       <div className="relative h-[60vh] min-h-[400px] max-h-[600px] overflow-hidden">
         <img
           src={post.image || "/placeholder.jpg"}
@@ -68,18 +63,18 @@ export default function BlogDetail() {
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
-        
-        {/* Back Button - Floating */}
+
+        {/* Back Button */}
         <Link
           href="/blog"
           className="absolute top-8 left-8 flex items-center gap-2 px-4 py-2 bg-white/95 backdrop-blur-sm rounded-full text-gray-800 font-medium shadow-lg hover:bg-white transition-all duration-300 group"
         >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> 
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           Back
         </Link>
       </div>
 
-      {/* Content Container */}
+      {/* Blog Content */}
       <div className="max-w-4xl mx-auto px-5 md:px-10 -mt-32 relative z-10 pb-20">
         <motion.article
           initial={{ opacity: 0, y: 30 }}
@@ -87,7 +82,6 @@ export default function BlogDetail() {
           transition={{ duration: 0.5 }}
           className="bg-white rounded-2xl shadow-2xl overflow-hidden"
         >
-          {/* Article Header */}
           <div className="p-8 md:p-12 lg:p-16">
             {/* Meta Info */}
             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-6">
@@ -131,7 +125,7 @@ export default function BlogDetail() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 mb-2">Enjoyed this article?</p>
-                <Link 
+                <Link
                   href="/blog"
                   className="text-orange-600 hover:text-orange-700 font-semibold flex items-center gap-2 group"
                 >
