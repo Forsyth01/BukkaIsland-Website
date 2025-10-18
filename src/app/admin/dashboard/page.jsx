@@ -322,3 +322,5 @@ export default function Dashboard() {
     </ProtectedRoute>
   );
 }
+
+export const dynamic = "force-dynamic";
