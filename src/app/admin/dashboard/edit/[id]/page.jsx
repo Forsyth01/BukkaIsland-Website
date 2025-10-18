@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { db } from "@/lib/firebase";
+import { db } from "@/lib/firebaseClient";
 import { doc, getDoc, updateDoc, Timestamp } from "firebase/firestore";
 import ProtectedRoute from "@/app/components/ProtectedRoute";
 import axios from "axios";

@@ -1,4 +1,6 @@
 "use client";
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -20,7 +22,7 @@ import { signOut } from "firebase/auth";
 
 export default function Dashboard() {
   const router = useRouter();
-  
+
   // Get initial tab from URL on mount (client-side only)
   const [tab, setTab] = useState("posts");
   const [posts, setPosts] = useState([]);
@@ -36,9 +38,9 @@ export default function Dashboard() {
 
   // Initialize tab from URL on client side
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
-      const tabParam = params.get('tab');
+      const tabParam = params.get("tab");
       if (tabParam) {
         setTab(tabParam);
       }
@@ -46,7 +48,7 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    import("@/lib/firebase").then((mod) => {
+    import("@/lib/firebaseClient").then((mod) => {
       setDb(mod.db);
       setAuth(mod.auth);
     });
@@ -107,7 +109,10 @@ export default function Dashboard() {
       setMenu((prev) => prev.filter((d) => d.id !== selectedItem));
     }
 
-    toast.success("Deleted successfully!", { duration: 4000, position: "top-right" });
+    toast.success("Deleted successfully!", {
+      duration: 4000,
+      position: "top-right",
+    });
   };
 
   const handleTabChange = (newTab) => {
@@ -178,7 +183,9 @@ export default function Dashboard() {
         {/* Main Content */}
         <div className="ml-64 flex-1 min-h-screen">
           <div className="border-b border-gray-200 bg-white px-8 py-6 flex items-center justify-between">
-            <h1 className="text-3xl font-bold text-gray-900 capitalize">{tab}</h1>
+            <h1 className="text-3xl font-bold text-gray-900 capitalize">
+              {tab}
+            </h1>
           </div>
 
           <div className="p-8">
@@ -207,7 +214,9 @@ export default function Dashboard() {
                           </h3>
                           <p className="text-gray-600 text-sm line-clamp-2">
                             {post.content
-                              ? post.content.replace(/<[^>]+>/g, "").slice(0, 150)
+                              ? post.content
+                                  .replace(/<[^>]+>/g, "")
+                                  .slice(0, 150)
                               : "No content available"}
                           </p>
                           <p className="text-gray-400 text-xs mt-1">
@@ -258,7 +267,9 @@ export default function Dashboard() {
                         <h3 className="text-xl font-semibold text-gray-900 mb-2 hover:text-orange-500 transition-colors cursor-pointer">
                           {dish.name}
                         </h3>
-                        <p className="text-gray-600 text-sm line-clamp-2 mb-1">{dish.desc}</p>
+                        <p className="text-gray-600 text-sm line-clamp-2 mb-1">
+                          {dish.desc}
+                        </p>
                         <p className="text-orange-600 font-semibold text-sm">
                           {dish.price} • {dish.prepTime}
                         </p>
@@ -322,5 +333,3 @@ export default function Dashboard() {
     </ProtectedRoute>
   );
 }
-
-export const dynamic = "force-dynamic";

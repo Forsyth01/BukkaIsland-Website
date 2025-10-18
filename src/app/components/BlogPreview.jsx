@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db } from "@/lib/firebaseClient";
 import { motion } from "framer-motion";
 import { Calendar, ArrowRight } from "lucide-react";
 import Link from "next/link";

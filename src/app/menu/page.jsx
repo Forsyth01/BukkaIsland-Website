@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Filter, ChefHat, Star } from "lucide-react";
 import { useState, useEffect } from "react";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db } from "@/lib/firebaseClient";
 
 export default function MenuPage() {
   const [categories, setCategories] = useState(["All"]);

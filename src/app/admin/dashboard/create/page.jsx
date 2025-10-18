@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { addDoc, collection, Timestamp } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db } from "@/lib/firebaseClient";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FileImage, X, Sparkles, User, Type, FileText } from "lucide-react";
