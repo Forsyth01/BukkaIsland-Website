@@ -12,7 +12,7 @@ import Navbar from "./components/Navbar";
 export default function Home() {
   return (
     <main className="bg-[#fffaf0] text-gray-900">
-      <Navbar/>
+      {/* <Navbar/> */}
       <Hero />
       <About />
       <MenuPreview />

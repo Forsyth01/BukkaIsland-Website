@@ -5,7 +5,7 @@ import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebaseClient";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search } from "lucide-react";
+import { Search, BookOpen, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import LoadingAnimation from "@/app/components/LoadingAnimation";
 
@@ -24,7 +24,6 @@ export default function BlogPage() {
       }));
       setPosts(postList);
 
-      // Add a short minimum delay before hiding loader
       setTimeout(() => setLoading(false), 1500);
     };
 
@@ -36,33 +35,84 @@ export default function BlogPage() {
   );
 
   return (
-    <section className="relative min-h-screen bg-orange-50 py-20 px-5 md:px-10 overflow-hidden">
-      <div className="max-w-6xl mx-auto">
-        {/* 🔥 Static Header – visible immediately */}
-        <div className="text-center mb-10">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-orange-700 mb-2">
-            BukkaIsland Blog
+    <section className="relative min-h-screen bg-zinc-950 py-20 px-6 md:px-10 overflow-hidden">
+      {/* Background elements */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+      </div>
+
+      <motion.div
+        animate={{
+          scale: [1, 1.2, 1],
+          opacity: [0.3, 0.5, 0.3],
+        }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl"
+      />
+      <motion.div
+        animate={{
+          scale: [1, 1.3, 1],
+          opacity: [0.2, 0.4, 0.2],
+        }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-orange-600/20 rounded-full blur-3xl"
+      />
+
+      <div className="max-w-6xl mx-auto relative z-10">
+        
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.8 }}
+              className="h-0.5 w-20 bg-gradient-to-r from-transparent via-amber-500 to-transparent"
+            />
+            <BookOpen className="w-6 h-6 text-amber-500" />
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.8 }}
+              className="h-0.5 w-20 bg-gradient-to-r from-transparent via-amber-500 to-transparent"
+            />
+          </div>
+
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white mb-4">
+            BukkaIsland <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">Blog</span>
           </h1>
-          <p className="text-gray-600 max-w-lg mx-auto">
+          <p className="text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed">
             Fresh stories from the street — sizzling recipes, food truck tales, and local flavor vibes!
           </p>
-        </div>
+        </motion.div>
 
-        {/* 🔍 Search Bar – visible immediately */}
-        <div className="relative w-full max-w-md mx-auto mb-12">
-          <input
-            type="text"
-            placeholder="Search posts..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full border border-orange-300 rounded-full px-4 py-2 pl-10 text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
-          />
-          <Search className="absolute left-3 top-2.5 text-orange-500 w-5 h-5" />
-        </div>
+        {/* Search Bar */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="relative w-full max-w-md mx-auto mb-16"
+        >
+          <div className="relative group">
+            <input
+              type="text"
+              placeholder="Search posts..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full bg-zinc-900 border border-zinc-800 focus:border-amber-500/50 rounded-full px-6 py-3 pl-12 text-white placeholder-zinc-500 focus:outline-none transition-all duration-300 focus:ring-2 focus:ring-amber-500/20"
+            />
+            <Search className="absolute left-4 top-3.5 text-amber-500 w-5 h-5" />
+          </div>
+        </motion.div>
 
-        {/* 🌀 Posts Section */}
+        {/* Posts Section */}
         <div className="relative min-h-[300px]">
-          {/* ✨ Show loader inside posts section only */}
+          {/* Loader */}
           <AnimatePresence>
             {loading && (
               <motion.div
@@ -71,20 +121,28 @@ export default function BlogPage() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
-                className="absolute inset-0 flex items-center justify-center bg-orange-50/80 z-10 rounded-xl"
+                className="absolute inset-0 flex items-center justify-center bg-zinc-950/50 backdrop-blur-sm z-10 rounded-2xl"
               >
                 <LoadingAnimation message="Loading your blog posts..." />
               </motion.div>
             )}
           </AnimatePresence>
 
-          {/* ✅ Blog posts grid (visible after loading finishes) */}
+          {/* Blog Posts Grid */}
           {!loading && (
             <>
               {filteredPosts.length === 0 ? (
-                <p className="text-center text-gray-600">
-                  No posts found. Try a different keyword.
-                </p>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="text-center py-20"
+                >
+                  <BookOpen className="w-16 h-16 text-zinc-700 mx-auto mb-4" />
+                  <p className="text-lg text-zinc-400">
+                    No posts found. Try a different keyword.
+                  </p>
+                </motion.div>
               ) : (
                 <motion.div
                   layout
@@ -93,39 +151,56 @@ export default function BlogPage() {
                   {filteredPosts.map((post, index) => (
                     <motion.div
                       key={post.id}
+                      layout
                       initial={{ opacity: 0, y: 30 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg border border-orange-100 transition-transform hover:-translate-y-1"
+                      transition={{ delay: index * 0.1, duration: 0.4 }}
+                      whileHover={{ y: -8 }}
+                      className="group relative bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-2xl overflow-hidden border border-zinc-800 hover:border-amber-500/50 transition-all duration-300"
                     >
-                      <div className="relative w-full h-48">
+                      {/* Image Container */}
+                      <div className="relative w-full h-48 overflow-hidden bg-gradient-to-br from-amber-500/10 to-orange-600/10">
                         <Image
                           src={post.image || "/placeholder.jpg"}
                           alt={post.title}
                           fill
-                          className="object-cover"
+                          className="object-cover transition-transform duration-500 group-hover:scale-110"
                           sizes="(max-width: 768px) 100vw, 33vw"
                         />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       </div>
 
-                      <div className="p-5">
-                        <h3 className="text-lg font-bold text-orange-700 mb-2">
+                      {/* Content */}
+                      <div className="p-6 flex flex-col h-full">
+                        <h3 className="text-lg font-bold text-white mb-2 group-hover:text-amber-400 transition-colors line-clamp-2">
                           {post.title}
                         </h3>
-                        <p className="text-gray-600 text-sm mb-3 line-clamp-3">
-                          {post.content.slice(0, 100)}...
+                        <p className="text-sm text-zinc-400 mb-4 line-clamp-2 flex-1 leading-relaxed">
+                          {post.excerpt || post.content?.slice(0, 100) || "No excerpt available..."}
                         </p>
-                        <div className="flex justify-between items-center">
-                          <span className="text-xs text-gray-400">
+
+                        {/* Footer */}
+                        <div className="flex justify-between items-center pt-4 border-t border-zinc-800">
+                          <span className="text-xs text-zinc-500 uppercase tracking-wide">
                             {post.createdAt?.toDate
-                              ? post.createdAt.toDate().toLocaleDateString()
-                              : ""}
+                              ? post.createdAt.toDate().toLocaleDateString("en-US", { 
+                                  year: "numeric", 
+                                  month: "short", 
+                                  day: "numeric" 
+                                })
+                              : "Recently published"}
                           </span>
                           <Link
                             href={`/blog/${post.id}`}
-                            className="text-orange-600 font-semibold text-sm hover:underline"
+                            className="inline-flex items-center gap-1 text-amber-500 hover:text-amber-400 font-bold text-sm transition-colors group/link"
                           >
-                            Read More →
+                            Read
+                            <motion.span
+                              animate={{ x: [0, 4, 0] }}
+                              transition={{ duration: 1.5, repeat: Infinity }}
+                            >
+                              <ArrowRight className="w-4 h-4" />
+                            </motion.span>
                           </Link>
                         </div>
                       </div>
@@ -136,7 +211,23 @@ export default function BlogPage() {
             </>
           )}
         </div>
+
+        {/* Results Info */}
+        {!loading && filteredPosts.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+            className="text-center mt-12"
+          >
+            <p className="text-sm text-zinc-500">
+              Showing <span className="text-amber-500 font-bold">{filteredPosts.length}</span> of <span className="text-amber-500 font-bold">{posts.length}</span> posts
+            </p>
+          </motion.div>
+        )}
       </div>
+
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-zinc-950 to-transparent pointer-events-none" />
     </section>
   );
 }
