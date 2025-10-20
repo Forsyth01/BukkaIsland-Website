@@ -16,7 +16,10 @@ export default function BlogPage() {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const blogQuery = query(collection(db, "blogs"), orderBy("createdAt", "desc"));
+      const blogQuery = query(
+        collection(db, "blogs"),
+        orderBy("createdAt", "desc")
+      );
       const snapshot = await getDocs(blogQuery);
       const postList = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -24,6 +27,7 @@ export default function BlogPage() {
       }));
       setPosts(postList);
 
+      // Simulate loading time
       setTimeout(() => setLoading(false), 1500);
     };
 
@@ -41,6 +45,7 @@ export default function BlogPage() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
       </div>
 
+      {/* Animated Orbs */}
       <motion.div
         animate={{
           scale: [1, 1.2, 1],
@@ -54,12 +59,16 @@ export default function BlogPage() {
           scale: [1, 1.3, 1],
           opacity: [0.2, 0.4, 0.2],
         }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 1,
+        }}
         className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-orange-600/20 rounded-full blur-3xl"
       />
 
       <div className="max-w-6xl mx-auto relative z-10">
-        
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -30 }}
@@ -84,10 +93,14 @@ export default function BlogPage() {
           </div>
 
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white mb-4">
-            BukkaIsland <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">Blog</span>
+            BukkaIsland{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
+              Blog
+            </span>
           </h1>
           <p className="text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-            Fresh stories from the street — sizzling recipes, food truck tales, and local flavor vibes!
+            Fresh stories from the street — sizzling recipes, food truck tales,
+            and local flavor vibes!
           </p>
         </motion.div>
 
@@ -171,22 +184,24 @@ export default function BlogPage() {
                       </div>
 
                       {/* Content */}
-                      <div className="p-6 flex flex-col h-full">
+                      <div className="p-6 flex flex-col h-[calc(100%-12rem)]">
                         <h3 className="text-lg font-bold text-white mb-2 group-hover:text-amber-400 transition-colors line-clamp-2">
                           {post.title}
                         </h3>
                         <p className="text-sm text-zinc-400 mb-4 line-clamp-2 flex-1 leading-relaxed">
-                          {post.excerpt || post.content?.slice(0, 100) || "No excerpt available..."}
+                          {post.excerpt ||
+                            post.content?.slice(0, 100) ||
+                            "No excerpt available..."}
                         </p>
 
                         {/* Footer */}
                         <div className="flex justify-between items-center pt-4 border-t border-zinc-800">
                           <span className="text-xs text-zinc-500 uppercase tracking-wide">
                             {post.createdAt?.toDate
-                              ? post.createdAt.toDate().toLocaleDateString("en-US", { 
-                                  year: "numeric", 
-                                  month: "short", 
-                                  day: "numeric" 
+                              ? post.createdAt.toDate().toLocaleDateString("en-US", {
+                                  year: "numeric",
+                                  month: "short",
+                                  day: "numeric",
                                 })
                               : "Recently published"}
                           </span>
@@ -221,7 +236,15 @@ export default function BlogPage() {
             className="text-center mt-12"
           >
             <p className="text-sm text-zinc-500">
-              Showing <span className="text-amber-500 font-bold">{filteredPosts.length}</span> of <span className="text-amber-500 font-bold">{posts.length}</span> posts
+              Showing{" "}
+              <span className="text-amber-500 font-bold">
+                {filteredPosts.length}
+              </span>{" "}
+              of{" "}
+              <span className="text-amber-500 font-bold">
+                {posts.length}
+              </span>{" "}
+              posts
             </p>
           </motion.div>
         )}
