@@ -56,7 +56,7 @@ export default function Navbar() {
               </span>
               <div className="text-xs text-gray-500 -mt-0.5">Street food truck</div>
             </div> */}
-            {/* <img src="/logo/bukka_logo.png" alt="" className="" /> */}
+            {/* <img src="/logo/bukka_logo.png" alt="" className="" /> */} 
               <div className="w-14 h-14 rounded-full bg-black flex items-center justify-center text-white font-bold shadow">
              <img src="/logo/bukka_logo1.png" alt="" className="p-2 " />
             </div>
