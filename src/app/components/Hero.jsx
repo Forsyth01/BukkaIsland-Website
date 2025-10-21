@@ -12,42 +12,47 @@ export default memo(function Hero() {
       </div>
 
       {/* Radial Light Overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(245,158,11,0.15),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(250,199,3,0.15),transparent_50%)]" />
 
       {/* Soft Orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl opacity-40" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-orange-600/20 rounded-full blur-3xl opacity-30" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#fac703]/20 rounded-full blur-3xl opacity-40" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#e6b800]/20 rounded-full blur-3xl opacity-30" />
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 py-20 text-center">
         {/* Top Badge */}
-        <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900/80 border border-amber-500/20 rounded-full mb-8 backdrop-blur-sm">
-          <Sparkles className="w-4 h-4 text-amber-500" />
+        <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900/80 border border-[#fac703]/20 rounded-full mb-8 backdrop-blur-sm">
+          <Sparkles className="w-4 h-4 text-[#fac703]" />
           <span className="text-sm text-zinc-300 font-medium">
             Authentic Nigerian Cuisine
           </span>
         </div>
 
         {/* Heading */}
-        <div>
-          <h1 className="text-7xl md:text-9xl font-black text-white mb-4 tracking-tight">
+        <div className="relative">
+          <h1 className="text-7xl md:text-9xl font-black text-white mb-4 tracking-tight relative">
+            {/* Top Gradient Line */}
+            <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 w-48 h-0.5 bg-gradient-to-r from-transparent via-[#fac703] to-[#e6b800]" />
+            
             Bukka
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-500 to-amber-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] to-[#e6b800]">
               Island
             </span>
+
+            {/* Bottom Gradient Line */}
+            <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 w-48 h-0.5 bg-gradient-to-r from-transparent via-[#fac703] to-[#e6b800]" />
           </h1>
 
-          <div className="flex items-center justify-center gap-2">
-            <div className="h-0.5 w-20 bg-gradient-to-r from-transparent via-amber-500 to-transparent" />
-            <Utensils className="w-5 h-5 text-amber-500" />
-            <div className="h-0.5 w-20 bg-gradient-to-r from-transparent via-amber-500 to-transparent" />
+          <div className="flex items-center justify-center gap-2 mt-2">
+            <div className="h-0.5 w-20 bg-gradient-to-r from-transparent via-[#fac703] to-[#e6b800]" />
+            <Utensils className="w-5 h-5 text-[#fac703]" />
+            <div className="h-0.5 w-20 bg-gradient-to-r from-transparent via-[#fac703] to-[#e6b800]" />
           </div>
         </div>
 
         {/* Subtitle */}
         <p className="text-xl md:text-2xl text-zinc-400 max-w-2xl mb-16 leading-relaxed">
-          Where{" "}
-          <span className="text-amber-500 font-semibold">street flavors</span>{" "}
+          Where <span className="text-[#fac703] font-semibold">street flavors</span>{" "}
           meet island vibes.
           <br />
           Your favorite Nigerian meals, rolling to you 🌴
@@ -55,7 +60,7 @@ export default memo(function Hero() {
 
         {/* Central Circle */}
         <div className="relative mb-16 group">
-          <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-orange-500/20 rounded-full blur-2xl" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#fac703]/20 to-[#e6b800]/20 rounded-full blur-2xl" />
 
           <div className="relative w-72 h-72 md:w-96 md:h-96 rounded-full bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800 flex items-center justify-center overflow-hidden">
             <div className="absolute inset-0 rounded-full border border-dashed border-zinc-800 scale-90" />
@@ -71,16 +76,16 @@ export default memo(function Hero() {
         <div className="flex flex-col sm:flex-row gap-4 items-center">
           <a
             href="#menu"
-            className="px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full font-bold text-white text-lg shadow-lg transition-all duration-300"
+            className="px-8 py-4 bg-gradient-to-r from-[#fac703] to-[#e6b800] rounded-full font-bold text-white text-lg shadow-lg transition-all duration-300"
           >
             View Menu →
           </a>
 
           <a
             href="#location"
-            className="px-8 py-4 bg-zinc-900 border border-zinc-800 hover:border-amber-500/50 rounded-full font-bold text-white text-lg transition-all flex items-center gap-2"
+            className="px-8 py-4 bg-zinc-900 border border-zinc-800 hover:border-[#fac703]/50 rounded-full font-bold text-white text-lg transition-all flex items-center gap-2"
           >
-            <MapPin className="w-5 h-5 text-amber-500" />
+            <MapPin className="w-5 h-5 text-[#fac703]" />
             Find Us
           </a>
         </div>

@@ -18,9 +18,9 @@ export default function About() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-40 [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
       </div>
 
-      {/* Animated Orbs via CSS instead of Framer Motion */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-500/15 rounded-full blur-xl animate-pulse-slow will-change-transform" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-orange-600/15 rounded-full blur-xl animate-pulse-slower will-change-transform" />
+      {/* Animated Orbs */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#e6b800]/15 rounded-full blur-xl animate-pulse-slow will-change-transform" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#c49c00]/15 rounded-full blur-xl animate-pulse-slower will-change-transform" />
 
       {/* Main content */}
       <div className="relative z-10 max-w-6xl mx-auto px-6 py-20">
@@ -38,9 +38,9 @@ export default function About() {
               whileInView={{ scaleX: 1 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
-              className="h-0.5 w-20 bg-gradient-to-r from-transparent via-amber-500 to-transparent"
+              className="h-1 w-20 bg-gradient-to-r from-transparent via-[#e6b800] to-[#b38f00]"
             />
-            <span className="text-sm text-amber-500 font-medium uppercase tracking-widest">
+            <span className="text-sm text-[#e6b800] font-medium uppercase tracking-widest">
               About Us
             </span>
             <motion.div
@@ -48,13 +48,13 @@ export default function About() {
               whileInView={{ scaleX: 1 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
-              className="h-0.5 w-20 bg-gradient-to-r from-transparent via-amber-500 to-transparent"
+              className="h-1 w-20 bg-gradient-to-r from-transparent via-[#e6b800] to-[#b38f00]"
             />
           </div>
 
           <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight">
             The Story of
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-500 to-amber-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e6b800] via-[#c49c00] to-[#b38f00]">
               {" "}
               BukkaIsland
             </span>
@@ -71,10 +71,10 @@ export default function About() {
         {/* Story Section */}
         <motion.div {...fadeInUp} className="grid md:grid-cols-2 gap-12 items-center mb-20">
           <div className="relative h-96 rounded-2xl overflow-hidden bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800">
-            {/* Subtle glow animation via CSS */}
-            <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-orange-500/10 blur-xl animate-glow-slow" />
+            {/* Glow animation */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#e6b800]/20 via-[#c49c00]/15 to-[#b38f00]/10 blur-xl animate-glow-slow" />
             <div className="relative z-10 w-full h-full flex items-center justify-center">
-              <Award className="w-32 h-32 text-amber-500/40" />
+              <Award className="w-32 h-32 text-[#e6b800]/40" />
             </div>
           </div>
 
@@ -101,8 +101,8 @@ export default function About() {
               viewport={{ once: true }}
               className="flex gap-4"
             >
-              <div className="border-l-2 border-amber-500 pl-4">
-                <p className="text-sm text-amber-500 uppercase font-bold tracking-wide">
+              <div className="border-l-2 border-[#e6b800] pl-4">
+                <p className="text-sm text-[#e6b800] uppercase font-bold tracking-wide">
                   Since 2019
                 </p>
                 <p className="text-zinc-500">
@@ -119,5 +119,3 @@ export default function About() {
     </section>
   );
 }
-
-/* 🔥 Add this to your global CSS (e.g., globals.css or index.css) */

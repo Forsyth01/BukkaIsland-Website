@@ -50,16 +50,16 @@ export default function BlogDetailClient() {
             opacity: [0.3, 0.5, 0.3],
           }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl"
+          className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-[#fac703]/20 via-[#f6d303]/20 to-[#e6b800]/20 rounded-full blur-3xl"
         />
 
         <div className="relative z-10 text-center">
-          <ChefHat className="w-16 h-16 text-amber-500 mx-auto mb-4" />
+          <ChefHat className="w-16 h-16 text-[#fac703] mx-auto mb-4" />
           <h2 className="text-3xl font-bold text-white mb-4">Blog Post Not Found</h2>
           <p className="text-zinc-400 mb-8">Sorry, we couldn't find the blog post you're looking for.</p>
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full font-bold hover:shadow-lg hover:shadow-amber-500/40 transition-all"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800] text-white rounded-full font-bold hover:shadow-lg hover:shadow-[#fac703]/40 transition-all"
           >
             <ArrowLeft className="w-4 h-4" />
             Return to Blog
@@ -81,7 +81,7 @@ export default function BlogDetailClient() {
           opacity: [0.3, 0.5, 0.3],
         }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl"
+        className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-[#fac703]/20 via-[#f6d303]/20 to-[#e6b800]/20 rounded-full blur-3xl"
       />
       <motion.div
         animate={{
@@ -89,7 +89,7 @@ export default function BlogDetailClient() {
           opacity: [0.2, 0.4, 0.2],
         }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-orange-600/20 rounded-full blur-3xl"
+        className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-[#fac703]/20 via-[#f6d303]/20 to-[#e6b800]/20 rounded-full blur-3xl"
       />
 
       {/* Hero Image Section */}
@@ -104,7 +104,7 @@ export default function BlogDetailClient() {
         {/* Back Button */}
         <Link
           href="/blog"
-          className="absolute top-8 left-8 flex items-center gap-2 px-4 py-3 bg-zinc-900/90 backdrop-blur-md rounded-full text-white font-semibold shadow-lg hover:bg-zinc-800 transition-all duration-300 group/btn border border-zinc-800 hover:border-amber-500/50 z-20"
+          className="absolute top-8 left-8 flex items-center gap-2 px-4 py-3 bg-zinc-900/90 backdrop-blur-md rounded-full text-white font-semibold shadow-lg hover:bg-zinc-800 transition-all duration-300 group/btn border border-zinc-800 hover:border-[#fac703]/50 z-20"
         >
           <ArrowLeft className="w-4 h-4 group-hover/btn:-translate-x-1 transition-transform" />
           Back to Blog
@@ -117,7 +117,7 @@ export default function BlogDetailClient() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-2xl shadow-2xl overflow-hidden border border-zinc-800 hover:border-amber-500/20 transition-all duration-300"
+          className="bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-2xl shadow-2xl overflow-hidden border border-zinc-800 hover:border-[#fac703]/20 transition-all duration-300"
         >
           {/* Article Header */}
           <div className="p-8 md:p-12 lg:p-16 border-b border-zinc-800">
@@ -129,14 +129,14 @@ export default function BlogDetailClient() {
               className="flex flex-wrap items-center gap-4 text-sm mb-8"
             >
               <div className="flex items-center gap-2 text-zinc-400">
-                <Calendar className="w-4 h-4 text-amber-500" />
+                <Calendar className="w-4 h-4 text-[#fac703]" />
                 <span>{post.date}</span>
               </div>
               {post.readTime && (
                 <>
                   <span className="text-zinc-700">•</span>
                   <div className="flex items-center gap-2 text-zinc-400">
-                    <Clock className="w-4 h-4 text-amber-500" />
+                    <Clock className="w-4 h-4 text-[#fac703]" />
                     <span>{post.readTime} min read</span>
                   </div>
                 </>
@@ -159,7 +159,7 @@ export default function BlogDetailClient() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.6 }}
-                className="text-lg md:text-xl text-zinc-300 leading-relaxed italic border-l-4 border-amber-500 pl-6"
+                className="text-lg md:text-xl text-zinc-300 leading-relaxed italic border-l-4 border-[#fac703] pl-6"
               >
                 {post.excerpt}
               </motion.p>
@@ -181,7 +181,7 @@ export default function BlogDetailClient() {
           </div>
 
           {/* Footer CTA */}
-          <div className="bg-gradient-to-r from-amber-500/10 to-orange-600/10 border-t border-zinc-800 p-8 md:p-12">
+          <div className="bg-gradient-to-r from-[#fac703]/10 via-[#f6d303]/10 to-[#e6b800]/10 border-t border-zinc-800 p-8 md:p-12">
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -194,7 +194,7 @@ export default function BlogDetailClient() {
                 </p>
                 <Link
                   href="/blog"
-                  className="inline-flex items-center gap-2 text-amber-500 hover:text-amber-400 font-bold transition-colors group"
+                  className="inline-flex items-center gap-2 text-[#fac703] hover:text-[#f6d303] font-bold transition-colors group"
                 >
                   Read more articles
                   <motion.span
@@ -210,7 +210,7 @@ export default function BlogDetailClient() {
                 href="#"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full font-bold shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/40 transition-all"
+                className="px-6 py-3 bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800] text-white rounded-full font-bold shadow-lg shadow-[#fac703]/25 hover:shadow-xl hover:shadow-[#fac703]/40 transition-all"
               >
                 Share Article
               </motion.a>
@@ -228,7 +228,7 @@ export default function BlogDetailClient() {
         >
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-zinc-900 border border-zinc-800 rounded-full text-white font-bold hover:border-amber-500/50 hover:bg-zinc-800/50 transition-all group"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-zinc-900 border border-zinc-800 rounded-full text-white font-bold hover:border-[#fac703]/50 hover:bg-zinc-800/50 transition-all group"
           >
             Explore More Recipes & Stories
             <motion.span

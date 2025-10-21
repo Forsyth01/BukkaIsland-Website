@@ -14,7 +14,7 @@ const DishCard = memo(
 
     return (
       <article
-        className="group relative bg-zinc-900/60 border border-zinc-800 rounded-xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-500/10"
+        className="group relative bg-zinc-900/60 border border-zinc-800 rounded-xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#e6b800]/20"
         aria-label={dish.name}
       >
         <div className="relative aspect-[5/3] bg-zinc-900 overflow-hidden">
@@ -36,14 +36,14 @@ const DishCard = memo(
               {Array.from({ length: Math.min(dish.spicy, 3) }).map((_, i) => (
                 <Flame
                   key={i}
-                  className="w-3 h-3 text-orange-500 fill-orange-500"
+                  className="w-3 h-3 text-[#e6b800] fill-[#e6b800]"
                   aria-hidden="true"
                 />
               ))}
             </div>
           )}
 
-          <div className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+          <div className="absolute top-3 left-3 bg-gradient-to-r from-[#e6b800] via-[#c49c00] to-[#b38f00] text-white text-xs font-bold px-2 py-1 rounded-full">
             Popular
           </div>
         </div>
@@ -54,11 +54,10 @@ const DishCard = memo(
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1">
-              <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
-              <span className="text-xs text-white font-semibold">{dish.rating}</span>
+              <Star className="w-3 h-3 text-[#e6b800] fill-[#e6b800]" />
             </div>
-            <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
-              {dish.price}
+            <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#e6b800] via-[#c49c00] to-[#b38f00]">
+              ${dish.price}
             </span>
           </div>
         </div>
@@ -118,7 +117,7 @@ export default function MenuPreview() {
         <header className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-black text-white mb-3">
             Popular{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e6b800] via-[#c49c00] to-[#b38f00]">
               Dishes
             </span>
           </h2>
@@ -128,14 +127,13 @@ export default function MenuPreview() {
         {/* Dishes Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16" role="list">
           {loading ? (
-            // Skeletons while fetching
             Array.from({ length: 3 }).map((_, i) => (
               <div
                 key={i}
                 className="bg-zinc-900/40 border border-zinc-800 rounded-xl overflow-hidden animate-pulse"
               >
                 <div className="aspect-[5/3] bg-zinc-800/30" />
-                <div className="p-4 space-y-2"> 
+                <div className="p-4 space-y-2">
                   <div className="h-4 w-3/4 bg-zinc-800/30 rounded" />
                   <div className="h-3 w-full bg-zinc-800/20 rounded" />
                   <div className="flex items-center justify-between pt-2">
@@ -148,7 +146,6 @@ export default function MenuPreview() {
           ) : dishes.length > 0 ? (
             dishes.map((dish) => <DishCard key={dish.id} dish={dish} />)
           ) : (
-            // Motion “menu not found” message
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -166,7 +163,7 @@ export default function MenuPreview() {
           <Link
             href="/menu"
             prefetch={false}
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full font-bold shadow-lg shadow-amber-500/25 hover:scale-105 transition-transform"
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-[#e6b800] via-[#c49c00] to-[#b38f00] text-white rounded-full font-bold shadow-lg shadow-[#e6b800]/25 hover:scale-105 transition-transform"
           >
             View Menu
             <ArrowRight className="w-4 h-4" />

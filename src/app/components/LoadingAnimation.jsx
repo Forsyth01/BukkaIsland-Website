@@ -22,7 +22,7 @@ export default function LoadingAnimation({ message = "Preparing your meal..." })
             repeatDelay: 1,
           }}
         >
-          <Soup className="w-28 h-28 text-orange-500 drop-shadow-[0_0_15px_rgba(255,115,0,0.4)]" />
+          <Soup className="w-28 h-28 text-[#fac703] drop-shadow-[0_0_15px_rgba(250,199,3,0.4)]" />
         </motion.div>
 
         {/* Spoon coming in from right */}
@@ -41,7 +41,7 @@ export default function LoadingAnimation({ message = "Preparing your meal..." })
           }}
           className="absolute right-10 top-5"
         >
-          <Utensils className="w-10 h-10 text-orange-400" />
+          <Utensils className="w-10 h-10 text-[#fac703]" />
         </motion.div>
 
         {/* Fork coming in from left */}
@@ -60,7 +60,7 @@ export default function LoadingAnimation({ message = "Preparing your meal..." })
           }}
           className="absolute left-10 top-5"
         >
-          <Utensils className="w-10 h-10 text-orange-400" />
+          <Utensils className="w-10 h-10 text-[#fac703]" />
         </motion.div>
       </div>
 
@@ -69,7 +69,7 @@ export default function LoadingAnimation({ message = "Preparing your meal..." })
         initial={{ opacity: 0 }}
         animate={{ opacity: [0, 1, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
-        className="mt-10 text-orange-500 text-lg tracking-wide font-medium text-center"
+        className="mt-10 text-[#fac703] text-lg tracking-wide font-medium text-center"
       >
         {message}
       </motion.p>

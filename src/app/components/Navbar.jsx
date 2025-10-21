@@ -30,14 +30,12 @@ export default function Navbar() {
     { href: "/#contact", label: "Contact", icon: <MessageSquare className="w-4 h-4" /> },
   ];
 
-  // ✅ Scroll listener optimized
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // ✅ Smooth scroll for hash links
   const handleSmoothScroll = (href) => {
     if (href.startsWith("/#")) {
       const id = href.split("#")[1];
@@ -62,7 +60,7 @@ export default function Navbar() {
       >
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
-            {/* 🔸 Logo */}
+            {/* Logo */}
             <Link
               href="/"
               prefetch={false}
@@ -72,28 +70,21 @@ export default function Navbar() {
               }}
               className="flex items-center gap-3 group"
             >
-              <div className="w-11 h-11 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/25 group-hover:shadow-amber-500/40 transition-all duration-300">
-                <UtensilsCrossed className="w-5 h-5 text-white" strokeWidth={2.5} />
-              </div>
-              <div className="hidden sm:block">
-                <span className="text-lg font-black text-white tracking-tight">
-                  Bukka
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
-                    Island
-                  </span>
-                </span>
-                <div className="text-xs text-zinc-500 font-medium -mt-0.5">
-                  Street Food Truck
-                </div>
+              <div>
+                <img src="/logo/bukka_logo_white.png" alt="" className="h-35" />
               </div>
             </Link>
 
-            {/* 🔹 Desktop Nav */}
+            {/* Desktop Nav */}
             <div className="hidden lg:flex items-center gap-1">
               {links.map((link) => {
                 const isActive = pathname === link.href;
                 return (
-                  <motion.div key={link.href} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <motion.div
+                    key={link.href}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
                     <Link
                       href={link.href}
                       prefetch={false}
@@ -108,7 +99,7 @@ export default function Navbar() {
                       {isActive && (
                         <motion.div
                           layoutId="activeTab"
-                          className="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full"
+                          className="absolute inset-0 bg-gradient-to-r from-[#e6b800] to-[#c49c00] rounded-full"
                           transition={{ type: "spring", stiffness: 250, damping: 20 }}
                         />
                       )}
@@ -122,7 +113,7 @@ export default function Navbar() {
               })}
             </div>
 
-            {/* 🔸 CTA + Mobile Menu */}
+            {/* CTA + Mobile Menu */}
             <div className="flex items-center gap-3">
               {/* Desktop CTA */}
               <Link
@@ -132,7 +123,7 @@ export default function Navbar() {
                   e.preventDefault();
                   handleSmoothScroll("/menu");
                 }}
-                className="hidden md:flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full font-bold text-sm shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all duration-300"
+                className="hidden md:flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#e6b800] to-[#c49c00] text-white rounded-full font-bold text-sm shadow-lg shadow-[#c49c00]/25 hover:shadow-[#c49c00]/40 transition-all duration-300"
               >
                 <MapPin className="w-4 h-4" />
                 Order Now
@@ -150,7 +141,7 @@ export default function Navbar() {
           </div>
         </nav>
 
-        {/* 🔹 Mobile Menu */}
+        {/* Mobile Menu */}
         <AnimatePresence>
           {open && (
             <motion.div
@@ -173,12 +164,12 @@ export default function Navbar() {
                     className="flex items-center justify-between px-4 py-3 rounded-xl text-zinc-300 hover:text-white hover:bg-zinc-900/60 transition-all duration-200 group"
                   >
                     <span className="flex items-center gap-3">
-                      <span className="text-amber-500 group-hover:text-amber-400 transition-colors">
+                      <span className="text-[#e6b800] group-hover:text-[#c49c00] transition-colors">
                         {link.icon}
                       </span>
                       <span className="font-medium">{link.label}</span>
                     </span>
-                    <ChevronRight className="w-4 h-4 text-zinc-600 group-hover:text-amber-500 group-hover:translate-x-1 transition-all" />
+                    <ChevronRight className="w-4 h-4 text-zinc-600 group-hover:text-[#e6b800] group-hover:translate-x-1 transition-all" />
                   </Link>
                 ))}
 
@@ -190,7 +181,7 @@ export default function Navbar() {
                     e.preventDefault();
                     handleSmoothScroll("/menu");
                   }}
-                  className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-amber-500 to-orange-600 text-white px-6 py-3.5 rounded-full font-bold shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all duration-300"
+                  className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-[#e6b800] to-[#c49c00] text-white px-6 py-3.5 rounded-full font-bold shadow-lg shadow-[#c49c00]/25 hover:shadow-[#c49c00]/40 transition-all duration-300"
                 >
                   <MapPin className="w-5 h-5" />
                   Order Now

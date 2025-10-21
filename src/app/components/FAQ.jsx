@@ -31,15 +31,15 @@ function FAQItem({ q, a, i, openIndex, setOpenIndex }) {
     >
       <button
         onClick={() => setOpenIndex(isOpen ? null : i)}
-        className="w-full py-5 px-6 flex items-center justify-between text-left hover:bg-zinc-800/40 transition-colors duration-300 group"
+        className="w-full py-5 px-6 flex items-center justify-between text-left hover:bg-gradient-to-r hover:from-[#fac703]/10 hover:to-[#e6b800]/10 transition-all duration-300 group"
       >
-        <span className="font-semibold text-white text-lg group-hover:text-amber-400 transition-colors duration-300">
+        <span className="font-semibold text-white text-lg group-hover:text-[#fac703] transition-colors duration-300">
           {q}
         </span>
         <m.span
           animate={{ rotate: isOpen ? 45 : 0 }}
-          transition={{ duration: 0.2 }}
-          className="text-amber-500 flex-shrink-0"
+          transition={{ duration: 0.25, ease: "easeInOut" }}
+          className="text-[#fac703] flex-shrink-0"
         >
           <Plus size={22} />
         </m.span>
@@ -52,10 +52,10 @@ function FAQItem({ q, a, i, openIndex, setOpenIndex }) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25 }}
+            transition={{ height: { duration: 0.25 }, opacity: { duration: 0.3 } }}
             className="overflow-hidden"
           >
-            <p className="px-6 pb-5 text-zinc-300 leading-relaxed text-base border-l-4 border-amber-500/50">
+            <p className="px-6 pb-5 text-[#f5f5f5] leading-relaxed text-base border-l-4 border-gradient-to-b from-[#fac703] via-[#f6d303] to-[#e6b800]">
               {a}
             </p>
           </m.div>
@@ -75,7 +75,7 @@ export default function FAQ() {
         {/* Background grid */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-[size:4rem_4rem]" />
 
-        {/* Single glowing background for lighter load */}
+        {/* Glowing background orb */}
         <m.div
           animate={
             shouldReduceMotion
@@ -83,7 +83,7 @@ export default function FAQ() {
               : { scale: [1, 1.15, 1], opacity: [0.3, 0.45, 0.3] }
           }
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/3 left-1/2 w-[28rem] h-[28rem] -translate-x-1/2 bg-amber-500/15 rounded-full blur-3xl"
+          className="absolute top-1/3 left-1/2 w-[28rem] h-[28rem] -translate-x-1/2 bg-gradient-to-r from-[#fac703]/20 via-[#f6d303]/20 to-[#e6b800]/15 rounded-full blur-3xl"
         />
 
         <div className="mx-auto max-w-4xl relative z-10">
@@ -96,14 +96,14 @@ export default function FAQ() {
             className="text-center mb-16"
           >
             <div className="flex items-center justify-center gap-3 mb-6">
-              <div className="h-0.5 w-20 bg-gradient-to-r from-transparent via-amber-500 to-transparent" />
-              <HelpCircle className="w-6 h-6 text-amber-500" />
-              <div className="h-0.5 w-20 bg-gradient-to-r from-transparent via-amber-500 to-transparent" />
+              <div className="h-0.5 w-20 bg-gradient-to-r from-transparent via-[#fac703] to-transparent" />
+              <HelpCircle className="w-6 h-6 text-[#fac703]" />
+              <div className="h-0.5 w-20 bg-gradient-to-r from-transparent via-[#fac703] to-transparent" />
             </div>
 
             <h2 className="text-5xl md:text-6xl font-black text-white mb-4 tracking-tight">
               Frequently Asked{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800]">
                 Questions
               </span>
             </h2>
@@ -115,7 +115,7 @@ export default function FAQ() {
 
           {/* FAQ List */}
           <m.div
-            className="rounded-2xl bg-gradient-to-br from-zinc-900/50 to-zinc-950/50 border border-zinc-800 hover:border-amber-500/20 transition-all duration-300 overflow-hidden backdrop-blur-sm shadow-2xl"
+            className="rounded-2xl bg-gradient-to-br from-zinc-900/50 to-zinc-950/50 border border-zinc-800 hover:border-[#fac703]/40 transition-all duration-300 overflow-hidden backdrop-blur-sm shadow-2xl"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
@@ -136,7 +136,7 @@ export default function FAQ() {
             <p className="text-zinc-400 mb-6">Still have questions? We'd love to hear from you!</p>
             <a
               href="/contact"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full font-bold shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/40 transition-all"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800] text-white rounded-full font-bold shadow-lg shadow-[#fac703]/25 hover:shadow-xl hover:shadow-[#fac703]/40 transition-all"
             >
               Get in Touch →
             </a>

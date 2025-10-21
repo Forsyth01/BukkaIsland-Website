@@ -30,7 +30,7 @@ const BlogCard = memo(({ post, eager }) => {
     : "No description available.";
 
   return (
-    <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl overflow-hidden shadow-lg backdrop-blur-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-amber-500/10">
+    <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl overflow-hidden shadow-lg backdrop-blur-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-[#c49c00]/10">
       <Link href={`/blog/${post.id}`} prefetch>
         <div className="relative aspect-[16/9] bg-zinc-900 overflow-hidden">
           <img
@@ -59,7 +59,7 @@ const BlogCard = memo(({ post, eager }) => {
         <p className="text-zinc-400 text-sm mb-4 line-clamp-3">{contentText}</p>
 
         <div className="flex items-center gap-2 text-zinc-500 text-sm">
-          <Calendar className="w-4 h-4 text-amber-500/70" aria-hidden="true" />
+          <Calendar className="w-4 h-4 text-[#c49c00]/70" aria-hidden="true" />
           <span>{displayDate}</span>
         </div>
       </div>
@@ -109,7 +109,7 @@ export default function BlogPreview() {
         <header className="text-center mb-16">
           <h2 className="text-5xl md:text-6xl font-black text-white mb-4 tracking-tight">
             From Our{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e6b800] via-[#c49c00] to-[#b38f00]">
               Kitchen
             </span>
           </h2>
@@ -117,9 +117,9 @@ export default function BlogPreview() {
             Stories, recipes, and behind-the-scenes from the Bukka Island team.
           </p>
           <div className="flex items-center justify-center gap-2">
-            <div className="h-0.5 w-20 bg-amber-500" />
-            <Calendar className="w-5 h-5 text-amber-500" aria-hidden="true" />
-            <div className="h-0.5 w-20 bg-amber-500" />
+            <div className="h-0.5 w-20 bg-[#c49c00]" />
+            <Calendar className="w-5 h-5 text-[#c49c00]" aria-hidden="true" />
+            <div className="h-0.5 w-20 bg-[#c49c00]" />
           </div>
         </header>
 
@@ -164,7 +164,7 @@ export default function BlogPreview() {
           <Link
             href="/blog"
             prefetch
-            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full font-bold text-lg hover:scale-105 transition-transform shadow-lg shadow-amber-500/25"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#e6b800] via-[#c49c00] to-[#b38f00] text-white rounded-full font-bold text-lg hover:scale-105 transition-transform shadow-lg shadow-[#e6b800]/25"
           >
             Visit Our Blog
             <ArrowRight className="w-5 h-5" />

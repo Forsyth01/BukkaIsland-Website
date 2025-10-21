@@ -27,7 +27,6 @@ export default function BlogPage() {
       }));
       setPosts(postList);
 
-      // Simulate loading time
       setTimeout(() => setLoading(false), 1500);
     };
 
@@ -40,32 +39,21 @@ export default function BlogPage() {
 
   return (
     <section className="relative min-h-screen bg-zinc-950 py-20 px-6 md:px-10 overflow-hidden">
-      {/* Background elements */}
+      {/* Background Grid */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
       </div>
 
       {/* Animated Orbs */}
       <motion.div
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
+        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.45, 0.3] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl"
+        className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-[#fac703]/20 via-[#f6d303]/20 to-[#e6b800]/20 rounded-full blur-3xl"
       />
       <motion.div
-        animate={{
-          scale: [1, 1.3, 1],
-          opacity: [0.2, 0.4, 0.2],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1,
-        }}
-        className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-orange-600/20 rounded-full blur-3xl"
+        animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-[#fac703]/20 via-[#f6d303]/20 to-[#e6b800]/20 rounded-full blur-3xl"
       />
 
       <div className="max-w-6xl mx-auto relative z-10">
@@ -81,20 +69,20 @@ export default function BlogPage() {
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ duration: 0.8 }}
-              className="h-0.5 w-20 bg-gradient-to-r from-transparent via-amber-500 to-transparent"
+              className="h-0.5 w-20 bg-gradient-to-r from-transparent via-[#fac703] to-transparent"
             />
-            <BookOpen className="w-6 h-6 text-amber-500" />
+            <BookOpen className="w-6 h-6 text-[#fac703]" />
             <motion.div
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ duration: 0.8 }}
-              className="h-0.5 w-20 bg-gradient-to-r from-transparent via-amber-500 to-transparent"
+              className="h-0.5 w-20 bg-gradient-to-r from-transparent via-[#fac703] to-transparent"
             />
           </div>
 
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white mb-4">
             BukkaIsland{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800]">
               Blog
             </span>
           </h1>
@@ -117,9 +105,9 @@ export default function BlogPage() {
               placeholder="Search posts..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-zinc-900 border border-zinc-800 focus:border-amber-500/50 rounded-full px-6 py-3 pl-12 text-white placeholder-zinc-500 focus:outline-none transition-all duration-300 focus:ring-2 focus:ring-amber-500/20"
+              className="w-full bg-zinc-900 border border-zinc-800 focus:border-[#fac703]/50 rounded-full px-6 py-3 pl-12 text-white placeholder-zinc-500 focus:outline-none transition-all duration-300 focus:ring-2 focus:ring-[#fac703]/20"
             />
-            <Search className="absolute left-4 top-3.5 text-amber-500 w-5 h-5" />
+            <Search className="absolute left-4 top-3.5 text-[#fac703] w-5 h-5" />
           </div>
         </motion.div>
 
@@ -169,10 +157,10 @@ export default function BlogPage() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1, duration: 0.4 }}
                       whileHover={{ y: -8 }}
-                      className="group relative bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-2xl overflow-hidden border border-zinc-800 hover:border-amber-500/50 transition-all duration-300"
+                      className="group relative bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-2xl overflow-hidden border border-zinc-800 hover:border-[#fac703]/50 transition-all duration-300"
                     >
                       {/* Image Container */}
-                      <div className="relative w-full h-48 overflow-hidden bg-gradient-to-br from-amber-500/10 to-orange-600/10">
+                      <div className="relative w-full h-48 overflow-hidden bg-gradient-to-br from-[#fac703]/10 via-[#f6d303]/10 to-[#e6b800]/10">
                         <Image
                           src={post.image || "/placeholder.jpg"}
                           alt={post.title}
@@ -185,7 +173,7 @@ export default function BlogPage() {
 
                       {/* Content */}
                       <div className="p-6 flex flex-col h-[calc(100%-12rem)]">
-                        <h3 className="text-lg font-bold text-white mb-2 group-hover:text-amber-400 transition-colors line-clamp-2">
+                        <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#fac703] transition-colors line-clamp-2">
                           {post.title}
                         </h3>
                         <p className="text-sm text-zinc-400 mb-4 line-clamp-2 flex-1 leading-relaxed">
@@ -207,7 +195,7 @@ export default function BlogPage() {
                           </span>
                           <Link
                             href={`/blog/${post.id}`}
-                            className="inline-flex items-center gap-1 text-amber-500 hover:text-amber-400 font-bold text-sm transition-colors group/link"
+                            className="inline-flex items-center gap-1 text-[#fac703] hover:text-[#f6d303] font-bold text-sm transition-colors group/link"
                           >
                             Read
                             <motion.span
@@ -237,13 +225,9 @@ export default function BlogPage() {
           >
             <p className="text-sm text-zinc-500">
               Showing{" "}
-              <span className="text-amber-500 font-bold">
-                {filteredPosts.length}
-              </span>{" "}
+              <span className="text-[#fac703] font-bold">{filteredPosts.length}</span>{" "}
               of{" "}
-              <span className="text-amber-500 font-bold">
-                {posts.length}
-              </span>{" "}
+              <span className="text-[#fac703] font-bold">{posts.length}</span>{" "}
               posts
             </p>
           </motion.div>

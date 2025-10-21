@@ -1,12 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Facebook, Instagram, Twitter, Mail, Phone, MapPin, ChefHat } from "lucide-react";
+import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from "lucide-react";
 import Link from "next/link";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-  
+
   const socialLinks = [
     { icon: Instagram, href: "https://instagram.com/bukkaisland", label: "Instagram" },
     { icon: Facebook, href: "https://facebook.com/bukkaisland", label: "Facebook" },
@@ -30,9 +30,8 @@ export default function Footer() {
     <footer className="relative bg-zinc-950 text-white overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/50 to-transparent" />
-      
+
       <div className="relative z-10">
-        {/* Main Footer Content */}
         <div className="max-w-7xl mx-auto px-6 md:px-10 py-16 md:py-20">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             
@@ -44,11 +43,10 @@ export default function Footer() {
               viewport={{ once: true }}
               className="md:col-span-1"
             >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg">
-                  <ChefHat className="w-6 h-6 text-white" />
+              <div className="relative bottom-10">
+                <div className="bg-black">
+                  <img src="/logo/bukka_logo_white.png" alt="BukkaIsland Logo" />
                 </div>
-                <span className="text-2xl font-black text-white">BukkaIsland</span>
               </div>
               <p className="text-sm text-zinc-400 leading-relaxed">
                 Bringing authentic Nigerian street food to your table, one meal at a time.
@@ -70,7 +68,7 @@ export default function Footer() {
                   <li key={idx}>
                     <Link
                       href={link.href}
-                      className="text-zinc-400 hover:text-amber-400 transition-colors duration-300 text-sm"
+                      className="text-zinc-400 hover:text-[#fac703] transition-colors duration-300 text-sm"
                     >
                       {link.label}
                     </Link>
@@ -94,7 +92,7 @@ export default function Footer() {
                   const Icon = info.icon;
                   return (
                     <li key={idx} className="flex items-start gap-3">
-                      <Icon className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+                      <Icon className="w-4 h-4 text-[#fac703] mt-0.5 flex-shrink-0" />
                       <span className="text-zinc-400 text-sm">{info.text}</span>
                     </li>
                   );
@@ -123,7 +121,7 @@ export default function Footer() {
                       rel="noopener noreferrer"
                       whileHover={{ scale: 1.1, rotate: 5 }}
                       whileTap={{ scale: 0.95 }}
-                      className="p-3 bg-gradient-to-br from-amber-500/10 to-orange-600/10 border border-zinc-800 rounded-lg text-amber-500 hover:border-amber-500/50 transition-all duration-300"
+                      className="p-3 bg-gradient-to-br from-[#fac703]/10 to-[#e6b800]/10 border border-zinc-800 rounded-lg text-[#fac703] hover:border-[#fac703]/40 transition-all duration-300"
                       aria-label={social.label}
                     >
                       <Icon className="w-5 h-5" />
@@ -151,18 +149,18 @@ export default function Footer() {
             viewport={{ once: true }}
             className="flex flex-col md:flex-row justify-between items-center gap-4"
           >
-            <p className="text-sm text-zinc-500">
-              © {currentYear} <span className="text-amber-500 font-semibold">BukkaIsland</span>. All rights reserved.
+            <p className="text-sm text-zinc-400">
+              © {currentYear} <span className="text-[#fac703] font-semibold">BukkaIsland</span>. All rights reserved.
             </p>
             
             <div className="flex gap-6 text-sm">
-              <Link href="#" className="text-zinc-500 hover:text-amber-400 transition-colors">
+              <Link href="#" className="text-zinc-400 hover:text-[#fac703] transition-colors">
                 Privacy Policy
               </Link>
-              <Link href="#" className="text-zinc-500 hover:text-amber-400 transition-colors">
+              <Link href="#" className="text-zinc-400 hover:text-[#fac703] transition-colors">
                 Terms of Service
               </Link>
-              <Link href="#" className="text-zinc-500 hover:text-amber-400 transition-colors">
+              <Link href="#" className="text-zinc-400 hover:text-[#fac703] transition-colors">
                 Cookies
               </Link>
             </div>
@@ -170,7 +168,7 @@ export default function Footer() {
         </div>
 
         {/* Decorative bottom element */}
-        <div className="h-px bg-gradient-to-r from-transparent via-amber-500/20 to-transparent" />
+        <div className="h-px bg-gradient-to-r from-transparent via-[#fac703]/20 to-transparent" />
       </div>
     </footer>
   );
