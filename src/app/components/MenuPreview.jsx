@@ -1,30 +1,34 @@
 "use client";
 
 import { useState, useEffect, memo } from "react";
-import { Flame, Star } from "lucide-react";
+import { Flame, Star, ArrowRight } from "lucide-react";
 import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
 import { db } from "@/lib/firebaseClient";
 
-// 🔹 Memoized dish card for performance
+// 🧠 Memoized dish card
 const DishCard = memo(
   ({ dish }) => (
-    <div className="group relative bg-zinc-900/60 border border-zinc-800 rounded-xl overflow-hidden hover:border-amber-500/50 transition-colors duration-200">
-      {/* Image Section */}
+    <article
+      className="group relative bg-zinc-900/60 border border-zinc-800 rounded-xl overflow-hidden hover:border-amber-500/50 transition-all duration-200"
+      aria-label={dish.name}
+    >
+      {/* Image */}
       <div className="relative aspect-[5/3] bg-zinc-900 overflow-hidden">
         <img
           src={dish.imageUrl}
           alt={dish.name}
           loading="lazy"
           decoding="async"
+          className="absolute inset-0 w-full h-full object-cover"
           width="400"
           height="240"
-          className="absolute inset-0 w-full h-full object-cover"
           style={{ contentVisibility: "auto" }}
         />
 
+        {/* Spicy indicator */}
         {dish.spicy > 0 && (
           <div className="absolute top-3 right-3 flex gap-1">
-            {[...Array(Math.min(dish.spicy, 3))].map((_, i) => (
+            {Array.from({ length: Math.min(dish.spicy, 3) }).map((_, i) => (
               <Flame
                 key={i}
                 className="w-3 h-3 text-orange-500 fill-orange-500"
@@ -34,12 +38,13 @@ const DishCard = memo(
           </div>
         )}
 
+        {/* Popular tag */}
         <div className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">
           Popular
         </div>
       </div>
 
-      {/* Text Section */}
+      {/* Text */}
       <div className="p-4">
         <h3 className="text-base font-bold text-white mb-1 truncate">
           {dish.name}
@@ -50,22 +55,20 @@ const DishCard = memo(
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">
-            <Star
-              className="w-3 h-3 text-amber-500 fill-amber-500"
-              aria-hidden="true"
-            />
+            <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
             <span className="text-xs text-white font-semibold">
               {dish.rating}
             </span>
           </div>
+
           <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
             {dish.price}
           </span>
         </div>
       </div>
-    </div>
+    </article>
   ),
-  (prevProps, nextProps) => prevProps.dish.id === nextProps.dish.id
+  (prev, next) => prev.dish.id === next.dish.id
 );
 
 DishCard.displayName = "DishCard";
@@ -75,33 +78,26 @@ export default function MenuPreview() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 🔸 Fetch only once — no real-time subscription
-    const fetchDishesOnce = async () => {
-      try {
-        const q = query(
-          collection(db, "dishes"),
-          orderBy("createdAt", "desc"),
-          limit(10)
-        );
+    let mounted = true;
 
-        const snapshot = await getDocs(q);
+    getDocs(
+      query(collection(db, "dishes"), orderBy("createdAt", "desc"), limit(10))
+    )
+      .then((snapshot) => {
+        if (!mounted) return;
         const data = snapshot.docs
           .map((doc) => ({ id: doc.id, ...doc.data() }))
           .filter((dish) => dish.popular)
           .slice(0, 4);
-
         setDishes(data);
-      } catch (error) {
-        console.error("Error fetching dishes:", error);
-      } finally {
-        setLoading(false);
-      }
+      })
+      .catch((err) => console.error("Error fetching dishes:", err))
+      .finally(() => mounted && setLoading(false));
+
+    return () => {
+      mounted = false;
     };
-
-    fetchDishesOnce(); // 🔸 Run only once on mount
-  }, []); // ✅ Empty dependency array means no re-runs
-
-  const displayDishes = loading ? [] : dishes;
+  }, []);
 
   return (
     <section
@@ -124,7 +120,7 @@ export default function MenuPreview() {
 
       <div className="relative z-10 max-w-6xl mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-12">
+        <header className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-black text-white mb-3">
             Popular{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
@@ -134,34 +130,50 @@ export default function MenuPreview() {
           <p className="text-zinc-400">
             Handpicked favorites from our authentic menu
           </p>
-        </div>
+        </header>
 
-        {/* Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
-          {displayDishes.length > 0 ? (
-            displayDishes.map((dish) => <DishCard key={dish.id} dish={dish} />)
+        {/* Dishes Grid */}
+        <div
+          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"
+          role="list"
+        >
+          {!loading && dishes.length > 0 ? (
+            dishes.map((dish) => <DishCard key={dish.id} dish={dish} />)
           ) : (
-            [...Array(4)].map((_, i) => (
+            Array.from({ length: 4 }).map((_, i) => (
               <div
                 key={i}
-                className="relative bg-zinc-900/40 border border-zinc-800 rounded-xl overflow-hidden"
+                className="animate-pulse bg-zinc-900/40 border border-zinc-800 rounded-xl overflow-hidden"
               >
                 <div className="aspect-[5/3] bg-zinc-800/30" />
-                <div className="p-4">
-                  <div className="h-4 w-3/4 bg-zinc-800/30 rounded mb-2" />
-                  <div className="h-3 w-full bg-zinc-800/20 rounded mb-3" />
-                  <div className="flex items-center justify-between">
-                    <div className="h-3 w-12 bg-zinc-800/30 rounded" />
-                    <div className="h-4 w-16 bg-zinc-800/30 rounded" />
+                <div className="p-4 space-y-2">
+                  <div className="h-4 w-3/4 bg-zinc-800/30 rounded" />
+                  <div className="h-3 w-full bg-zinc-800/20 rounded" />
+                  <div className="flex items-center justify-between pt-2">
+                    <div className="h-3 w-10 bg-zinc-800/30 rounded" />
+                    <div className="h-4 w-14 bg-zinc-800/30 rounded" />
                   </div>
                 </div>
               </div>
             ))
           )}
         </div>
+
+        {/* ✅ View Menu Button */}
+        <div className="flex justify-center">
+          <a
+            href="/#menu"
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full font-bold shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/40 transition-all group"
+          >
+            View Menu
+            <span className="transition-transform group-hover:translate-x-1">
+              <ArrowRight className="w-4 h-4" />
+            </span>
+          </a>
+        </div>
       </div>
 
-      {/* Bottom Fade */}
+      {/* Fade Overlay */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-zinc-950 to-transparent pointer-events-none" />
     </section>
   );

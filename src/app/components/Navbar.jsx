@@ -18,16 +18,8 @@ import { usePathname, useRouter } from "next/navigation";
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activeLink, setActiveLink] = useState("/");
   const pathname = usePathname();
   const router = useRouter();
-
-  // Detect scroll for navbar background toggle
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   const links = [
     { href: "/", label: "Home", icon: <Home className="w-4 h-4" /> },
@@ -37,60 +29,51 @@ export default function Navbar() {
     { href: "/#contact", label: "Contact", icon: <MessageSquare className="w-4 h-4" /> },
   ];
 
-  // ✅ Corrected click handler
+  // ✅ Scroll listener optimized
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // ✅ Simplified click handler
   const handleLinkClick = (link) => {
-    // Home scroll
-    if (link.href === "/" || link.href === "#") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      setActiveLink("/");
-      setOpen(false);
-      return;
-    }
-
-    // Smooth scroll for hash links
-    if (link.href.startsWith("/#")) {
-      const targetId = link.href.split("#")[1];
-      const target = document.getElementById(targetId);
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth" });
-      }
-      setActiveLink(link.href);
-      setOpen(false);
-      return;
-    }
-
-    // Normal page navigation (menu/blog)
-    router.push(link.href);
-    setActiveLink(link.href);
     setOpen(false);
+    if (link.href.startsWith("/#")) {
+      const id = link.href.split("#")[1];
+      const el = document.getElementById(id);
+      el?.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+    if (link.href === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    router.push(link.href);
   };
 
   return (
     <>
-      <motion.header
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+      <header
+        className={`fixed inset-x-0 top-0 z-50 bg-zinc-950/95 transition-all duration-300 ${
           scrolled
-            ? "bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/50 shadow-md shadow-black/20"
-            : "bg-zinc-950/95"
+            ? "backdrop-blur-md border-b border-zinc-800/50 shadow-md shadow-black/20"
+            : ""
         }`}
       >
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* 🔸 Logo */}
-            <motion.a
+            <a
               href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                handleLinkClick({ href: "/" });
+              }}
               className="flex items-center gap-3 group"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => handleLinkClick({ href: "/" })}
             >
-              <div className="relative">
-                <div className="w-11 h-11 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/25 group-hover:shadow-amber-500/40 transition-all duration-300">
-                  <UtensilsCrossed className="w-5 h-5 text-white" strokeWidth={2.5} />
-                </div>
+              <div className="w-11 h-11 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/25 group-hover:shadow-amber-500/40 transition-all duration-300">
+                <UtensilsCrossed className="w-5 h-5 text-white" strokeWidth={2.5} />
               </div>
               <div className="hidden sm:block">
                 <span className="text-lg font-black text-white tracking-tight">
@@ -99,20 +82,16 @@ export default function Navbar() {
                     Island
                   </span>
                 </span>
-                <div className="text-xs text-zinc-500 font-medium -mt-0.5 tracking-wide">
+                <div className="text-xs text-zinc-500 font-medium -mt-0.5">
                   Street Food Truck
                 </div>
               </div>
-            </motion.a>
+            </a>
 
-            {/* 🔹 Desktop Navigation */}
+            {/* 🔹 Desktop Nav */}
             <div className="hidden lg:flex items-center gap-1">
               {links.map((link) => {
-                const isActive =
-                  activeLink === link.href ||
-                  (pathname === "/" &&
-                    (link.href === "/" || link.href === "#"));
-
+                const isActive = pathname === link.href;
                 return (
                   <motion.a
                     key={link.href}
@@ -121,10 +100,8 @@ export default function Navbar() {
                       e.preventDefault();
                       handleLinkClick(link);
                     }}
-                    className={`relative flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                      isActive
-                        ? "text-white"
-                        : "text-zinc-400 hover:text-white"
+                    className={`relative flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      isActive ? "text-white" : "text-zinc-400 hover:text-white"
                     }`}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -145,50 +122,29 @@ export default function Navbar() {
               })}
             </div>
 
-            {/* 🔸 CTA Button + Mobile Menu */}
+            {/* 🔸 CTA + Mobile Menu */}
             <div className="flex items-center gap-3">
               {/* Desktop CTA */}
-              <motion.a
+              <a
                 href="/menu"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleLinkClick({ href: "/menu" });
+                }}
                 className="hidden md:flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full font-bold text-sm shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all duration-300"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
               >
                 <MapPin className="w-4 h-4" />
                 Order Now
-              </motion.a>
+              </a>
 
               {/* Mobile Hamburger */}
-              <motion.button
-                onClick={() => setOpen(!open)}
+              <button
+                onClick={() => setOpen((o) => !o)}
                 className="lg:hidden p-2 rounded-full text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition-colors"
-                whileTap={{ scale: 0.9 }}
                 aria-label="Toggle menu"
               >
-                <AnimatePresence mode="wait">
-                  {open ? (
-                    <motion.div
-                      key="close"
-                      initial={{ rotate: -90, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: 90, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <X className="w-6 h-6" />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="menu"
-                      initial={{ rotate: 90, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: -90, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <Menu className="w-6 h-6" />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.button>
+                {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
             </div>
           </div>
         </nav>
@@ -200,17 +156,14 @@ export default function Navbar() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.25 }}
               className="lg:hidden border-t border-zinc-800/50 bg-zinc-950/98 backdrop-blur-xl overflow-hidden"
             >
               <div className="max-w-7xl mx-auto px-4 py-6 space-y-1">
-                {links.map((link, index) => (
+                {links.map((link) => (
                   <motion.a
                     key={link.href}
                     href={link.href}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.07 }}
                     onClick={(e) => {
                       e.preventDefault();
                       handleLinkClick(link);
@@ -228,23 +181,15 @@ export default function Navbar() {
                 ))}
 
                 {/* Mobile CTA */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: links.length * 0.1 }}
-                  className="pt-4"
+                <a
+                  href="/menu"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-amber-500 to-orange-600 text-white px-6 py-3.5 rounded-full font-bold shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all duration-300"
                 >
-                  <a
-                    href="/menu"
-                    onClick={() => setOpen(false)}
-                    className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-amber-500 to-orange-600 text-white px-6 py-3.5 rounded-full font-bold shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all duration-300"
-                  >
-                    <MapPin className="w-5 h-5" />
-                    Order Now
-                  </a>
-                </motion.div>
+                  <MapPin className="w-5 h-5" />
+                  Order Now
+                </a>
 
-                {/* Mobile Footer Info */}
                 <div className="pt-6 border-t border-zinc-800/50 text-center">
                   <p className="text-xs text-zinc-600">
                     🌴 Authentic Nigerian Street Food
@@ -254,9 +199,9 @@ export default function Navbar() {
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.header>
+      </header>
 
-      {/* Spacer to offset fixed navbar */}
+      {/* Spacer */}
       <div className="h-20" />
     </>
   );

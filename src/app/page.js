@@ -15,8 +15,8 @@ export default function Home() {
       <Navbar/>
       <Hero />
       <About />
-      {/* <MenuPreview /> */}
-      {/* <BlogPreview/> */}
+      <MenuPreview />
+      <BlogPreview/>
       <FAQ/>
       <Contact />
       <Footer />
