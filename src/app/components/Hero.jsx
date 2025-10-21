@@ -1,28 +1,16 @@
 "use client";
 
+import { memo } from "react";
 import { motion } from "framer-motion";
 import { Utensils, Sparkles, MapPin } from "lucide-react";
 
-export default function Hero() {
-  const fadeInUp = (delay = 0) => ({
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.7, delay },
-  });
+const fadeInUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.7, delay },
+});
 
-  const floating = (duration = 6, delay = 0) => ({
-    animate: {
-      y: [-10, 10, -10],
-      rotate: [0, 180, 360],
-    },
-    transition: {
-      duration,
-      delay,
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
-  });
-
+export default memo(function Hero() {
   return (
     <section className="relative overflow-hidden bg-zinc-950 min-h-screen">
       {/* Background Grid */}
@@ -33,21 +21,22 @@ export default function Hero() {
       {/* Radial Light Overlay */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(245,158,11,0.15),transparent_50%)]" />
 
-      {/* Soft Orbs */}
+      {/* Soft Orbs (fade in only once) */}
       <motion.div
-        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 0.4 }}
+        transition={{ duration: 1.8, ease: "easeOut", delay: 0.3 }}
         className="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl"
       />
       <motion.div
-        animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 0.3 }}
+        transition={{ duration: 2, ease: "easeOut", delay: 0.6 }}
         className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-orange-600/20 rounded-full blur-3xl"
       />
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 py-20 text-center">
-        
         {/* Top Badge */}
         <motion.div
           {...fadeInUp(0)}
@@ -63,12 +52,11 @@ export default function Hero() {
         <motion.div {...fadeInUp(0.2)}>
           <h1 className="text-7xl md:text-9xl font-black text-white mb-4 tracking-tight">
             Bukka
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-500 to-amber-400 animate-gradient">
-            Island
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-500 to-amber-400">
+          Island
             </span>
           </h1>
 
-          {/* Underline */}
           <div className="flex items-center justify-center gap-2">
             <motion.div
               initial={{ scaleX: 0 }}
@@ -91,45 +79,33 @@ export default function Hero() {
           {...fadeInUp(0.5)}
           className="text-xl md:text-2xl text-zinc-400 max-w-2xl mb-16 leading-relaxed"
         >
-          Where <span className="text-amber-500 font-semibold">street flavors</span> meet island vibes.
+          Where <span className="text-amber-500 font-semibold">street flavors</span> meet island
+          vibes.
           <br />
           Your favorite Nigerian meals, rolling to you 🌴
         </motion.p>
 
-        {/* Central Circle */}
-        <motion.div
-          {...fadeInUp(0.7)}
-          className="relative mb-16 group"
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-orange-500/20 rounded-full blur-2xl animate-pulse" />
+        {/* Central Circle (spins only once) */}
+        <motion.div {...fadeInUp(0.7)} className="relative mb-16 group">
+          <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-orange-500/20 rounded-full blur-2xl" />
 
-          <div className="relative w-72 h-72 md:w-96 md:h-96 rounded-full bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800 group-hover:border-amber-500/50 transition-all flex items-center justify-center overflow-hidden">
-            
+          <div className="relative w-72 h-72 md:w-96 md:h-96 rounded-full bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800 transition-all flex items-center justify-center overflow-hidden">
             <motion.div
+              initial={{ rotate: 0 }}
               animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 2, ease: "easeOut" }}
               className="absolute inset-0 rounded-full border border-dashed border-zinc-800 scale-90"
             />
             <motion.div
+              initial={{ rotate: 0 }}
               animate={{ rotate: -360 }}
-              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 2.5, ease: "easeOut" }}
               className="absolute inset-0 rounded-full border border-dashed border-zinc-800 scale-75"
             />
 
-            {/* Placeholder Icon */}
             <div className="w-48 h-48 md:w-64 md:h-64 bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-full flex items-center justify-center">
               <Utensils className="w-24 h-24 text-zinc-700" strokeWidth={1.5} />
             </div>
-
-            {/* Floating Particles */}
-            <motion.div
-              {...floating(6)}
-              className="absolute top-10 right-10 w-3 h-3 bg-amber-500/60 rounded-full blur-sm"
-            />
-            <motion.div
-              {...floating(8, 1)}
-              className="absolute bottom-10 left-10 w-2 h-2 bg-orange-500/60 rounded-full blur-sm"
-            />
           </div>
         </motion.div>
 
@@ -137,23 +113,14 @@ export default function Hero() {
         <motion.div {...fadeInUp(0.9)} className="flex flex-col sm:flex-row gap-4 items-center">
           <a
             href="#menu"
-            className="group relative px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full font-bold text-white text-lg shadow-lg hover:shadow-amber-500/40 transition-all duration-300 overflow-hidden"
+            className="px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full font-bold text-white text-lg shadow-lg transition-all duration-300"
           >
-            <span className="relative z-10 flex items-center gap-2">
-              View Menu
-              <motion.span
-                animate={{ x: [0, 4, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                →
-              </motion.span>
-            </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-orange-600 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            View Menu →
           </a>
 
           <a
             href="#location"
-            className="group px-8 py-4 bg-zinc-900 border border-zinc-800 hover:border-amber-500/50 rounded-full font-bold text-white text-lg transition-all flex items-center gap-2"
+            className="px-8 py-4 bg-zinc-900 border border-zinc-800 hover:border-amber-500/50 rounded-full font-bold text-white text-lg transition-all flex items-center gap-2"
           >
             <MapPin className="w-5 h-5 text-amber-500" />
             Find Us
@@ -177,7 +144,6 @@ export default function Hero() {
 
       {/* Bottom Gradient */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-zinc-950 to-transparent pointer-events-none" />
-
     </section>
   );
-}
+});

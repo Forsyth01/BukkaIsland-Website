@@ -13,13 +13,14 @@ import {
   MapPin,
   ChevronRight,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeLink, setActiveLink] = useState("/");
   const pathname = usePathname();
+  const router = useRouter();
 
   // Detect scroll for navbar background toggle
   useEffect(() => {
@@ -36,8 +37,9 @@ export default function Navbar() {
     { href: "/#contact", label: "Contact", icon: <MessageSquare className="w-4 h-4" /> },
   ];
 
-  // Handle link clicks (especially for smooth scroll or Home)
+  // ✅ Corrected click handler
   const handleLinkClick = (link) => {
+    // Home scroll
     if (link.href === "/" || link.href === "#") {
       window.scrollTo({ top: 0, behavior: "smooth" });
       setActiveLink("/");
@@ -45,6 +47,7 @@ export default function Navbar() {
       return;
     }
 
+    // Smooth scroll for hash links
     if (link.href.startsWith("/#")) {
       const targetId = link.href.split("#")[1];
       const target = document.getElementById(targetId);
@@ -56,6 +59,8 @@ export default function Navbar() {
       return;
     }
 
+    // Normal page navigation (menu/blog)
+    router.push(link.href);
     setActiveLink(link.href);
     setOpen(false);
   };
@@ -64,7 +69,7 @@ export default function Navbar() {
     <>
       <motion.header
         initial={{ opacity: 0 }}
-        animate={{ opacity: 100 }}
+        animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
         className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
           scrolled
@@ -74,7 +79,6 @@ export default function Navbar() {
       >
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
-
             {/* 🔸 Logo */}
             <motion.a
               href="/"
