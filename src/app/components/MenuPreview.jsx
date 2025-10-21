@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect, memo } from "react";
-import { Flame, Star, ArrowRight } from "lucide-react";
-import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
+import { Flame, Star, ArrowRight, BookOpen } from "lucide-react";
+import { collection, query, orderBy, limit, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebaseClient";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
-// 🧠 Memoized dish card
+// 🧠 Memoized DishCard
 const DishCard = memo(
   ({ dish }) => {
     const [loaded, setLoaded] = useState(false);
@@ -16,7 +17,6 @@ const DishCard = memo(
         className="group relative bg-zinc-900/60 border border-zinc-800 rounded-xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-500/10"
         aria-label={dish.name}
       >
-        {/* Image */}
         <div className="relative aspect-[5/3] bg-zinc-900 overflow-hidden">
           <img
             src={`${dish.imageUrl}?auto=format&fit=crop&w=400&q=70`}
@@ -31,7 +31,6 @@ const DishCard = memo(
             }`}
           />
 
-          {/* Spicy indicator */}
           {dish.spicy > 0 && (
             <div className="absolute top-3 right-3 flex gap-1">
               {Array.from({ length: Math.min(dish.spicy, 3) }).map((_, i) => (
@@ -44,29 +43,20 @@ const DishCard = memo(
             </div>
           )}
 
-          {/* Popular tag */}
           <div className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">
             Popular
           </div>
         </div>
 
-        {/* Text */}
         <div className="p-4">
-          <h3 className="text-base font-bold text-white mb-1 truncate">
-            {dish.name}
-          </h3>
-          <p className="text-xs text-zinc-500 mb-3 line-clamp-1">
-            {dish.description}
-          </p>
+          <h3 className="text-base font-bold text-white mb-1 truncate">{dish.name}</h3>
+          <p className="text-xs text-zinc-500 mb-3 line-clamp-1">{dish.description}</p>
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1">
               <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
-              <span className="text-xs text-white font-semibold">
-                {dish.rating}
-              </span>
+              <span className="text-xs text-white font-semibold">{dish.rating}</span>
             </div>
-
             <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
               {dish.price}
             </span>
@@ -86,25 +76,26 @@ export default function MenuPreview() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let mounted = true;
+    const q = query(collection(db, "dishes"), orderBy("createdAt", "desc"), limit(10));
 
-    getDocs(
-      query(collection(db, "dishes"), orderBy("createdAt", "desc"), limit(10))
-    )
-      .then((snapshot) => {
-        if (!mounted) return;
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
         const data = snapshot.docs
           .map((doc) => ({ id: doc.id, ...doc.data() }))
           .filter((dish) => dish.popular)
-          .slice(0, 4);
-        setDishes(data);
-      })
-      .catch((err) => console.error("Error fetching dishes:", err))
-      .finally(() => mounted && setLoading(false));
+          .slice(0, 3); // only 3 popular dishes
 
-    return () => {
-      mounted = false;
-    };
+        setDishes(data);
+        setLoading(false);
+      },
+      (err) => {
+        console.error("Error fetching dishes:", err);
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribe();
   }, []);
 
   return (
@@ -116,8 +107,7 @@ export default function MenuPreview() {
           backgroundImage:
             "linear-gradient(to right, #18181b 1px, transparent 1px), linear-gradient(to bottom, #18181b 1px, transparent 1px)",
           backgroundSize: "4rem 4rem",
-          maskImage:
-            "radial-gradient(ellipse 80% 50% at 50% 0%, #000 70%, transparent 110%)",
+          maskImage: "radial-gradient(ellipse 80% 50% at 50% 0%, #000 70%, transparent 110%)",
           WebkitMaskImage:
             "radial-gradient(ellipse 80% 50% at 50% 0%, #000 70%, transparent 110%)",
         }}
@@ -132,17 +122,14 @@ export default function MenuPreview() {
               Dishes
             </span>
           </h2>
-          <p className="text-zinc-400">
-            Handpicked favorites from our authentic menu
-          </p>
+          <p className="text-zinc-400">Handpicked favorites from our authentic menu</p>
         </header>
 
         {/* Dishes Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16" role="list">
-          {!loading && dishes.length > 0 ? (
-            dishes.map((dish) => <DishCard key={dish.id} dish={dish} />)
-          ) : (
-            Array.from({ length: 4 }).map((_, i) => (
+          {loading ? (
+            // Skeletons while fetching
+            Array.from({ length: 3 }).map((_, i) => (
               <div
                 key={i}
                 className="bg-zinc-900/40 border border-zinc-800 rounded-xl overflow-hidden animate-pulse"
@@ -158,10 +145,23 @@ export default function MenuPreview() {
                 </div>
               </div>
             ))
+          ) : dishes.length > 0 ? (
+            dishes.map((dish) => <DishCard key={dish.id} dish={dish} />)
+          ) : (
+            // Motion “menu not found” message
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-center py-20 col-span-full"
+            >
+              <BookOpen className="w-16 h-16 text-zinc-700 mx-auto mb-4" />
+              <p className="text-lg text-zinc-400">Menu not found.</p>
+            </motion.div>
           )}
         </div>
 
-        {/* View Menu Button (✅ Next.js Link version) */}
+        {/* View Menu Button */}
         <div className="flex justify-center">
           <Link
             href="/menu"

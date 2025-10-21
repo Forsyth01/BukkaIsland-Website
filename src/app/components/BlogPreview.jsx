@@ -3,8 +3,9 @@
 import { useState, useEffect, memo } from "react";
 import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
 import { db } from "@/lib/firebaseClient";
-import { Calendar, ArrowRight } from "lucide-react";
+import { Calendar, ArrowRight, BookOpen } from "lucide-react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 // 🧠 Memoized BlogCard with lazy loading + fade-in
 const BlogCard = memo(({ post, eager }) => {
@@ -70,28 +71,22 @@ BlogCard.displayName = "BlogCard";
 // 🏁 Main Component
 export default function BlogPreview() {
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const cached = localStorage.getItem("blog-preview");
-
-    if (cached) {
-      setPosts(JSON.parse(cached));
-      return;
-    }
-
     getDocs(query(collection(db, "blogs"), orderBy("updatedAt", "desc"), limit(3)))
       .then((snapshot) => {
         const data = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-        localStorage.setItem("blog-preview", JSON.stringify(data));
         setPosts(data);
       })
-      .catch((err) => console.error("Error fetching posts:", err));
+      .catch((err) => console.error("Error fetching posts:", err))
+      .finally(() => setLoading(false));
   }, []);
 
-  const isEmpty = posts.length === 0;
+  const isEmpty = !loading && posts.length === 0;
 
   return (
     <section className="relative bg-zinc-950 py-24">
@@ -128,25 +123,41 @@ export default function BlogPreview() {
           </div>
         </header>
 
-        {/* 📰 Blog Cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {!isEmpty
-            ? posts.map((post, i) => <BlogCard key={post.id} post={post} eager={i === 0} />)
-            : Array.from({ length: 3 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="bg-zinc-900/40 border border-zinc-800 rounded-2xl overflow-hidden animate-pulse"
-                >
-                  <div className="aspect-[16/9] bg-zinc-800/30" />
-                  <div className="p-6 space-y-3">
-                    <div className="h-6 w-3/4 bg-zinc-800/30 rounded" />
-                    <div className="h-3 w-full bg-zinc-800/20 rounded" />
-                    <div className="h-3 w-5/6 bg-zinc-800/20 rounded" />
-                    <div className="h-3 w-32 bg-zinc-800/30 rounded" />
-                  </div>
+        {/* 📰 Blog Cards / Skeleton / No Posts */}
+        {loading ? (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div
+                key={i}
+                className="bg-zinc-900/40 border border-zinc-800 rounded-2xl overflow-hidden animate-pulse"
+              >
+                <div className="aspect-[16/9] bg-zinc-800/30" />
+                <div className="p-6 space-y-3">
+                  <div className="h-6 w-3/4 bg-zinc-800/30 rounded" />
+                  <div className="h-3 w-full bg-zinc-800/20 rounded" />
+                  <div className="h-3 w-5/6 bg-zinc-800/20 rounded" />
+                  <div className="h-3 w-32 bg-zinc-800/30 rounded" />
                 </div>
-              ))}
-        </div>
+              </div>
+            ))}
+          </div>
+        ) : isEmpty ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center py-20"
+          >
+            <BookOpen className="w-16 h-16 text-zinc-700 mx-auto mb-4" />
+            <p className="text-lg text-zinc-400">No posts found.</p>
+          </motion.div>
+        ) : (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {posts.map((post, i) => (
+              <BlogCard key={post.id} post={post} eager={i === 0} />
+            ))}
+          </div>
+        )}
 
         {/* 📘 CTA Button */}
         <div className="flex justify-center mt-16">
