@@ -22,8 +22,8 @@ export default function Footer() {
 
   const contactInfo = [
     { icon: Mail, text: "contact@bukkaisland.com" },
-    { icon: Phone, text: "+234 (0) 700 000 0000" },
-    { icon: MapPin, text: "Lekki Phase 1, Lagos" },
+    { icon: Phone, text: "+1 (317) 459-3144" },
+    { icon: MapPin, text: "4300 Old Spanish Trl, Houston, TX 77021" },
   ];
 
   return (

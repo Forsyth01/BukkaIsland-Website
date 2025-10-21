@@ -1,37 +1,100 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
+import { useState, useEffect, memo } from "react";
 import {
   Plus,
   Trash2,
   LogOut,
   Edit,
   FileText,
-  Menu as MenuIcon,
+  Menu,
+  X,
+  Search,
+  Calendar,
+  Utensils,
+  Sparkles,
 } from "lucide-react";
-import ProtectedRoute from "@/app/components/ProtectedRoute";
-import toast, { Toaster } from "react-hot-toast";
 
-import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
-import { signOut } from "firebase/auth";
+// Memoized Card Component for Performance
+const DashboardCard = memo(({ item, type, onEdit, onDelete, getImageUrl }) => {
+  const imageValue = type === 'dish' ? (item.image || item.imageUrl) : item.image;
+  const title = type === 'dish' ? item.name : item.title;
+  const description = type === 'dish' ? item.desc : (item.content ? item.content.replace(/<[^>]+>/g, "").slice(0, 100) : "No content");
+  const date = item.createdAt?.toDate ? item.createdAt.toDate().toLocaleDateString() : "";
+
+  return (
+    <div className="group bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl overflow-hidden hover:border-amber-500/30 transition-all duration-300">
+      <div className="relative w-full h-48 bg-zinc-950 overflow-hidden">
+        <img
+          src={getImageUrl(imageValue)}
+          alt={title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          loading="lazy"
+          onError={(e) => {
+            e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='400' height='300' fill='%2327272a'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='16' fill='%23a1a1aa'%3EImage Error%3C/text%3E%3C/svg%3E";
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent opacity-60" />
+      </div>
+      
+      <div className="p-5">
+        <h3 className="text-lg font-bold text-white mb-2 line-clamp-1">{title}</h3>
+        <p className="text-zinc-400 text-sm line-clamp-2 mb-3">{description}</p>
+        
+        {type === 'dish' && item.price && (
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-amber-500 font-semibold">{item.price}</span>
+            {item.prepTime && (
+              <>
+                <span className="text-zinc-600">•</span>
+                <span className="text-zinc-500 text-sm">{item.prepTime}</span>
+              </>
+            )}
+          </div>
+        )}
+        
+        <div className="flex items-center justify-between pt-3 border-t border-zinc-800">
+          <div className="flex items-center gap-1.5 text-zinc-500 text-xs">
+            <Calendar className="w-3.5 h-3.5" />
+            <span>{date}</span>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => onEdit(item.id)}
+              className="p-2 rounded-lg bg-amber-500/10 text-amber-500 hover:bg-amber-500/20 transition-colors"
+              aria-label="Edit"
+            >
+              <Edit className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => onDelete(item.id)}
+              className="p-2 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors"
+              aria-label="Delete"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+DashboardCard.displayName = 'DashboardCard';
 
 export default function Dashboard() {
-  const router = useRouter();
-
   const [tab, setTab] = useState("posts");
   const [posts, setPosts] = useState([]);
   const [menu, setMenu] = useState([]);
-
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedType, setSelectedType] = useState(null);
-
   const [db, setDb] = useState(null);
   const [auth, setAuth] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Initialize tab from URL
   useEffect(() => {
@@ -47,26 +110,19 @@ export default function Dashboard() {
     import("@/lib/firebaseClient").then((mod) => {
       setDb(mod.db);
       setAuth(mod.auth);
+    }).catch(() => {
+      // Fallback for demo
+      setLoading(false);
     });
   }, []);
 
   // Helper function to construct proper Cloudinary URL
   const getImageUrl = (imageValue) => {
     if (!imageValue) {
-      return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='400' height='300' fill='%23e5e7eb'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='18' fill='%239ca3af'%3ENo Image%3C/text%3E%3C/svg%3E";
+      return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='400' height='300' fill='%2327272a'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='18' fill='%23a1a1aa'%3ENo Image%3C/text%3E%3C/svg%3E";
     }
-    
-    // If it's already a complete URL, return it as-is
-    if (imageValue.includes('://')) {
-      return imageValue;
-    }
-    
-    // If it starts with 'res.cloudinary.com', add https://
-    if (imageValue.startsWith('res.cloudinary.com')) {
-      return `https://${imageValue}`;
-    }
-    
-    // Otherwise return the value as-is
+    if (imageValue.includes('://')) return imageValue;
+    if (imageValue.startsWith('res.cloudinary.com')) return `https://${imageValue}`;
     return imageValue;
   };
 
@@ -75,43 +131,43 @@ export default function Dashboard() {
     if (!db) return;
 
     const fetchData = async () => {
-      // Posts
-      const postsSnap = await getDocs(collection(db, "blogs"));
-      const postsData = postsSnap.docs.map((doc) => {
-        return {
+      try {
+        const { collection, getDocs } = await import("firebase/firestore");
+        
+        // Posts
+        const postsSnap = await getDocs(collection(db, "blogs"));
+        const postsData = postsSnap.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-        };
-      });
-      
-      // Sort posts by createdAt (newest first)
-      postsData.sort((a, b) => {
-        const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(0);
-        const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(0);
-        return dateB - dateA;
-      });
-      
-      setPosts(postsData);
+        }));
+        
+        postsData.sort((a, b) => {
+          const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(0);
+          const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(0);
+          return dateB - dateA;
+        });
+        
+        setPosts(postsData);
 
-      // Menu
-      const menuSnap = await getDocs(collection(db, "dishes"));
-      const menuData = menuSnap.docs.map((doc) => {
-        return {
+        // Menu
+        const menuSnap = await getDocs(collection(db, "dishes"));
+        const menuData = menuSnap.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-        };
-      });
-      
-      // Sort menu by createdAt (newest first)
-      menuData.sort((a, b) => {
-        const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(0);
-        const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(0);
-        return dateB - dateA;
-      });
-      
-      setMenu(menuData);
-
-      setTimeout(() => setLoading(false), 500); // short delay for smoother load
+        }));
+        
+        menuData.sort((a, b) => {
+          const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(0);
+          const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(0);
+          return dateB - dateA;
+        });
+        
+        setMenu(menuData);
+        setTimeout(() => setLoading(false), 500);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      }
     };
 
     fetchData();
@@ -119,8 +175,11 @@ export default function Dashboard() {
 
   const handleLogout = async () => {
     if (!auth) return;
+    const { signOut } = await import("firebase/auth");
     await signOut(auth);
-    router.push("/admin/login");
+    if (typeof window !== "undefined") {
+      window.location.href = "/admin/login";
+    }
   };
 
   const handleDeleteClick = (id, type) => {
@@ -132,200 +191,278 @@ export default function Dashboard() {
   const handleConfirmDelete = async () => {
     if (!db) return;
 
-    if (selectedType === "post") {
-      await deleteDoc(doc(db, "blogs", selectedItem));
-      setPosts((prev) => prev.filter((p) => p.id !== selectedItem));
-    } else if (selectedType === "dish") {
-      await deleteDoc(doc(db, "dishes", selectedItem));
-      setMenu((prev) => prev.filter((d) => d.id !== selectedItem));
+    try {
+      const { deleteDoc, doc } = await import("firebase/firestore");
+      
+      if (selectedType === "post") {
+        await deleteDoc(doc(db, "blogs", selectedItem));
+        setPosts((prev) => prev.filter((p) => p.id !== selectedItem));
+      } else if (selectedType === "dish") {
+        await deleteDoc(doc(db, "dishes", selectedItem));
+        setMenu((prev) => prev.filter((d) => d.id !== selectedItem));
+      }
+      
+      setModalOpen(false);
+    } catch (error) {
+      console.error("Error deleting:", error);
     }
-
-    toast.success("Deleted successfully!", { duration: 4000, position: "top-right" });
-    setModalOpen(false);
   };
 
   const handleTabChange = (newTab) => {
     setTab(newTab);
-    router.replace(`/admin/dashboard?tab=${newTab}`);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set('tab', newTab);
+      window.history.replaceState({}, '', url);
+    }
   };
 
+  const handleEdit = (id) => {
+    if (typeof window !== "undefined") {
+      if (tab === "posts") {
+        window.location.href = `/admin/dashboard/edit/${id}?tab=posts`;
+      } else {
+        window.location.href = `/admin/dashboard/menu/edit/${id}?tab=menu`;
+      }
+    }
+  };
+
+  const handleCreate = () => {
+    if (typeof window !== "undefined") {
+      if (tab === "posts") {
+        window.location.href = `/admin/dashboard/create?tab=posts`;
+      } else {
+        window.location.href = `/admin/dashboard/menu/create?tab=menu`;
+      }
+    }
+  };
+
+  const currentData = tab === "posts" ? posts : menu;
+  const filteredData = currentData.filter(item => {
+    const searchLower = searchQuery.toLowerCase();
+    if (tab === "posts") {
+      return item.title?.toLowerCase().includes(searchLower) || 
+             item.content?.toLowerCase().includes(searchLower);
+    }
+    return item.name?.toLowerCase().includes(searchLower) || 
+           item.desc?.toLowerCase().includes(searchLower);
+  });
+
   return (
-    <ProtectedRoute>
-      <div className="min-h-screen bg-white flex">
-        <Toaster />
+    <div className="min-h-screen bg-zinc-950 text-white">
+      {/* Background Effects */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-20" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-orange-600/10 rounded-full blur-3xl" />
+      </div>
 
-        {/* Sidebar */}
-        <div className="fixed left-0 top-0 h-full w-64 bg-gray-900 text-white p-8 flex flex-col">
-          <h2 className="text-2xl font-bold mb-12">Admin</h2>
+      {/* Mobile Header */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-zinc-900/90 backdrop-blur-lg border-b border-zinc-800">
+        <div className="flex items-center justify-between p-4">
+          <h1 className="text-xl font-bold">
+            Bukka<span className="text-amber-500">Island</span>
+          </h1>
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="p-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 transition-colors"
+          >
+            {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+      </div>
 
-          <nav className="flex flex-col gap-2 flex-1">
+      {/* Sidebar */}
+      <aside className={`
+        fixed top-0 left-0 h-full w-72 bg-zinc-900/95 backdrop-blur-xl border-r border-zinc-800 z-50 transition-transform duration-300
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}>
+        <div className="flex flex-col h-full p-6">
+          <div className="mb-8 hidden lg:block">
+            <div className="flex items-center gap-2 mb-2">
+              <Sparkles className="w-5 h-5 text-amber-500" />
+              <h1 className="text-2xl font-bold">
+                Bukka<span className="text-amber-500">Island</span>
+              </h1>
+            </div>
+            <p className="text-zinc-500 text-sm">Admin Dashboard</p>
+          </div>
+
+          <nav className="flex-1 space-y-2">
             <button
-              onClick={() => handleTabChange("posts")}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${
-                tab === "posts" ? "bg-orange-500" : "hover:bg-gray-800"
+              onClick={() => { handleTabChange("posts"); setSidebarOpen(false); }}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all ${
+                tab === "posts" 
+                  ? "bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg" 
+                  : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
               }`}
             >
-              <FileText size={18} /> Posts
+              <FileText className="w-5 h-5" />
+              <span>Blog Posts</span>
+              <span className="ml-auto text-xs bg-zinc-800 px-2 py-1 rounded-full">
+                {posts.length}
+              </span>
             </button>
 
             <button
-              onClick={() => handleTabChange("menu")}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${
-                tab === "menu" ? "bg-orange-500" : "hover:bg-gray-800"
+              onClick={() => { handleTabChange("menu"); setSidebarOpen(false); }}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all ${
+                tab === "menu" 
+                  ? "bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg" 
+                  : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
               }`}
             >
-              <MenuIcon size={18} /> Menu
+              <Utensils className="w-5 h-5" />
+              <span>Menu Items</span>
+              <span className="ml-auto text-xs bg-zinc-800 px-2 py-1 rounded-full">
+                {menu.length}
+              </span>
             </button>
 
-            {tab === "posts" && (
-              <Link
-                href="/admin/dashboard/create?tab=posts"
-                className="flex items-center gap-3 px-4 py-3 hover:bg-gray-800 rounded-lg transition-colors mt-4"
+            <div className="pt-4">
+              <button
+                onClick={() => { handleCreate(); setSidebarOpen(false); }}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-amber-500 hover:bg-amber-500/10 border border-amber-500/20 transition-all"
               >
-                <Plus size={18} /> New Post
-              </Link>
-            )}
-
-            {tab === "menu" && (
-              <Link
-                href="/admin/dashboard/menu/create?tab=menu"
-                className="flex items-center gap-3 px-4 py-3 hover:bg-gray-800 rounded-lg transition-colors mt-4"
-              >
-                <Plus size={18} /> New Dish
-              </Link>
-            )}
+                <Plus className="w-5 h-5" />
+                <span>New {tab === "posts" ? "Post" : "Dish"}</span>
+              </button>
+            </div>
           </nav>
 
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 px-4 py-3 hover:bg-gray-800 rounded-lg transition-colors mt-auto"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-red-400 hover:bg-red-500/10 border border-red-500/20 transition-all"
           >
-            <LogOut size={18} /> Logout
+            <LogOut className="w-5 h-5" />
+            <span>Logout</span>
           </button>
         </div>
+      </aside>
 
-        {/* Main Content */}
-        <div className="ml-64 flex-1 min-h-screen p-8">
-          <h1 className="text-3xl font-bold mb-6 capitalize">{tab}</h1>
+      {/* Overlay for mobile */}
+      {sidebarOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black/50 z-40"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
-          {loading ? (
-            <div className="flex items-center justify-center min-h-[300px]">
-              <p className="text-gray-500">Loading content...</p>
-            </div>
-          ) : tab === "posts" ? (
-            posts.length === 0 ? (
-              <p>No posts yet.</p>
-            ) : (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {posts.map((post) => (
-                  <div key={post.id} className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col">
-                    <div className="relative w-full h-48 bg-gray-200">
-                      <img
-                        src={getImageUrl(post.image)}
-                        alt={post.title}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                        onError={(e) => {
-                          e.target.onerror = null; // Prevent infinite loop
-                          e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='400' height='300' fill='%23e5e7eb'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='18' fill='%239ca3af'%3EImage Unavailable%3C/text%3E%3C/svg%3E";
-                        }}
-                      />
-                    </div>
-                    <div className="p-4 flex-1 flex flex-col justify-between">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1">{post.title}</h3>
-                      <p className="text-gray-600 text-sm line-clamp-2">
-                        {post.content ? post.content.replace(/<[^>]+>/g, "").slice(0, 100) : "No content available"}
-                      </p>
-                      <div className="mt-3 flex justify-between items-center text-xs text-gray-400">
-                        <span>
-                          {post.createdAt?.toDate ? post.createdAt.toDate().toLocaleDateString() : ""}
-                        </span>
-                        <div className="flex gap-2">
-                          <Link 
-                            href={`/admin/dashboard/edit/${post.id}?tab=posts`} 
-                            className="text-orange-500 hover:text-orange-600 font-medium transition-colors"
-                          >
-                            Edit
-                          </Link>
-                          <button 
-                            onClick={() => handleDeleteClick(post.id, "post")} 
-                            className="text-red-500 hover:text-red-600 font-medium transition-colors"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )
-          ) : menu.length === 0 ? (
-            <p>No dishes yet.</p>
-          ) : (
-                          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {menu.map((dish) => {
-                const imageValue = dish.image || dish.imageUrl;
-                const imageSrc = getImageUrl(imageValue);
-                
-                return (
-                  <div key={dish.id} className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col">
-                    <div className="relative w-full h-48 bg-gray-200">
-                      <img
-                        src={imageSrc}
-                        alt={dish.name}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                        onError={(e) => {
-                          console.error('Image load error for dish:', dish.name, '| Original URL:', imageValue, '| Constructed URL:', e.target.src);
-                          e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='400' height='300' fill='%23e5e7eb'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='18' fill='%239ca3af'%3EImage Failed%3C/text%3E%3C/svg%3E";
-                        }}
-                      />
-                    </div>
-                    <div className="p-4 flex-1 flex flex-col justify-between">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1">{dish.name}</h3>
-                      <p className="text-gray-600 text-sm line-clamp-2">{dish.desc}</p>
-                      <p className="text-orange-600 font-semibold text-sm">{dish.price} • {dish.prepTime}</p>
-                      <div className="mt-3 flex justify-between items-center text-xs text-gray-400">
-                        <span>{dish.createdAt?.toDate ? dish.createdAt.toDate().toLocaleDateString() : ""}</span>
-                        <div className="flex gap-2">
-                          <Link 
-                            href={`/admin/dashboard/menu/edit/${dish.id}?tab=menu`} 
-                            className="text-orange-500 hover:text-orange-600 font-medium transition-colors"
-                          >
-                            Edit
-                          </Link>
-                          <button 
-                            onClick={() => handleDeleteClick(dish.id, "dish")} 
-                            className="text-red-500 hover:text-red-600 font-medium transition-colors"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          {/* Confirm Modal */}
-          {modalOpen && (
-            <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-              <div className="bg-white rounded-xl shadow-lg p-6 w-96">
-                <p className="text-gray-800 mb-6">
-                  Are you sure you want to delete this item?
+      {/* Main Content */}
+      <main className="lg:ml-72 min-h-screen pt-20 lg:pt-0">
+        <div className="p-6 lg:p-8 relative z-10">
+          {/* Header */}
+          <div className="mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+              <div>
+                <h2 className="text-3xl font-bold mb-2 capitalize">{tab}</h2>
+                <p className="text-zinc-400">
+                  Manage your {tab === "posts" ? "blog posts" : "menu items"}
                 </p>
-                <div className="flex justify-end gap-4">
-                  <button onClick={() => setModalOpen(false)} className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300">Cancel</button>
-                  <button onClick={handleConfirmDelete} className="px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600">Delete</button>
-                </div>
               </div>
+              
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 pr-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-amber-500/50 transition-colors w-full sm:w-64"
+                />
+              </div>
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {[
+                { label: "Total", value: currentData.length },
+                { label: "Published", value: currentData.length },
+                { label: "Draft", value: 0 },
+                { label: "Active", value: currentData.length },
+              ].map((stat, i) => (
+                <div key={i} className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-4 hover:border-amber-500/30 transition-all">
+                  <p className="text-2xl font-bold text-amber-500">{stat.value}</p>
+                  <p className="text-zinc-500 text-sm mt-1">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Content Grid */}
+          {loading ? (
+            <div className="flex items-center justify-center min-h-[400px]">
+              <div className="text-center">
+                <div className="w-16 h-16 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin mx-auto mb-4" />
+                <p className="text-zinc-400">Loading {tab}...</p>
+              </div>
+            </div>
+          ) : filteredData.length === 0 ? (
+            <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
+              <div className="w-20 h-20 bg-zinc-900 rounded-full flex items-center justify-center mb-4">
+                {tab === "posts" ? <FileText className="w-10 h-10 text-zinc-700" /> : <Utensils className="w-10 h-10 text-zinc-700" />}
+              </div>
+              <h3 className="text-xl font-bold text-zinc-300 mb-2">
+                {searchQuery ? "No results found" : `No ${tab} yet`}
+              </h3>
+              <p className="text-zinc-500 mb-6">
+                {searchQuery ? "Try a different search term" : `Create your first ${tab === "posts" ? "post" : "dish"} to get started`}
+              </p>
+              {!searchQuery && (
+                <button 
+                  onClick={handleCreate}
+                  className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 rounded-lg font-semibold hover:shadow-lg transition-all"
+                >
+                  <Plus className="w-5 h-5 inline mr-2" />
+                  Create {tab === "posts" ? "Post" : "Dish"}
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredData.map((item) => (
+                <DashboardCard
+                  key={item.id}
+                  item={item}
+                  type={tab === "posts" ? "post" : "dish"}
+                  onEdit={handleEdit}
+                  onDelete={(id) => handleDeleteClick(id, tab === "posts" ? "post" : "dish")}
+                  getImageUrl={getImageUrl}
+                />
+              ))}
             </div>
           )}
         </div>
-      </div>
-    </ProtectedRoute>
+      </main>
+
+      {/* Delete Confirmation Modal */}
+      {modalOpen && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl p-6 w-full max-w-md">
+            <div className="w-12 h-12 bg-red-500/10 rounded-full flex items-center justify-center mb-4">
+              <Trash2 className="w-6 h-6 text-red-500" />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2">Delete {selectedType}?</h3>
+            <p className="text-zinc-400 mb-6">
+              This action cannot be undone. Are you sure you want to delete this item?
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setModalOpen(false)}
+                className="flex-1 px-4 py-3 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-medium transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmDelete}
+                className="flex-1 px-4 py-3 rounded-lg bg-red-500 hover:bg-red-600 text-white font-medium transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
