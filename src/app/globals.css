@@ -1,19 +1,164 @@
 @import "tailwindcss";
 
-*{
+* {
   scroll-behavior: smooth;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   color-scheme: dark;
   background: radial-gradient(circle at 50% -20%, rgba(245, 158, 11, 0.15), transparent 50%),
-              linear-gradient(to right, #18181b 1px, transparent 1px),
-              linear-gradient(to bottom, #18181b 1px, transparent 1px),
-              #09090b; /* fallback base color */
+    linear-gradient(to right, #18181b 1px, transparent 1px),
+    linear-gradient(to bottom, #18181b 1px, transparent 1px),
+    #09090b;
+  /* fallback base color */
   background-size: 4rem 4rem;
   background-repeat: repeat;
-  background-attachment: fixed; /* Prevents flicker during scroll */
+  background-attachment: fixed;
+  /* Prevents flicker during scroll */
   background-blend-mode: overlay;
+}
+
+@keyframes gradient {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
+}
+
+
+@keyframes pulse-slow {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 0.5;
+  }
+}
+
+@keyframes pulse-slower {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+
+  50% {
+    transform: scale(1.15);
+    opacity: 0.4;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 8s ease-in-out infinite;
+}
+
+.animate-pulse-slower {
+  animation: pulse-slower 10s ease-in-out infinite;
+}
+
+@keyframes glow-slow {
+
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+.animate-glow-slow {
+  animation: glow-slow 6s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulseGlow 8s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 0.5;
+  }
+}
+
+/* Reduced GPU Overdraw Animations */
+@keyframes gradient {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 6s ease infinite;
+}
+
+@keyframes softGlow {
+
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.45;
+    transform: scale(1.1);
+  }
+}
+
+.animate-soft-glow {
+  animation: softGlow 10s ease-in-out infinite;
+}
+
+@keyframes lineSlide {
+
+  0%,
+  100% {
+    transform: scaleX(1);
+  }
+
+  50% {
+    transform: scaleX(1.2);
+  }
+}
+
+.animate-line {
+  animation: lineSlide 3s ease-in-out infinite;
 }
