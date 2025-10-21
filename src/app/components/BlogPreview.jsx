@@ -6,8 +6,10 @@ import { db } from "@/lib/firebaseClient";
 import { Calendar, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
-// 🧠 Memoized BlogCard — avoids re-renders when parent changes
+// 🧠 Memoized BlogCard with lazy loading + fade-in
 const BlogCard = memo(({ post }) => {
+  const [loaded, setLoaded] = useState(false);
+
   const date = post.updatedAt?.toDate
     ? post.updatedAt.toDate()
     : post.createdAt?.toDate
@@ -27,27 +29,38 @@ const BlogCard = memo(({ post }) => {
     : "No description available.";
 
   return (
-    <div className="group bg-zinc-900/60 border border-zinc-800 rounded-2xl overflow-hidden shadow-lg backdrop-blur-sm transition-colors duration-200 hover:border-amber-500/50">
+    <div
+      className="bg-zinc-900/60 border border-zinc-800 rounded-2xl overflow-hidden shadow-lg backdrop-blur-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-amber-500/10"
+      style={{ contentVisibility: "auto", containIntrinsicSize: "0 400px" }}
+    >
       <Link href={`/blog/${post.id}`} prefetch={false}>
         <div className="relative aspect-[16/9] bg-zinc-900 overflow-hidden">
           <img
-            src={post.image || "/placeholder.jpg"}
+            src={`${post.image || "/placeholder.jpg"}?auto=format&fit=crop&w=500&q=70`}
             alt={post.title}
             loading="lazy"
             decoding="async"
+            fetchpriority="low"
             width="400"
             height="225"
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ contentVisibility: "auto" }}
+            onLoad={() => setLoaded(true)}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+              loaded ? "opacity-100" : "opacity-0"
+            }`}
+            style={{
+              contentVisibility: "auto",
+              containIntrinsicSize: "400px 225px",
+              transform: "translateZ(0)",
+            }}
           />
         </div>
       </Link>
 
       <div className="p-6">
         <Link href={`/blog/${post.id}`} prefetch={false}>
-          <h3 className="text-xl font-bold text-white mb-3 group-hover:text-amber-500 transition-colors flex items-center justify-between">
+          <h3 className="text-xl font-bold text-white mb-3 flex items-center justify-between">
             <span className="line-clamp-2">{post.title}</span>
-            <ArrowRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex-shrink-0" />
+            <ArrowRight className="w-5 h-5 flex-shrink-0" />
           </h3>
         </Link>
 
@@ -63,7 +76,7 @@ const BlogCard = memo(({ post }) => {
 });
 BlogCard.displayName = "BlogCard";
 
-// 🏎️ Main Component
+// 🏁 Main Component
 export default function BlogPreview() {
   const [posts, setPosts] = useState([]);
 
@@ -94,9 +107,9 @@ export default function BlogPreview() {
   return (
     <section
       className="relative bg-zinc-950 py-24"
-      style={{ contentVisibility: "auto", containIntrinsicSize: "0 900px" }}
+      style={{ contentVisibility: "auto", containIntrinsicSize: "0 800px" }}
     >
-      {/* 🩶 Subtle Grid Background */}
+      {/* 🩶 Static Grid Background */}
       <div
         className="absolute inset-0 opacity-40"
         style={{
@@ -109,14 +122,13 @@ export default function BlogPreview() {
             "radial-gradient(ellipse 80% 50% at 50% 100%, #000 70%, transparent 110%)",
         }}
       />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(245,158,11,0.08),transparent_60%)]" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         {/* 🧡 Header */}
         <header className="text-center mb-16">
           <h2 className="text-5xl md:text-6xl font-black text-white mb-4 tracking-tight">
             From Our{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-500 to-amber-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
               Kitchen
             </span>
           </h2>
@@ -124,9 +136,9 @@ export default function BlogPreview() {
             Stories, recipes, and behind-the-scenes from the Bukka Island team.
           </p>
           <div className="flex items-center justify-center gap-2">
-            <div className="h-0.5 w-20 bg-gradient-to-r from-transparent via-amber-500 to-transparent" />
+            <div className="h-0.5 w-20 bg-amber-500" />
             <Calendar className="w-5 h-5 text-amber-500" aria-hidden="true" />
-            <div className="h-0.5 w-20 bg-gradient-to-r from-transparent via-amber-500 to-transparent" />
+            <div className="h-0.5 w-20 bg-amber-500" />
           </div>
         </header>
 
@@ -152,15 +164,15 @@ export default function BlogPreview() {
           )}
         </div>
 
-        {/* ✨ CTA Button */}
+        {/* 📘 CTA Button */}
         <div className="flex justify-center mt-16">
           <Link
             href="/blog"
             prefetch={false}
-            className="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full font-bold text-lg shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/40 transition-all"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full font-bold text-lg hover:scale-105 transition-transform shadow-lg shadow-amber-500/25"
           >
             Visit Our Blog
-            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
       </div>

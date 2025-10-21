@@ -13,6 +13,7 @@ import {
   MapPin,
   ChevronRight,
 } from "lucide-react";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
 export default function Navbar() {
@@ -36,20 +37,18 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // ✅ Simplified click handler
-  const handleLinkClick = (link) => {
-    setOpen(false);
-    if (link.href.startsWith("/#")) {
-      const id = link.href.split("#")[1];
+  // ✅ Smooth scroll for hash links
+  const handleSmoothScroll = (href) => {
+    if (href.startsWith("/#")) {
+      const id = href.split("#")[1];
       const el = document.getElementById(id);
-      el?.scrollIntoView({ behavior: "smooth" });
-      return;
-    }
-    if (link.href === "/") {
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    } else if (href === "/") {
       window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
+    } else {
+      router.push(href);
     }
-    router.push(link.href);
+    setOpen(false);
   };
 
   return (
@@ -64,11 +63,12 @@ export default function Navbar() {
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* 🔸 Logo */}
-            <a
+            <Link
               href="/"
+              prefetch={false}
               onClick={(e) => {
                 e.preventDefault();
-                handleLinkClick({ href: "/" });
+                handleSmoothScroll("/");
               }}
               className="flex items-center gap-3 group"
             >
@@ -86,38 +86,38 @@ export default function Navbar() {
                   Street Food Truck
                 </div>
               </div>
-            </a>
+            </Link>
 
             {/* 🔹 Desktop Nav */}
             <div className="hidden lg:flex items-center gap-1">
               {links.map((link) => {
                 const isActive = pathname === link.href;
                 return (
-                  <motion.a
-                    key={link.href}
-                    href={link.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleLinkClick(link);
-                    }}
-                    className={`relative flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                      isActive ? "text-white" : "text-zinc-400 hover:text-white"
-                    }`}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    {isActive && (
-                      <motion.div
-                        layoutId="activeTab"
-                        className="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full"
-                        transition={{ type: "spring", stiffness: 250, damping: 20 }}
-                      />
-                    )}
-                    <span className="relative z-10 flex items-center gap-2">
-                      {link.icon}
-                      {link.label}
-                    </span>
-                  </motion.a>
+                  <motion.div key={link.href} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Link
+                      href={link.href}
+                      prefetch={false}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleSmoothScroll(link.href);
+                      }}
+                      className={`relative flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                        isActive ? "text-white" : "text-zinc-400 hover:text-white"
+                      }`}
+                    >
+                      {isActive && (
+                        <motion.div
+                          layoutId="activeTab"
+                          className="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full"
+                          transition={{ type: "spring", stiffness: 250, damping: 20 }}
+                        />
+                      )}
+                      <span className="relative z-10 flex items-center gap-2">
+                        {link.icon}
+                        {link.label}
+                      </span>
+                    </Link>
+                  </motion.div>
                 );
               })}
             </div>
@@ -125,17 +125,18 @@ export default function Navbar() {
             {/* 🔸 CTA + Mobile Menu */}
             <div className="flex items-center gap-3">
               {/* Desktop CTA */}
-              <a
+              <Link
                 href="/menu"
+                prefetch={false}
                 onClick={(e) => {
                   e.preventDefault();
-                  handleLinkClick({ href: "/menu" });
+                  handleSmoothScroll("/menu");
                 }}
                 className="hidden md:flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full font-bold text-sm shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all duration-300"
               >
                 <MapPin className="w-4 h-4" />
                 Order Now
-              </a>
+              </Link>
 
               {/* Mobile Hamburger */}
               <button
@@ -161,12 +162,13 @@ export default function Navbar() {
             >
               <div className="max-w-7xl mx-auto px-4 py-6 space-y-1">
                 {links.map((link) => (
-                  <motion.a
+                  <Link
                     key={link.href}
                     href={link.href}
+                    prefetch={false}
                     onClick={(e) => {
                       e.preventDefault();
-                      handleLinkClick(link);
+                      handleSmoothScroll(link.href);
                     }}
                     className="flex items-center justify-between px-4 py-3 rounded-xl text-zinc-300 hover:text-white hover:bg-zinc-900/60 transition-all duration-200 group"
                   >
@@ -177,18 +179,22 @@ export default function Navbar() {
                       <span className="font-medium">{link.label}</span>
                     </span>
                     <ChevronRight className="w-4 h-4 text-zinc-600 group-hover:text-amber-500 group-hover:translate-x-1 transition-all" />
-                  </motion.a>
+                  </Link>
                 ))}
 
                 {/* Mobile CTA */}
-                <a
+                <Link
                   href="/menu"
-                  onClick={() => setOpen(false)}
+                  prefetch={false}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleSmoothScroll("/menu");
+                  }}
                   className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-amber-500 to-orange-600 text-white px-6 py-3.5 rounded-full font-bold shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all duration-300"
                 >
                   <MapPin className="w-5 h-5" />
                   Order Now
-                </a>
+                </Link>
 
                 <div className="pt-6 border-t border-zinc-800/50 text-center">
                   <p className="text-xs text-zinc-600">

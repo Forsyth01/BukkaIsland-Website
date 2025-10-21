@@ -7,72 +7,86 @@ import { db } from "@/lib/firebaseClient";
 
 // 🧠 Memoized dish card
 const DishCard = memo(
-  ({ dish }) => (
-    <article
-      className="group relative bg-zinc-900/60 border border-zinc-800 rounded-xl overflow-hidden hover:border-amber-500/50 transition-all duration-200"
-      aria-label={dish.name}
-    >
-      {/* Image */}
-      <div className="relative aspect-[5/3] bg-zinc-900 overflow-hidden">
-        <img
-          src={dish.imageUrl}
-          alt={dish.name}
-          loading="lazy"
-          decoding="async"
-          className="absolute inset-0 w-full h-full object-cover"
-          width="400"
-          height="240"
-          style={{ contentVisibility: "auto" }}
-        />
+  ({ dish }) => {
+    const [loaded, setLoaded] = useState(false);
 
-        {/* Spicy indicator */}
-        {dish.spicy > 0 && (
-          <div className="absolute top-3 right-3 flex gap-1">
-            {Array.from({ length: Math.min(dish.spicy, 3) }).map((_, i) => (
-              <Flame
-                key={i}
-                className="w-3 h-3 text-orange-500 fill-orange-500"
-                aria-hidden="true"
-              />
-            ))}
+    return (
+      <article
+        className="group relative bg-zinc-900/60 border border-zinc-800 rounded-xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-500/10"
+        aria-label={dish.name}
+        style={{ contentVisibility: "auto", containIntrinsicSize: "0 400px" }}
+      >
+        {/* Image */}
+        <div className="relative aspect-[5/3] bg-zinc-900 overflow-hidden">
+          <img
+            src={`${dish.imageUrl}?auto=format&fit=crop&w=400&q=70`}
+            alt={dish.name}
+            loading="lazy"
+            decoding="async"
+            fetchpriority="low"
+            width="400"
+            height="240"
+            onLoad={() => setLoaded(true)}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+              loaded ? "opacity-100" : "opacity-0"
+            }`}
+            style={{
+              contentVisibility: "auto",
+              containIntrinsicSize: "400px 240px",
+              transform: "translateZ(0)",
+            }}
+          />
+
+          {/* Spicy indicator */}
+          {dish.spicy > 0 && (
+            <div className="absolute top-3 right-3 flex gap-1">
+              {Array.from({ length: Math.min(dish.spicy, 3) }).map((_, i) => (
+                <Flame
+                  key={i}
+                  className="w-3 h-3 text-orange-500 fill-orange-500"
+                  aria-hidden="true"
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Popular tag */}
+          <div className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+            Popular
           </div>
-        )}
-
-        {/* Popular tag */}
-        <div className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-          Popular
         </div>
-      </div>
 
-      {/* Text */}
-      <div className="p-4">
-        <h3 className="text-base font-bold text-white mb-1 truncate">
-          {dish.name}
-        </h3>
-        <p className="text-xs text-zinc-500 mb-3 line-clamp-1">
-          {dish.description}
-        </p>
+        {/* Text */}
+        <div className="p-4">
+          <h3 className="text-base font-bold text-white mb-1 truncate">
+            {dish.name}
+          </h3>
+          <p className="text-xs text-zinc-500 mb-3 line-clamp-1">
+            {dish.description}
+          </p>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1">
-            <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
-            <span className="text-xs text-white font-semibold">
-              {dish.rating}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1">
+              <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
+              <span className="text-xs text-white font-semibold">
+                {dish.rating}
+              </span>
+            </div>
+
+            <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
+              {dish.price}
             </span>
           </div>
-
-          <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
-            {dish.price}
-          </span>
         </div>
-      </div>
-    </article>
-  ),
+      </article>
+    );
+  },
   (prev, next) => prev.dish.id === next.dish.id
 );
 
 DishCard.displayName = "DishCard";
 
+// ⚡ Main Component
 export default function MenuPreview() {
   const [dishes, setDishes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -143,7 +157,7 @@ export default function MenuPreview() {
             Array.from({ length: 4 }).map((_, i) => (
               <div
                 key={i}
-                className="animate-pulse bg-zinc-900/40 border border-zinc-800 rounded-xl overflow-hidden"
+                className="bg-zinc-900/40 border border-zinc-800 rounded-xl overflow-hidden animate-pulse"
               >
                 <div className="aspect-[5/3] bg-zinc-800/30" />
                 <div className="p-4 space-y-2">
@@ -159,16 +173,14 @@ export default function MenuPreview() {
           )}
         </div>
 
-        {/* ✅ View Menu Button */}
+        {/* View Menu Button */}
         <div className="flex justify-center">
           <a
-            href="/#menu"
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full font-bold shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/40 transition-all group"
+            href="/menu"
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full font-bold shadow-lg shadow-amber-500/25 hover:scale-105 transition-transform"
           >
             View Menu
-            <span className="transition-transform group-hover:translate-x-1">
-              <ArrowRight className="w-4 h-4" />
-            </span>
+            <ArrowRight className="w-4 h-4" />
           </a>
         </div>
       </div>

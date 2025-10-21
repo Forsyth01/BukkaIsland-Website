@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Mail, MapPin, Phone, MessageCircle, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 const contactMethods = [
   {
@@ -88,7 +89,9 @@ export default function Contact() {
         {/* Contact Cards */}
         <motion.div
           variants={{
-            visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
+            visible: {
+              transition: { staggerChildren: 0.1, delayChildren: 0.1 },
+            },
           }}
           className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
         >
@@ -100,7 +103,9 @@ export default function Contact() {
                 variants={fadeUp}
                 href={method.href}
                 target={method.href.startsWith("http") ? "_blank" : "_self"}
-                rel={method.href.startsWith("http") ? "noopener noreferrer" : ""}
+                rel={
+                  method.href.startsWith("http") ? "noopener noreferrer" : ""
+                }
                 whileHover={{ y: -4 }}
                 className="group relative bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-2xl p-6 border border-zinc-800 hover:border-amber-500/50 transition-all duration-300 overflow-hidden"
               >
@@ -127,7 +132,9 @@ export default function Contact() {
         {/* CTA */}
         <motion.div variants={fadeUp} className="text-center">
           <div className="bg-gradient-to-br from-zinc-900/60 to-zinc-950/60 border border-zinc-800 rounded-2xl p-12 backdrop-blur-xs">
-            <h3 className="text-3xl font-bold text-white mb-4">Ready to Order?</h3>
+            <h3 className="text-3xl font-bold text-white mb-4">
+              Ready to Order?
+            </h3>
             <p className="text-zinc-400 mb-8 max-w-xl mx-auto">
               Reach out through any of our channels above, or click below to
               explore our menu!
@@ -141,12 +148,14 @@ export default function Contact() {
                 Send Email <ArrowRight className="w-4 h-4" />
               </a>
 
-              <a
-                href="/#menu"
+              <Link
+                href="/menu"
+                prefetch={false}
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-zinc-900 border border-zinc-800 hover:border-amber-500/50 text-white rounded-full font-bold transition-transform hover:scale-105"
               >
-                View Menu <ArrowRight className="w-4 h-4" />
-              </a>
+                View Menu
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
           </div>
         </motion.div>
