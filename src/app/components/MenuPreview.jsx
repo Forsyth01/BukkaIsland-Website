@@ -135,7 +135,7 @@ export default function MenuPreview() {
                 className="bg-zinc-900/40 border border-zinc-800 rounded-xl overflow-hidden animate-pulse"
               >
                 <div className="aspect-[5/3] bg-zinc-800/30" />
-                <div className="p-4 space-y-2">
+                <div className="p-4 space-y-2"> 
                   <div className="h-4 w-3/4 bg-zinc-800/30 rounded" />
                   <div className="h-3 w-full bg-zinc-800/20 rounded" />
                   <div className="flex items-center justify-between pt-2">
