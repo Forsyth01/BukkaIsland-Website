@@ -7,7 +7,7 @@ import { Calendar, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 // 🧠 Memoized BlogCard with lazy loading + fade-in
-const BlogCard = memo(({ post }) => {
+const BlogCard = memo(({ post, eager }) => {
   const [loaded, setLoaded] = useState(false);
 
   const date = post.updatedAt?.toDate
@@ -29,35 +29,26 @@ const BlogCard = memo(({ post }) => {
     : "No description available.";
 
   return (
-    <div
-      className="bg-zinc-900/60 border border-zinc-800 rounded-2xl overflow-hidden shadow-lg backdrop-blur-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-amber-500/10"
-      style={{ contentVisibility: "auto", containIntrinsicSize: "0 400px" }}
-    >
-      <Link href={`/blog/${post.id}`} prefetch={false}>
+    <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl overflow-hidden shadow-lg backdrop-blur-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-amber-500/10">
+      <Link href={`/blog/${post.id}`} prefetch>
         <div className="relative aspect-[16/9] bg-zinc-900 overflow-hidden">
           <img
             src={`${post.image || "/placeholder.jpg"}?auto=format&fit=crop&w=500&q=70`}
             alt={post.title}
-            loading="lazy"
+            loading={eager ? "eager" : "lazy"}
             decoding="async"
-            fetchpriority="low"
             width="400"
             height="225"
             onLoad={() => setLoaded(true)}
             className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
               loaded ? "opacity-100" : "opacity-0"
             }`}
-            style={{
-              contentVisibility: "auto",
-              containIntrinsicSize: "400px 225px",
-              transform: "translateZ(0)",
-            }}
           />
         </div>
       </Link>
 
       <div className="p-6">
-        <Link href={`/blog/${post.id}`} prefetch={false}>
+        <Link href={`/blog/${post.id}`} prefetch>
           <h3 className="text-xl font-bold text-white mb-3 flex items-center justify-between">
             <span className="line-clamp-2">{post.title}</span>
             <ArrowRight className="w-5 h-5 flex-shrink-0" />
@@ -81,22 +72,20 @@ export default function BlogPreview() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    const cached = sessionStorage.getItem("blog-preview");
+    const cached = localStorage.getItem("blog-preview");
 
     if (cached) {
       setPosts(JSON.parse(cached));
       return;
     }
 
-    getDocs(
-      query(collection(db, "blogs"), orderBy("updatedAt", "desc"), limit(3))
-    )
+    getDocs(query(collection(db, "blogs"), orderBy("updatedAt", "desc"), limit(3)))
       .then((snapshot) => {
         const data = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-        sessionStorage.setItem("blog-preview", JSON.stringify(data));
+        localStorage.setItem("blog-preview", JSON.stringify(data));
         setPosts(data);
       })
       .catch((err) => console.error("Error fetching posts:", err));
@@ -105,10 +94,7 @@ export default function BlogPreview() {
   const isEmpty = posts.length === 0;
 
   return (
-    <section
-      className="relative bg-zinc-950 py-24"
-      style={{ contentVisibility: "auto", containIntrinsicSize: "0 800px" }}
-    >
+    <section className="relative bg-zinc-950 py-24">
       {/* 🩶 Static Grid Background */}
       <div
         className="absolute inset-0 opacity-40"
@@ -144,31 +130,29 @@ export default function BlogPreview() {
 
         {/* 📰 Blog Cards */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {!isEmpty ? (
-            posts.map((post) => <BlogCard key={post.id} post={post} />)
-          ) : (
-            Array.from({ length: 3 }).map((_, i) => (
-              <div
-                key={i}
-                className="bg-zinc-900/40 border border-zinc-800 rounded-2xl overflow-hidden animate-pulse"
-              >
-                <div className="aspect-[16/9] bg-zinc-800/30" />
-                <div className="p-6 space-y-3">
-                  <div className="h-6 w-3/4 bg-zinc-800/30 rounded" />
-                  <div className="h-3 w-full bg-zinc-800/20 rounded" />
-                  <div className="h-3 w-5/6 bg-zinc-800/20 rounded" />
-                  <div className="h-3 w-32 bg-zinc-800/30 rounded" />
+          {!isEmpty
+            ? posts.map((post, i) => <BlogCard key={post.id} post={post} eager={i === 0} />)
+            : Array.from({ length: 3 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="bg-zinc-900/40 border border-zinc-800 rounded-2xl overflow-hidden animate-pulse"
+                >
+                  <div className="aspect-[16/9] bg-zinc-800/30" />
+                  <div className="p-6 space-y-3">
+                    <div className="h-6 w-3/4 bg-zinc-800/30 rounded" />
+                    <div className="h-3 w-full bg-zinc-800/20 rounded" />
+                    <div className="h-3 w-5/6 bg-zinc-800/20 rounded" />
+                    <div className="h-3 w-32 bg-zinc-800/30 rounded" />
+                  </div>
                 </div>
-              </div>
-            ))
-          )}
+              ))}
         </div>
 
         {/* 📘 CTA Button */}
         <div className="flex justify-center mt-16">
           <Link
             href="/blog"
-            prefetch={false}
+            prefetch
             className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full font-bold text-lg hover:scale-105 transition-transform shadow-lg shadow-amber-500/25"
           >
             Visit Our Blog

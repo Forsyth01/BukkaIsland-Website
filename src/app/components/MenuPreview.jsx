@@ -4,6 +4,7 @@ import { useState, useEffect, memo } from "react";
 import { Flame, Star, ArrowRight } from "lucide-react";
 import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
 import { db } from "@/lib/firebaseClient";
+import Link from "next/link";
 
 // 🧠 Memoized dish card
 const DishCard = memo(
@@ -14,7 +15,6 @@ const DishCard = memo(
       <article
         className="group relative bg-zinc-900/60 border border-zinc-800 rounded-xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-500/10"
         aria-label={dish.name}
-        style={{ contentVisibility: "auto", containIntrinsicSize: "0 400px" }}
       >
         {/* Image */}
         <div className="relative aspect-[5/3] bg-zinc-900 overflow-hidden">
@@ -23,18 +23,12 @@ const DishCard = memo(
             alt={dish.name}
             loading="lazy"
             decoding="async"
-            fetchpriority="low"
             width="400"
             height="240"
             onLoad={() => setLoaded(true)}
             className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
               loaded ? "opacity-100" : "opacity-0"
             }`}
-            style={{
-              contentVisibility: "auto",
-              containIntrinsicSize: "400px 240px",
-              transform: "translateZ(0)",
-            }}
           />
 
           {/* Spicy indicator */}
@@ -114,10 +108,7 @@ export default function MenuPreview() {
   }, []);
 
   return (
-    <section
-      className="relative bg-zinc-950 py-24"
-      style={{ contentVisibility: "auto", containIntrinsicSize: "0 800px" }}
-    >
+    <section className="relative bg-zinc-950 py-24">
       {/* Background Grid */}
       <div
         className="absolute inset-0 opacity-40"
@@ -147,10 +138,7 @@ export default function MenuPreview() {
         </header>
 
         {/* Dishes Grid */}
-        <div
-          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"
-          role="list"
-        >
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16" role="list">
           {!loading && dishes.length > 0 ? (
             dishes.map((dish) => <DishCard key={dish.id} dish={dish} />)
           ) : (
@@ -173,15 +161,16 @@ export default function MenuPreview() {
           )}
         </div>
 
-        {/* View Menu Button */}
+        {/* View Menu Button (✅ Next.js Link version) */}
         <div className="flex justify-center">
-          <a
+          <Link
             href="/menu"
+            prefetch={false}
             className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full font-bold shadow-lg shadow-amber-500/25 hover:scale-105 transition-transform"
           >
             View Menu
             <ArrowRight className="w-4 h-4" />
-          </a>
+          </Link>
         </div>
       </div>
 
