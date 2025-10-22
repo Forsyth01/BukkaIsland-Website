@@ -60,7 +60,7 @@ export default function MenuPage() {
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Back Button */}
- <motion.div
+ {/* <motion.div
   initial={{ opacity: 0, y: -15 }}
   animate={{ opacity: 1, y: 0 }}
   transition={{ duration: 0.6 }}
@@ -77,7 +77,7 @@ export default function MenuPage() {
     </motion.div>
     <span className="tracking-wide group-hover:font-semibold">Back to Home</span>
   </Link>
-</motion.div>
+</motion.div> */}
 
 
         {/* Header */}

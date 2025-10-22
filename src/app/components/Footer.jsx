@@ -68,7 +68,7 @@ export default function Footer() {
                 <div className="bg-[#e6b800] rounded-lg p-2 px-4">
                   <h1 className="font text-5xl text-white">B</h1>
                 </div>
-                <div className="text-2xl">
+                <div className="text-2xl relative top-1">
                   <p className="font text-white">Bukka</p>
                   <p className="font text-[#e6b800] relative bottom-2">
                     Island

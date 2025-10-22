@@ -49,7 +49,7 @@ export default function BlogPage() {
       />
 
       {/* ✅ Back Button (Now Clickable) */}
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0, y: -15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -69,7 +69,7 @@ export default function BlogPage() {
             Back to Home
           </span>
         </Link>
-      </motion.div>
+      </motion.div> */}
 
       <motion.div
         animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
