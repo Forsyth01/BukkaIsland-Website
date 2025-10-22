@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   Menu,
   X,
@@ -44,17 +43,39 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleSmoothScroll = (href) => {
+  const handleSmoothScroll = (e, href) => {
+    e.preventDefault();
+    setOpen(false);
+
     if (href.startsWith("/#")) {
       const id = href.split("#")[1];
-      const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
+      
+      // If we're not on the home page, navigate there first
+      if (pathname !== "/") {
+        router.push("/");
+        // Wait for navigation then scroll
+        setTimeout(() => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }, 100);
+      } else {
+        // We're already on home page, just scroll
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
     } else if (href === "/") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (pathname === "/") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        router.push("/");
+      }
     } else {
       router.push(href);
     }
-    setOpen(false);
   };
 
   return (
@@ -72,19 +93,14 @@ export default function Navbar() {
             <Link
               href="/"
               prefetch={false}
-              onClick={(e) => {
-                e.preventDefault();
-                handleSmoothScroll("/");
-              }}
+              onClick={(e) => handleSmoothScroll(e, "/")}
               className="group"
             >
               <div className="flex items-center gap-2">
                 <div className="bg-[#e6b800] rounded-lg p-2 px-4">
-                  <h1 className="font text-5xl text-white">B</h1>
-                  {/* <h1 className="font text-3xl text-white">Bukka</h1>
-              <h1 className="font text-3xl text-[#e6b800] relative bottom-2">Island</h1> */}
+                  <h1 className="font text-3xl md:text-5xl text-white">B</h1>
                 </div>
-                <div className="text-2xl">
+                <div className="text-lg md:text-2xl relative top-1 hidden md:block">
                   <p className="font text-white">Bukka</p>
                   <p className="font text-[#e6b800] relative bottom-2">Island</p>
                 </div>
@@ -96,41 +112,20 @@ export default function Navbar() {
               {links.map((link) => {
                 const isActive = pathname === link.href;
                 return (
-                  <motion.div
+                  <Link
                     key={link.href}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                    href={link.href}
+                    prefetch={false}
+                    onClick={(e) => handleSmoothScroll(e, link.href)}
+                    className={`relative flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all hover:scale-105 active:scale-95 ${
+                      isActive
+                        ? "text-white bg-gradient-to-r from-[#e6b800] to-[#c49c00]"
+                        : "text-zinc-400 hover:text-white"
+                    }`}
                   >
-                    <Link
-                      href={link.href}
-                      prefetch={false}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleSmoothScroll(link.href);
-                      }}
-                      className={`relative flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                        isActive
-                          ? "text-white"
-                          : "text-zinc-400 hover:text-white"
-                      }`}
-                    >
-                      {isActive && (
-                        <motion.div
-                          layoutId="activeTab"
-                          className="absolute inset-0 bg-gradient-to-r from-[#e6b800] to-[#c49c00] rounded-full"
-                          transition={{
-                            type: "spring",
-                            stiffness: 250,
-                            damping: 20,
-                          }}
-                        />
-                      )}
-                      <span className="relative z-10 flex items-center gap-2">
-                        {link.icon}
-                        {link.label}
-                      </span>
-                    </Link>
-                  </motion.div>
+                    {link.icon}
+                    {link.label}
+                  </Link>
                 );
               })}
             </div>
@@ -141,10 +136,7 @@ export default function Navbar() {
               <Link
                 href="/menu"
                 prefetch={false}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleSmoothScroll("/menu");
-                }}
+                onClick={(e) => handleSmoothScroll(e, "/menu")}
                 className="hidden md:flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#e6b800] to-[#c49c00] text-white rounded-full font-bold text-sm shadow-lg shadow-[#c49c00]/25 hover:shadow-[#c49c00]/40 transition-all duration-300"
               >
                 <MapPin className="w-4 h-4" />
@@ -168,60 +160,46 @@ export default function Navbar() {
         </nav>
 
         {/* Mobile Menu */}
-        <AnimatePresence>
-          {open && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.25 }}
-              className="lg:hidden border-t border-zinc-800/50 bg-zinc-950/98 backdrop-blur-xl overflow-hidden"
-            >
-              <div className="max-w-7xl mx-auto px-4 py-6 space-y-1">
-                {links.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    prefetch={false}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleSmoothScroll(link.href);
-                    }}
-                    className="flex items-center justify-between px-4 py-3 rounded-xl text-zinc-300 hover:text-white hover:bg-zinc-900/60 transition-all duration-200 group"
-                  >
-                    <span className="flex items-center gap-3">
-                      <span className="text-[#e6b800] group-hover:text-[#c49c00] transition-colors">
-                        {link.icon}
-                      </span>
-                      <span className="font-medium">{link.label}</span>
-                    </span>
-                    <ChevronRight className="w-4 h-4 text-zinc-600 group-hover:text-[#e6b800] group-hover:translate-x-1 transition-all" />
-                  </Link>
-                ))}
-
-                {/* Mobile CTA */}
+        {open && (
+          <div className="lg:hidden border-t border-zinc-800/50 bg-zinc-950/98 backdrop-blur-xl animate-slideDown">
+            <div className="max-w-7xl mx-auto px-4 py-6 space-y-1">
+              {links.map((link) => (
                 <Link
-                  href="/menu"
+                  key={link.href}
+                  href={link.href}
                   prefetch={false}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleSmoothScroll("/menu");
-                  }}
-                  className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-[#e6b800] to-[#c49c00] text-white px-6 py-3.5 rounded-full font-bold shadow-lg shadow-[#c49c00]/25 hover:shadow-[#c49c00]/40 transition-all duration-300"
+                  onClick={(e) => handleSmoothScroll(e, link.href)}
+                  className="flex items-center justify-between px-4 py-3 rounded-xl text-zinc-300 hover:text-white hover:bg-zinc-900/60 transition-all duration-200 group"
                 >
-                  <MapPin className="w-5 h-5" />
-                  Order Now
+                  <span className="flex items-center gap-3">
+                    <span className="text-[#e6b800] group-hover:text-[#c49c00] transition-colors">
+                      {link.icon}
+                    </span>
+                    <span className="font-medium">{link.label}</span>
+                  </span>
+                  <ChevronRight className="w-4 h-4 text-zinc-600 group-hover:text-[#e6b800] group-hover:translate-x-1 transition-all" />
                 </Link>
+              ))}
 
-                <div className="pt-6 border-t border-zinc-800/50 text-center">
-                  <p className="text-xs text-zinc-600">
-                    🌴 Authentic Nigerian Street Food
-                  </p>
-                </div>
+              {/* Mobile CTA */}
+              <Link
+                href="/menu"
+                prefetch={false}
+                onClick={(e) => handleSmoothScroll(e, "/menu")}
+                className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-[#e6b800] to-[#c49c00] text-white px-6 py-3.5 rounded-full font-bold shadow-lg shadow-[#c49c00]/25 hover:shadow-[#c49c00]/40 transition-all duration-300"
+              >
+                <MapPin className="w-5 h-5" />
+                Order Now
+              </Link>
+
+              <div className="pt-6 border-t border-zinc-800/50 text-center">
+                <p className="text-xs text-zinc-600">
+                  🌴 Authentic Nigerian Street Food
+                </p>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Spacer */}

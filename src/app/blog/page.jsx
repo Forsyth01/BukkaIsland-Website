@@ -5,7 +5,7 @@ import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebaseClient";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, BookOpen, ArrowRight } from "lucide-react";
+import { Search, BookOpen, ArrowRight, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import LoadingAnimation from "@/app/components/LoadingAnimation";
 
@@ -16,10 +16,7 @@ export default function BlogPage() {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const blogQuery = query(
-        collection(db, "blogs"),
-        orderBy("createdAt", "desc")
-      );
+      const blogQuery = query(collection(db, "blogs"), orderBy("createdAt", "desc"));
       const snapshot = await getDocs(blogQuery);
       const postList = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -38,9 +35,9 @@ export default function BlogPage() {
   );
 
   return (
-    <section className="relative min-h-screen bg-zinc-950 py-20 px-6 md:px-10 overflow-hidden">
+    <section className="relative min-h-screen bg-zinc-950 py-12 px-6 md:px-10 overflow-hidden">
       {/* Background Grid */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
       </div>
 
@@ -48,12 +45,41 @@ export default function BlogPage() {
       <motion.div
         animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.45, 0.3] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-[#fac703]/20 via-[#f6d303]/20 to-[#e6b800]/20 rounded-full blur-3xl"
+        className="pointer-events-none absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-[#fac703]/20 via-[#f6d303]/20 to-[#e6b800]/20 rounded-full blur-3xl"
       />
+
+      {/* ✅ Back Button (Now Clickable) */}
+      <motion.div
+        initial={{ opacity: 0, y: -15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="relative z-20 mb-10"
+      >
+        <Link
+          href="/"
+          className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#fac703]/40 bg-[#1a1a1a] text-[#fac703] font-medium transition-all duration-300 hover:bg-[#fac703] hover:text-black hover:shadow-[0_0_15px_#fac70380]"
+        >
+          <motion.div
+            whileHover={{ x: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </motion.div>
+          <span className="tracking-wide group-hover:font-semibold">
+            Back to Home
+          </span>
+        </Link>
+      </motion.div>
+
       <motion.div
         animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-[#fac703]/20 via-[#f6d303]/20 to-[#e6b800]/20 rounded-full blur-3xl"
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 1,
+        }}
+        className="pointer-events-none absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-[#fac703]/20 via-[#f6d303]/20 to-[#e6b800]/20 rounded-full blur-3xl"
       />
 
       <div className="max-w-6xl mx-auto relative z-10">
@@ -80,7 +106,7 @@ export default function BlogPage() {
             />
           </div>
 
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white mb-4">
+          <h1 className="font text-5xl md:text-6xl lg:text-7xl font-black text-white mb-4">
             BukkaIsland{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800]">
               Blog
@@ -145,10 +171,7 @@ export default function BlogPage() {
                   </p>
                 </motion.div>
               ) : (
-                <motion.div
-                  layout
-                  className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8"
-                >
+                <motion.div layout className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
                   {filteredPosts.map((post, index) => (
                     <motion.div
                       key={post.id}
@@ -186,11 +209,13 @@ export default function BlogPage() {
                         <div className="flex justify-between items-center pt-4 border-t border-zinc-800">
                           <span className="text-xs text-zinc-500 uppercase tracking-wide">
                             {post.createdAt?.toDate
-                              ? post.createdAt.toDate().toLocaleDateString("en-US", {
-                                  year: "numeric",
-                                  month: "short",
-                                  day: "numeric",
-                                })
+                              ? post.createdAt
+                                  .toDate()
+                                  .toLocaleDateString("en-US", {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                  })
                               : "Recently published"}
                           </span>
                           <Link
@@ -225,7 +250,9 @@ export default function BlogPage() {
           >
             <p className="text-sm text-zinc-500">
               Showing{" "}
-              <span className="text-[#fac703] font-bold">{filteredPosts.length}</span>{" "}
+              <span className="text-[#fac703] font-bold">
+                {filteredPosts.length}
+              </span>{" "}
               of{" "}
               <span className="text-[#fac703] font-bold">{posts.length}</span>{" "}
               posts
@@ -234,7 +261,7 @@ export default function BlogPage() {
         )}
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-zinc-950 to-transparent pointer-events-none" />
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-zinc-950 to-transparent" />
     </section>
   );
 }

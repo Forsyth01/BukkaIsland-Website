@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { Filter, ChefHat, Star, ArrowRight } from "lucide-react";
+import { Filter, ChefHat, Star, ArrowRight, ArrowLeft } from "lucide-react";
 import { useState, useEffect } from "react";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebaseClient";
@@ -60,17 +60,25 @@ export default function MenuPage() {
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Back Button */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-6 flex items-center gap-3 cursor-pointer text-[#fac703] hover:text-[#f6d303]"
-        >
-          <Link href="/">
-            <ArrowRight className="w-5 h-5 rotate-180 inline-block" />
-            <span className="ml-2 font-semibold">Back to Home</span>
-          </Link>
-        </motion.div>
+ <motion.div
+  initial={{ opacity: 0, y: -15 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.6 }}
+>
+  <Link
+    href="/"
+    className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#fac703]/40 bg-[#1a1a1a] text-[#fac703] font-medium transition-all duration-300 hover:bg-[#fac703] hover:text-black hover:shadow-[0_0_15px_#fac70380]"
+  >
+    <motion.div
+      whileHover={{ x: -5 }}
+      transition={{ type: 'spring', stiffness: 300 }}
+    >
+      <ArrowLeft className="w-5 h-5" />
+    </motion.div>
+    <span className="tracking-wide group-hover:font-semibold">Back to Home</span>
+  </Link>
+</motion.div>
+
 
         {/* Header */}
         <motion.div
@@ -97,7 +105,7 @@ export default function MenuPage() {
 
           <h1 className="text-6xl md:text-7xl font-black mb-4">
             Our{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800]">
+            <span className="font text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800]">
               Menu
             </span>
           </h1>

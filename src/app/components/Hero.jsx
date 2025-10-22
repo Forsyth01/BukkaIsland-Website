@@ -30,7 +30,7 @@ export default memo(function Hero() {
 
         {/* Heading */}
         <div className="relative mb-6">
-          <h1 className="text-6xl md:text-8xl xl:text-9xl font-black text-white tracking-tight relative">
+          <h1 className="text-7xl md:text-8xl xl:text-9xl font-black text-white tracking-tight relative">
             {/* Top Gradient Line */}
             <div className="font absolute -top-6 left-1/2 transform -translate-x-1/2 w-48 h-0.5 bg-gradient-to-r from-transparent via-[#fac703] to-[#e6b800] animate-slide-left opacity-0 delay-100" />
             
