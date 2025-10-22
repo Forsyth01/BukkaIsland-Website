@@ -43,7 +43,7 @@ const DashboardCard = memo(({ item, type, onEdit, onDelete, getImageUrl }) => {
         
         {type === 'dish' && item.price && (
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-amber-500 font-semibold">{item.price}</span>
+            <span className="text-amber-500 font-semibold">${item.price}</span>
             {item.prepTime && (
               <>
                 <span className="text-zinc-600">•</span>
@@ -260,7 +260,7 @@ export default function Dashboard() {
       {/* Mobile Header */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-zinc-900/90 backdrop-blur-lg border-b border-zinc-800">
         <div className="flex items-center justify-between p-4">
-          <h1 className="text-xl font-bold">
+          <h1 className="text-xl font-bold font">
             Bukka<span className="text-amber-500">Island</span>
           </h1>
           <button
@@ -281,8 +281,8 @@ export default function Dashboard() {
           <div className="mb-8 hidden lg:block">
             <div className="flex items-center gap-2 mb-2">
               <Sparkles className="w-5 h-5 text-amber-500" />
-              <h1 className="text-2xl font-bold">
-                Bukka<span className="text-amber-500">Island</span>
+              <h1 className="text-2xl  font">
+                Bukka<span className="text-amber-500 font">Island</span>
               </h1>
             </div>
             <p className="text-zinc-500 text-sm">Admin Dashboard</p>
