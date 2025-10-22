@@ -32,7 +32,7 @@ export const metadata = {
     siteName: "BukkaIsland",
     images: [
       {
-        url: "/og-image.jpg", // add this to your /public folder
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "BukkaIsland - Unforgettable Naija Chow",
@@ -49,6 +49,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        {/* ✅ Add your font link here */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link href="https://fonts.googleapis.com/css2?family=Peralta&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"
+        />
+      </head>
+
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
         <Toaster position="top-right" />

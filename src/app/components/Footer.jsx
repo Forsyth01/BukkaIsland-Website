@@ -1,16 +1,38 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from "lucide-react";
+import {
+  Facebook,
+  Instagram,
+  Twitter,
+  Mail,
+  Phone,
+  MapPin,
+} from "lucide-react";
+import { SiDoordash, SiUbereats } from "react-icons/si";
 import Link from "next/link";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   const socialLinks = [
-    { icon: Instagram, href: "https://instagram.com/bukkaisland", label: "Instagram" },
-    { icon: Facebook, href: "https://facebook.com/bukkaisland", label: "Facebook" },
-    { icon: Twitter, href: "https://twitter.com/bukkaisland", label: "Twitter" },
+    {
+      icon: Instagram,
+      href: "https://www.instagram.com/bukkaisland",
+      label: "Instagram",
+    },
+    // { icon: Facebook, href: "https://facebook.com/bukkaisland", label: "Facebook" },
+    // { icon: Twitter, href: "https://twitter.com/bukkaisland", label: "Twitter" },
+    {
+      icon: SiDoordash,
+      href: "https://www.doordash.com/store/bukkaisland",
+      label: "DoorDash",
+    },
+    {
+      icon: SiUbereats,
+      href: "https://www.ubereats.com/store/bukkaisland",
+      label: "Uber Eats",
+    },
   ];
 
   const quickLinks = [
@@ -34,7 +56,6 @@ export default function Footer() {
       <div className="relative z-10">
         <div className="max-w-7xl mx-auto px-6 md:px-10 py-16 md:py-20">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
-            
             {/* Brand Section */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -43,13 +64,20 @@ export default function Footer() {
               viewport={{ once: true }}
               className="md:col-span-1"
             >
-              <div className="relative bottom-10">
-                <div className="bg-black">
-                  <img src="/logo/bukka_logo_white.png" alt="BukkaIsland Logo" />
+              <div className="flex items-center gap-2">
+                <div className="bg-[#e6b800] rounded-lg p-2 px-4">
+                  <h1 className="font text-5xl text-white">B</h1>
+                </div>
+                <div className="text-2xl">
+                  <p className="font text-white">Bukka</p>
+                  <p className="font text-[#e6b800] relative bottom-2">
+                    Island
+                  </p>
                 </div>
               </div>
               <p className="text-sm text-zinc-400 leading-relaxed">
-                Bringing authentic Nigerian street food to your table, one meal at a time.
+                Bringing authentic Nigerian street food to your table, one meal
+                at a time.
               </p>
             </motion.div>
 
@@ -147,13 +175,15 @@ export default function Footer() {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
             viewport={{ once: true }}
-            className="flex flex-col md:flex-row justify-between items-center gap-4"
+            className="flex flex-col md:flex-row justify-center items-center gap-4"
           >
             <p className="text-sm text-zinc-400">
-              © {currentYear} <span className="text-[#fac703] font-semibold">BukkaIsland</span>. All rights reserved.
+              © {currentYear}{" "}
+              <span className="text-[#fac703] font-semibold">BukkaIsland</span>.
+              All rights reserved.
             </p>
-            
-            <div className="flex gap-6 text-sm">
+
+            {/* <div className="flex gap-6 text-sm">
               <Link href="#" className="text-zinc-400 hover:text-[#fac703] transition-colors">
                 Privacy Policy
               </Link>
@@ -163,7 +193,7 @@ export default function Footer() {
               <Link href="#" className="text-zinc-400 hover:text-[#fac703] transition-colors">
                 Cookies
               </Link>
-            </div>
+            </div> */}
           </motion.div>
         </div>
 

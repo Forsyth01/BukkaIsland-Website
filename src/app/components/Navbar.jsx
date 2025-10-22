@@ -25,9 +25,17 @@ export default function Navbar() {
   const links = [
     { href: "/", label: "Home", icon: <Home className="w-4 h-4" /> },
     { href: "/#about", label: "About", icon: <Info className="w-4 h-4" /> },
-    { href: "/menu", label: "Menu", icon: <UtensilsCrossed className="w-4 h-4" /> },
+    {
+      href: "/menu",
+      label: "Menu",
+      icon: <UtensilsCrossed className="w-4 h-4" />,
+    },
     { href: "/blog", label: "Blog", icon: <BookOpen className="w-4 h-4" /> },
-    { href: "/#contact", label: "Contact", icon: <MessageSquare className="w-4 h-4" /> },
+    {
+      href: "/#contact",
+      label: "Contact",
+      icon: <MessageSquare className="w-4 h-4" />,
+    },
   ];
 
   useEffect(() => {
@@ -68,10 +76,18 @@ export default function Navbar() {
                 e.preventDefault();
                 handleSmoothScroll("/");
               }}
-              className="flex items-center gap-3 group"
+              className="group"
             >
-              <div>
-                <img src="/logo/bukka_logo_white.png" alt="" className="h-35" />
+              <div className="flex items-center gap-2">
+                <div className="bg-[#e6b800] rounded-lg p-2 px-4">
+                  <h1 className="font text-5xl text-white">B</h1>
+                  {/* <h1 className="font text-3xl text-white">Bukka</h1>
+              <h1 className="font text-3xl text-[#e6b800] relative bottom-2">Island</h1> */}
+                </div>
+                <div className="text-2xl">
+                  <p className="font text-white">Bukka</p>
+                  <p className="font text-[#e6b800] relative bottom-2">Island</p>
+                </div>
               </div>
             </Link>
 
@@ -93,14 +109,20 @@ export default function Navbar() {
                         handleSmoothScroll(link.href);
                       }}
                       className={`relative flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                        isActive ? "text-white" : "text-zinc-400 hover:text-white"
+                        isActive
+                          ? "text-white"
+                          : "text-zinc-400 hover:text-white"
                       }`}
                     >
                       {isActive && (
                         <motion.div
                           layoutId="activeTab"
                           className="absolute inset-0 bg-gradient-to-r from-[#e6b800] to-[#c49c00] rounded-full"
-                          transition={{ type: "spring", stiffness: 250, damping: 20 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 250,
+                            damping: 20,
+                          }}
                         />
                       )}
                       <span className="relative z-10 flex items-center gap-2">
@@ -135,7 +157,11 @@ export default function Navbar() {
                 className="lg:hidden p-2 rounded-full text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition-colors"
                 aria-label="Toggle menu"
               >
-                {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                {open ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <Menu className="w-6 h-6" />
+                )}
               </button>
             </div>
           </div>

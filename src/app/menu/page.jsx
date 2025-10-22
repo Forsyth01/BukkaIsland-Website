@@ -40,7 +40,7 @@ export default function MenuPage() {
       : dishes.filter((dish) => dish.category === activeCategory);
 
   return (
-    <section className="relative min-h-screen bg-zinc-950 text-white px-6 md:px-16 py-20 overflow-hidden">
+    <section className="relative min-h-screen bg-zinc-950 text-white px-6 md:px-16 py-10 overflow-hidden">
       {/* Background Grid */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />

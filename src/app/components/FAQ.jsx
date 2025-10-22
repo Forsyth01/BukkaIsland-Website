@@ -103,7 +103,7 @@ export default function FAQ() {
 
             <h2 className="text-5xl md:text-6xl font-black text-white mb-4 tracking-tight">
               Frequently Asked{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800]">
+              <span className="font text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800]">
                 Questions
               </span>
             </h2>

@@ -7,65 +7,66 @@ import { db } from "@/lib/firebaseClient";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-// 🧠 Memoized DishCard
-const DishCard = memo(
-  ({ dish }) => {
-    const [loaded, setLoaded] = useState(false);
+// 🧠 Memoized DishCard with scroll animation
+const DishCard = memo(({ dish }) => {
+  const [loaded, setLoaded] = useState(false);
 
-    return (
-      <article
-        className="group relative bg-zinc-900/60 border border-zinc-800 rounded-xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#e6b800]/20"
-        aria-label={dish.name}
-      >
-        <div className="relative aspect-[5/3] bg-zinc-900 overflow-hidden">
-          <img
-            src={`${dish.imageUrl}?auto=format&fit=crop&w=400&q=70`}
-            alt={dish.name}
-            loading="lazy"
-            decoding="async"
-            width="400"
-            height="240"
-            onLoad={() => setLoaded(true)}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-              loaded ? "opacity-100" : "opacity-0"
-            }`}
-          />
+  return (
+    <motion.article
+      className="group relative bg-zinc-900/60 border border-zinc-800 rounded-xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#e6b800]/20"
+      aria-label={dish.name}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
+      <div className="relative aspect-[5/3] bg-zinc-900 overflow-hidden">
+        <img
+          src={`${dish.imageUrl}?auto=format&fit=crop&w=400&q=70`}
+          alt={dish.name}
+          loading="lazy"
+          decoding="async"
+          width="400"
+          height="240"
+          onLoad={() => setLoaded(true)}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+            loaded ? "opacity-100" : "opacity-0"
+          }`}
+        />
 
-          {dish.spicy > 0 && (
-            <div className="absolute top-3 right-3 flex gap-1">
-              {Array.from({ length: Math.min(dish.spicy, 3) }).map((_, i) => (
-                <Flame
-                  key={i}
-                  className="w-3 h-3 text-[#e6b800] fill-[#e6b800]"
-                  aria-hidden="true"
-                />
-              ))}
-            </div>
-          )}
-
-          <div className="absolute top-3 left-3 bg-gradient-to-r from-[#e6b800] via-[#c49c00] to-[#b38f00] text-white text-xs font-bold px-2 py-1 rounded-full">
-            Popular
+        {dish.spicy > 0 && (
+          <div className="absolute top-3 right-3 flex gap-1">
+            {Array.from({ length: Math.min(dish.spicy, 3) }).map((_, i) => (
+              <Flame
+                key={i}
+                className="w-3 h-3 text-[#e6b800] fill-[#e6b800]"
+                aria-hidden="true"
+              />
+            ))}
           </div>
+        )}
+
+        <div className="absolute top-3 left-3 bg-gradient-to-r from-[#e6b800] via-[#c49c00] to-[#b38f00] text-white text-xs font-bold px-2 py-1 rounded-full">
+          Popular
         </div>
+      </div>
 
-        <div className="p-4">
-          <h3 className="text-base font-bold text-white mb-1 truncate">{dish.name}</h3>
-          <p className="text-xs text-zinc-500 mb-3 line-clamp-1">{dish.description}</p>
+      <div className="p-4">
+        <h3 className="text-base font-bold text-white mb-1 truncate">{dish.name}</h3>
+        <p className="text-xs text-zinc-500 mb-3 line-clamp-1">{dish.description}</p>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1">
-              <Star className="w-3 h-3 text-[#e6b800] fill-[#e6b800]" />
-            </div>
-            <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#e6b800] via-[#c49c00] to-[#b38f00]">
-              ${dish.price}
-            </span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1">
+            <Star className="w-3 h-3 text-[#e6b800] fill-[#e6b800]" />
           </div>
+          <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#e6b800] via-[#c49c00] to-[#b38f00]">
+            ${dish.price}
+          </span>
         </div>
-      </article>
-    );
-  },
-  (prev, next) => prev.dish.id === next.dish.id
-);
+      </div>
+    </motion.article>
+  );
+}, (prev, next) => prev.dish.id === next.dish.id);
 
 DishCard.displayName = "DishCard";
 
@@ -114,15 +115,21 @@ export default function MenuPreview() {
 
       <div className="relative z-10 max-w-6xl mx-auto px-4">
         {/* Header */}
-        <header className="text-center mb-12">
+        <motion.header
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.8 }}
+        >
           <h2 className="text-4xl md:text-5xl font-black text-white mb-3">
             Popular{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e6b800] via-[#c49c00] to-[#b38f00]">
+            <span className="font text-transparent bg-clip-text bg-gradient-to-r from-[#e6b800] via-[#c49c00] to-[#b38f00]">
               Dishes
             </span>
           </h2>
           <p className="text-zinc-400">Handpicked favorites from our authentic menu</p>
-        </header>
+        </motion.header>
 
         {/* Dishes Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16" role="list">
@@ -148,7 +155,8 @@ export default function MenuPreview() {
           ) : (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.6 }}
               className="text-center py-20 col-span-full"
             >
@@ -159,7 +167,13 @@ export default function MenuPreview() {
         </div>
 
         {/* View Menu Button */}
-        <div className="flex justify-center">
+        <motion.div
+          className="flex justify-center"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+        >
           <Link
             href="/menu"
             prefetch={false}
@@ -168,7 +182,7 @@ export default function MenuPreview() {
             View Menu
             <ArrowRight className="w-4 h-4" />
           </Link>
-        </div>
+        </motion.div>
       </div>
 
       {/* Fade Overlay */}

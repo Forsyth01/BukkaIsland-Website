@@ -7,7 +7,7 @@ import { Calendar, ArrowRight, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-// 🧠 Memoized BlogCard with lazy loading + fade-in
+// 🧠 Memoized BlogCard with scroll animation
 const BlogCard = memo(({ post, eager }) => {
   const [loaded, setLoaded] = useState(false);
 
@@ -30,7 +30,13 @@ const BlogCard = memo(({ post, eager }) => {
     : "No description available.";
 
   return (
-    <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl overflow-hidden shadow-lg backdrop-blur-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-[#c49c00]/10">
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="bg-zinc-900/60 border border-zinc-800 rounded-2xl overflow-hidden shadow-lg backdrop-blur-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-[#c49c00]/10"
+    >
       <Link href={`/blog/${post.id}`} prefetch>
         <div className="relative aspect-[16/9] bg-zinc-900 overflow-hidden">
           <img
@@ -63,7 +69,7 @@ const BlogCard = memo(({ post, eager }) => {
           <span>{displayDate}</span>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 });
 BlogCard.displayName = "BlogCard";
@@ -106,10 +112,16 @@ export default function BlogPreview() {
 
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         {/* 🧡 Header */}
-        <header className="text-center mb-16">
+        <motion.header
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.8 }}
+        >
           <h2 className="text-5xl md:text-6xl font-black text-white mb-4 tracking-tight">
             From Our{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e6b800] via-[#c49c00] to-[#b38f00]">
+            <span className="font text-transparent bg-clip-text bg-gradient-to-r from-[#e6b800] via-[#c49c00] to-[#b38f00]">
               Kitchen
             </span>
           </h2>
@@ -121,7 +133,7 @@ export default function BlogPreview() {
             <Calendar className="w-5 h-5 text-[#c49c00]" aria-hidden="true" />
             <div className="h-0.5 w-20 bg-[#c49c00]" />
           </div>
-        </header>
+        </motion.header>
 
         {/* 📰 Blog Cards / Skeleton / No Posts */}
         {loading ? (
@@ -144,7 +156,8 @@ export default function BlogPreview() {
         ) : isEmpty ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.6 }}
             className="text-center py-20"
           >
@@ -160,7 +173,13 @@ export default function BlogPreview() {
         )}
 
         {/* 📘 CTA Button */}
-        <div className="flex justify-center mt-16">
+        <motion.div
+          className="flex justify-center mt-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+        >
           <Link
             href="/blog"
             prefetch
@@ -169,7 +188,7 @@ export default function BlogPreview() {
             Visit Our Blog
             <ArrowRight className="w-5 h-5" />
           </Link>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

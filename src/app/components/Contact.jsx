@@ -74,7 +74,7 @@ export default function Contact() {
 
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-black text-white mb-4 tracking-tight">
             Get in{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800]">
+            <span className="font text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800]">
               Touch
             </span>
           </h2>
@@ -162,7 +162,7 @@ export default function Contact() {
           variants={fadeUp}
           className="text-center mt-12 text-sm text-zinc-400"
         >
-          Follow us on Instagram @BukkaIsland for daily location updates 🌴
+          Follow us on Instagram <a href="https://www.instagram.com/bukkaisland" className="text-[#fac703]">@BukkaIsland</a> for daily location updates 🌴
         </motion.p>
       </motion.div>
 
