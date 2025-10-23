@@ -30,7 +30,7 @@ export default function Navbar() {
       label: "Menu",
       icon: <UtensilsCrossed className="w-4 h-4" />,
     },
-    { href: "/blog", label: "Blog", icon: <BookOpen className="w-4 h-4" /> },
+    // { href: "/blog", label: "Blog", icon: <BookOpen className="w-4 h-4" /> },
     {
       href: "/#contact",
       label: "Contact",

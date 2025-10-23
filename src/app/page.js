@@ -8,6 +8,7 @@ import FAQ from "./components/FAQ";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
+import AllergyNotice from "./components/AllergyNotice";
 
 export default function Home() {
   return (
@@ -16,7 +17,8 @@ export default function Home() {
       <Hero />
       <About />
       <MenuPreview />
-      <BlogPreview/>
+      {/* <BlogPreview/> */}
+      <AllergyNotice />
       <FAQ/>
       <Contact />
       <Footer />

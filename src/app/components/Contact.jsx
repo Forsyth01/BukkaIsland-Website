@@ -30,7 +30,7 @@ const contactMethods = [
     icon: MapPin,
     label: "Location",
     value: "4300 Old Spanish Trl, Houston, TX 77021",
-    href: "#",
+    href: "https://maps.app.goo.gl/QJABxSyByVbQWUBZ8",
     color: "from-[#fac703] via-[#f6d303] to-[#e6b800]",
   },
 ];
