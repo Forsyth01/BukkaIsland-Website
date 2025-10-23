@@ -126,7 +126,7 @@ export default function FAQ() {
           </m.div>
 
           {/* CTA */}
-          <m.div
+          {/* <m.div
             initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
             whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -140,7 +140,7 @@ export default function FAQ() {
             >
               Get in Touch →
             </a>
-          </m.div>
+          </m.div> */}
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-zinc-950 to-transparent pointer-events-none" />

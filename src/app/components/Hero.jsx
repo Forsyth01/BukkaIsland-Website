@@ -2,6 +2,7 @@
 
 import { memo } from "react";
 import { Utensils, Sparkles, MapPin } from "lucide-react";
+import Link from "next/link";
 
 export default memo(function Hero() {
   return (
@@ -77,21 +78,22 @@ export default memo(function Hero() {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 items-center">
-          <a
-            href="#menu"
+          <Link
+            href="/menu"
             className="px-8 py-4 bg-gradient-to-r from-[#fac703] to-[#e6b800] rounded-full font-bold text-white text-lg shadow-lg transition-all duration-500 hover:scale-110 hover:rotate-2 hover:shadow-2xl hover:shadow-[#fac703]/40 animate-bounce-in opacity-0 delay-700 relative overflow-hidden group"
           >
             <span className="relative z-10">View Menu →</span>
             <div className="absolute inset-0 bg-gradient-to-r from-[#e6b800] to-[#fac703] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          </a>
+          </Link>
 
-          <a
-            href="#location"
+          <Link
+            href="https://maps.app.goo.gl/QJABxSyByVbQWUBZ8"
+            target="_blank"
             className="px-8 py-4 bg-zinc-900 border-2 border-zinc-800 hover:border-[#fac703] rounded-full font-bold text-white text-lg transition-all duration-500 flex items-center gap-2 hover:scale-110 hover:-rotate-2 hover:bg-zinc-800 animate-bounce-in opacity-0 delay-700"
           >
             <MapPin className="w-5 h-5 text-[#fac703] transition-transform duration-500 hover:scale-125" />
             Find Us
-          </a>
+          </Link>
         </div>
 
         {/* Stats */}
