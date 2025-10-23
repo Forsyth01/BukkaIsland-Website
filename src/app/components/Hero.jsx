@@ -60,21 +60,53 @@ export default memo(function Hero() {
           Your favorite Nigerian meals, rolling to you 🌴
         </p>
 
-        {/* Central Circle */}
-        <div className="relative mb-16 group animate-scale-in opacity-0 delay-700">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#fac703]/20 to-[#e6b800]/20 rounded-full blur-2xl animate-glow" />
+  {/* Central Circle */}
+<div className="relative mb-16 group animate-scale-in opacity-0 delay-700">
+  <div className="absolute inset-0 bg-gradient-to-r from-[#fac703]/20 to-[#e6b800]/20 rounded-full blur-2xl animate-glow" />
 
-          <div className="relative w-72 h-72 md:w-96 md:h-96 rounded-full bg-gradient-to-br from-zinc-900 to-zinc-950 border-2 border-zinc-800 flex items-center justify-center overflow-hidden transition-all duration-700 hover:scale-110 hover:rotate-6 hover:border-[#fac703]/50">
-            <div className="absolute inset-0 rounded-full border-2 border-dashed border-zinc-700 scale-90 animate-rotate-cw" />
-            <div className="absolute inset-0 rounded-full border-2 border-dashed border-zinc-700 scale-75 animate-rotate-ccw" />
-            <div className="absolute inset-0 rounded-full border border-dotted border-zinc-600 scale-[0.6] animate-rotate-cw" />
+  <div className="relative w-72 h-72 md:w-96 md:h-96 rounded-full bg-gradient-to-br from-zinc-900 to-zinc-950 border-2 border-zinc-800 flex items-center justify-center overflow-visible transition-all duration-700 hover:scale-110 hover:rotate-6 hover:border-[#fac703]/50">
+    <div className="absolute inset-0 rounded-full border-2 border-dashed border-zinc-700 scale-90 animate-rotate-cw" />
+    <div className="absolute inset-0 rounded-full border-2 border-dashed border-zinc-700 scale-75 animate-rotate-ccw" />
+    <div className="absolute inset-0 rounded-full border border-dotted border-zinc-600 scale-[0.6] animate-rotate-cw" />
 
-            <div className="w-48 h-48 md:w-64 md:h-64 bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-full flex items-center justify-center relative overflow-hidden transition-all duration-700 group-hover:scale-110">
-              <div className="absolute inset-0 bg-gradient-to-tr from-[#fac703]/10 via-transparent to-[#e6b800]/10" />
-              <Utensils className="w-24 h-24 text-zinc-600 animate-float transition-colors duration-700 group-hover:text-[#fac703]" strokeWidth={1.5} />
-            </div>
-          </div>
-        </div>
+    <div className="w-48 h-48 md:w-64 md:h-64 bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-full flex items-center justify-center relative overflow-visible transition-all duration-700 group-hover:scale-110">
+      <div className="absolute inset-0 bg-gradient-to-tr from-[#fac703]/10 via-transparent to-[#e6b800]/10 rounded-full" />
+      
+      {/* Food Image */}
+      <div className="absolute inset-0 flex items-center justify-center rounded-full overflow-hidden">
+        <img 
+          src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=500&q=80" 
+          alt="Delicious hot food"
+          className="w-full h-full object-cover rounded-full opacity-90 transition-opacity duration-700 group-hover:opacity-100"
+        />
+        {/* Dark overlay for contrast */}
+        <div className="absolute inset-0 bg-black/20 rounded-full" />
+      </div>
+      
+      {/* Steam/Smoke Effect - Much More Visible */}
+      <div className="absolute inset-0 pointer-events-none overflow-visible">
+        {/* Steam wisp 1 */}
+        <div className="absolute bottom-1/3 left-1/4 w-16 h-32 bg-gradient-to-t from-white/80 via-white/50 to-transparent rounded-full blur-xl animate-steam-rise-1" 
+             style={{filter: 'blur(20px)'}} />
+        
+        {/* Steam wisp 2 */}
+        <div className="absolute bottom-1/3 left-1/2 -translate-x-1/2 w-20 h-40 bg-gradient-to-t from-white/90 via-white/60 to-transparent rounded-full blur-2xl animate-steam-rise-2" 
+             style={{filter: 'blur(25px)'}} />
+        
+        {/* Steam wisp 3 */}
+        <div className="absolute bottom-1/3 right-1/4 w-14 h-28 bg-gradient-to-t from-white/75 via-white/45 to-transparent rounded-full blur-xl animate-steam-rise-3" 
+             style={{filter: 'blur(18px)'}} />
+        
+        {/* Additional smaller wisps */}
+        <div className="absolute bottom-1/4 left-1/3 w-12 h-24 bg-gradient-to-t from-[#fac703]/60 via-white/40 to-transparent rounded-full blur-lg animate-steam-rise-4" 
+             style={{filter: 'blur(15px)'}} />
+        
+        <div className="absolute bottom-1/4 right-1/3 w-10 h-20 bg-gradient-to-t from-[#fac703]/50 via-white/35 to-transparent rounded-full blur-lg animate-steam-rise-5" 
+             style={{filter: 'blur(12px)'}} />
+      </div>
+    </div>
+  </div>
+</div>
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 items-center">
