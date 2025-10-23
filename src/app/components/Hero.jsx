@@ -75,7 +75,7 @@ export default memo(function Hero() {
       {/* Food Image */}
       <div className="absolute inset-0 flex items-center justify-center rounded-full overflow-hidden">
         <img 
-          src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=500&q=80" 
+          src="/suya.jpg" 
           alt="Delicious hot food"
           className="w-full h-full object-cover rounded-full opacity-90 transition-opacity duration-700 group-hover:opacity-100"
         />
