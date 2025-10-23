@@ -37,7 +37,7 @@ export default function Footer() {
 
   const quickLinks = [
     { label: "Menu", href: "/#menu" },
-    { label: "Blog", href: "/blog" },
+    // { label: "Blog", href: "/blog" },
     { label: "About", href: "/#about" },
     { label: "FAQ", href: "/#faq" },
   ];
