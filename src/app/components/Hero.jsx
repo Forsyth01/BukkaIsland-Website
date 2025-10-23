@@ -3,6 +3,7 @@
 import { memo } from "react";
 import { Utensils, Sparkles, MapPin } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default memo(function Hero() {
   return (
@@ -74,7 +75,7 @@ export default memo(function Hero() {
       
       {/* Food Image */}
       <div className="absolute inset-0 flex items-center justify-center rounded-full overflow-hidden">
-        <img 
+        <Image 
           src="/suya.jpg" 
           alt="Delicious hot food"
           className="w-full h-full object-cover rounded-full opacity-90 transition-opacity duration-700 group-hover:opacity-100"
