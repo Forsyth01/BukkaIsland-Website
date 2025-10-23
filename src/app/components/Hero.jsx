@@ -78,7 +78,9 @@ export default memo(function Hero() {
         <Image 
           src="/suya.jpg" 
           alt="Delicious hot food"
-          className="w-full h-full object-cover rounded-full opacity-90 transition-opacity duration-700 group-hover:opacity-100"
+          width={800}
+          height={800}
+          className=" object-cover rounded-full opacity-90 transition-opacity duration-700 group-hover:opacity-100"
         />
         {/* Dark overlay for contrast */}
         <div className="absolute inset-0 bg-black/20 rounded-full" />
