@@ -95,15 +95,17 @@ export default function About() {
             </h2>
             <p className="text-zinc-400 text-lg mb-4 leading-relaxed">
               BukkaIsland was born from a simple dream — to bring the authentic
-              taste of Nigerian street food to everyone, regardless of where
-              they are. What started as a small food cart has grown into a
-              movement celebrating our rich culinary heritage.
+              taste of Nigerian street food to the heart of Houston. What
+              started as a small food cart has grown into a vibrant culinary
+              movement, celebrating Nigeria’s rich flavors right here in the
+              city’s diverse food scene.
             </p>
             <p className="text-zinc-400 text-lg mb-6 leading-relaxed">
               Every recipe tells a story — stories of grandmothers, home
-              kitchens, and the vibrant food culture that defines Nigeria. We
-              don't just serve food; we serve memories, traditions, and the
-              warmth of home.
+              kitchens, and the lively streets of Lagos, now reimagined for
+              Houston’s food lovers. At BukkaIsland, we don’t just serve food;
+              we serve memories, traditions, and the comforting warmth of home —
+              one delicious bite at a time.
             </p>
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -114,7 +116,7 @@ export default function About() {
             >
               <div className="border-l-2 border-[#e6b800] pl-4">
                 <p className="text-sm text-[#e6b800] uppercase font-bold tracking-wide">
-                  Since 2019
+                  Since 2025
                 </p>
                 <p className="text-zinc-500">
                   Serving authentic Nigerian cuisine

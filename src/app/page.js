@@ -15,7 +15,7 @@ export default function Home() {
     <main className="bg-[#fffaf0] text-gray-900">
       <Navbar/>
       <Hero />
-      <About />
+      {/* <About /> */}
       <MenuPreview />
       {/* <BlogPreview/> */}
       <AllergyNotice />

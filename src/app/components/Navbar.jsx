@@ -24,7 +24,7 @@ export default function Navbar() {
 
   const links = [
     { href: "/", label: "Home", icon: <Home className="w-4 h-4" /> },
-    { href: "/#about", label: "About", icon: <Info className="w-4 h-4" /> },
+    { href: "/about", label: "About", icon: <Info className="w-4 h-4" /> },
     {
       href: "/menu",
       label: "Menu",
@@ -209,7 +209,7 @@ export default function Navbar() {
       <header
         className={`fixed inset-x-0 top-0 z-50 bg-zinc-950/95 transition-all duration-300 ${
           scrolled
-            ? "backdrop-blur-md border-b border-zinc-800/50 shadow-md shadow-black/20"
+            ? "backdrop-blur-md  shadow-md shadow-black/20"
             : ""
         }`}
       >

@@ -5,14 +5,13 @@ import { LazyMotion, m, AnimatePresence, domAnimation, useReducedMotion } from "
 import { Plus, HelpCircle } from "lucide-react";
 
 const faqs = [
-  { q: "Where is BukkaIsland located?", a: "We're currently parked in Lekki Phase 1, Lagos — right by Admiralty Way. We update our location weekly on Instagram @BukkaIsland." },
+  { q: "Where is BukkaIsland located?", a: "We're currently located at 4300 Old Spanish Trl, Houston, TX 77021. We update our location weekly on Instagram @BukkaIsland." },
   { q: "What type of food do you serve?", a: "We specialize in vibrant Nigerian street food — from smoky jollof rice and suya wraps to plantain bowls and spicy grilled chicken." },
-  { q: "Do you offer home or office delivery?", a: "Yes! You can order directly through our WhatsApp line or via our delivery partners like Chowdeck and Bolt Food." },
+  { q: "Do you offer home or office delivery?", a: "Yes! You can order directly through our Uber Eats and dooordash." },
   { q: "Do you cater for events?", a: "Absolutely! We cater for parties, office gatherings, and outdoor events. Bookings should be made at least 48 hours in advance." },
-  { q: "What are your operating hours?", a: "We're open from 10:00 AM to 9:00 PM every day, except Mondays (our prep and restock day)." },
+  { q: "What are your operating hours?", a: "We're open from 12:00 PM to 9:00 PM every day." },
   { q: "Is your food spicy?", a: "Most of our meals are mildly spicy, but we can always make it hotter or milder based on your preference!" },
-  { q: "Do you have vegetarian options?", a: "Yes! We serve delicious plantain bowls, coconut rice with sautéed veggies, and bean cakes (moi-moi)." },
-  { q: "Do you accept card and bank transfers?", a: "Of course. We accept POS payments, transfers, and cash — whichever is easiest for you." },
+  { q: "Do you accept card and bank transfers?", a: "Of course. We accept transfers, and cash — whichever is easiest for you." },
   { q: "Do you sell drinks too?", a: "Yes! From zobo and palm wine to fresh fruit juices — we've got the perfect drink to pair with your meal." },
   { q: "Can I customize my order?", a: "Definitely. Want extra sauce, more meat, or no pepper? Just let us know when placing your order." },
 ];

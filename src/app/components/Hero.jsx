@@ -24,7 +24,7 @@ export default memo(function Hero() {
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 py-10 text-center perspective">
         {/* Top Badge */}
         <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900/80 border border-[#fac703]/20 rounded-full mb-8 backdrop-blur-sm animate-bounce-in opacity-0">
-          <Sparkles className="w-4 h-4 text-[#fac703] animate-sparkle" />
+          {/* <Sparkles className="w-4 h-4 text-[#fac703] animate-sparkle" /> */}
           <span className="text-sm text-zinc-300 font-medium">
             Authentic Nigerian Cuisine
           </span>
@@ -56,7 +56,7 @@ export default memo(function Hero() {
         {/* Subtitle */}
         <p className="text-xl md:text-2xl text-zinc-400 max-w-2xl mb-16 leading-relaxed animate-scale-in opacity-0 delay-600">
           Where <span className="text-[#fac703] font-semibold">street flavors</span>{" "}
-          meet island vibes.
+          meet Lagos vibes.
           <br />
           Your favorite Nigerian meals, rolling to you 🌴
         </p>
