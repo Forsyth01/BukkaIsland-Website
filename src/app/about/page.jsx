@@ -211,7 +211,7 @@ export default function About() {
                     Founder & CEO
                   </p>
                   <p className="text-zinc-400 text-sm leading-relaxed">
-                    Visionary leader driving BukkaIsland's mission to bring authentic Nigerian cuisine to Houston
+                    3+ Years of Economics, Accounting, and Finance at Deloitte. Serving Clients in various industries such as Hospitality, Oil & Gas, and Software Development. Co-Owner of Above Average Hospitality Group.
                   </p>
                 </div>
               </div>
@@ -247,7 +247,7 @@ export default function About() {
                     Founder & COO
                   </p>
                   <p className="text-zinc-400 text-sm leading-relaxed">
-                    Operations expert ensuring excellence in every customer experience and service delivery
+                    Adewale has 4+ years of experience in Account Management, Business Growth, and Strategy. He is currently an Account Strategist at Google, helping businesses scale through digital advertising. Previously, he worked at Uber Eats and drove a 150% revenue increase for a hotel when he worked at Expedia. He also founded HTX City Rentals, an event rental startup in Houston, and serves in U.S. Army reserve.
                   </p>
                 </div>
               </div>
@@ -283,7 +283,7 @@ export default function About() {
                     Founder & CFO
                   </p>
                   <p className="text-zinc-400 text-sm leading-relaxed">
-                    Financial strategist managing growth and sustainability of BukkaIsland's operations
+                   3+ years of experience in Engineering, Management, and Business Development. As a Key Account Manager in a multinational specialties chemical company, Bolaji manages over $10 million in AUM in the Petrochemical & Refining industry. He is also the co-founder of DealNest, a tech startup delivering efficiency solutions for Real Estate Development professionals.
                   </p>
                 </div>
               </div>
