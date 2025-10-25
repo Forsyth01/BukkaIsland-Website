@@ -13,17 +13,23 @@ import {
   Calendar,
   Utensils,
   Sparkles,
+  GripVertical,
 } from "lucide-react";
 
 // Memoized Card Component for Performance
-const DashboardCard = memo(({ item, type, onEdit, onDelete, getImageUrl }) => {
+const DashboardCard = memo(({ item, type, onEdit, onDelete, getImageUrl, isDragging }) => {
   const imageValue = type === 'dish' ? (item.image || item.imageUrl) : item.image;
   const title = type === 'dish' ? item.name : item.title;
   const description = type === 'dish' ? item.desc : (item.content ? item.content.replace(/<[^>]+>/g, "").slice(0, 100) : "No content");
   const date = item.createdAt?.toDate ? item.createdAt.toDate().toLocaleDateString() : "";
 
   return (
-    <div className="group bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl overflow-hidden hover:border-amber-500/30 transition-all duration-300">
+    <div className={`group bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl overflow-hidden hover:border-[#fac703]/50 transition-all duration-300 ${isDragging ? 'opacity-50 scale-95' : ''}`}>
+      {/* Drag Handle */}
+      <div className="absolute top-2 right-2 z-10 cursor-grab active:cursor-grabbing p-2 bg-zinc-900/80 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+        <GripVertical className="w-5 h-5 text-[#fac703]" />
+      </div>
+
       <div className="relative w-full h-48 bg-zinc-950 overflow-hidden">
         <img
           src={getImageUrl(imageValue)}
@@ -38,12 +44,12 @@ const DashboardCard = memo(({ item, type, onEdit, onDelete, getImageUrl }) => {
       </div>
       
       <div className="p-5">
-        <h3 className="text-lg font-bold text-white mb-2 line-clamp-1">{title}</h3>
+        <h3 className="text-lg font-bold text-white mb-2 line-clamp-1 group-hover:text-[#fac703] transition-colors">{title}</h3>
         <p className="text-zinc-400 text-sm line-clamp-2 mb-3">{description}</p>
         
         {type === 'dish' && item.price && (
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-amber-500 font-semibold">${item.price}</span>
+            <span className="text-[#fac703] font-semibold">${item.price}</span>
             {item.prepTime && (
               <>
                 <span className="text-zinc-600">•</span>
@@ -62,7 +68,7 @@ const DashboardCard = memo(({ item, type, onEdit, onDelete, getImageUrl }) => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => onEdit(item.id)}
-              className="p-2 rounded-lg bg-amber-500/10 text-amber-500 hover:bg-amber-500/20 transition-colors"
+              className="p-2 rounded-lg bg-[#fac703]/10 text-[#fac703] hover:bg-[#fac703]/20 transition-colors"
               aria-label="Edit"
             >
               <Edit className="w-4 h-4" />
@@ -95,6 +101,8 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [draggedItem, setDraggedItem] = useState(null);
+  const [dragOverIndex, setDragOverIndex] = useState(null);
 
   // Initialize tab from URL
   useEffect(() => {
@@ -111,7 +119,6 @@ export default function Dashboard() {
       setDb(mod.db);
       setAuth(mod.auth);
     }).catch(() => {
-      // Fallback for demo
       setLoading(false);
     });
   }, []);
@@ -141,7 +148,11 @@ export default function Dashboard() {
           ...doc.data(),
         }));
         
+        // Sort by order field, then by createdAt
         postsData.sort((a, b) => {
+          if (a.order !== undefined && b.order !== undefined) {
+            return a.order - b.order;
+          }
           const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(0);
           const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(0);
           return dateB - dateA;
@@ -156,7 +167,11 @@ export default function Dashboard() {
           ...doc.data(),
         }));
         
+        // Sort by order field, then by createdAt
         menuData.sort((a, b) => {
+          if (a.order !== undefined && b.order !== undefined) {
+            return a.order - b.order;
+          }
           const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(0);
           const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(0);
           return dateB - dateA;
@@ -172,6 +187,72 @@ export default function Dashboard() {
 
     fetchData();
   }, [db]);
+
+  // Update order in Firestore
+  const updateOrder = async (items, collectionName) => {
+    if (!db) return;
+
+    try {
+      const { doc, updateDoc } = await import("firebase/firestore");
+      
+      // Update each item with its new order
+      const updatePromises = items.map((item, index) => 
+        updateDoc(doc(db, collectionName, item.id), { order: index })
+      );
+      
+      await Promise.all(updatePromises);
+    } catch (error) {
+      console.error("Error updating order:", error);
+    }
+  };
+
+  // Drag and Drop Handlers
+  const handleDragStart = (e, index) => {
+    setDraggedItem(index);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+    if (draggedItem === null) return;
+    setDragOverIndex(index);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedItem(null);
+    setDragOverIndex(null);
+  };
+
+  const handleDrop = async (e, dropIndex) => {
+    e.preventDefault();
+    
+    if (draggedItem === null || draggedItem === dropIndex) {
+      setDraggedItem(null);
+      setDragOverIndex(null);
+      return;
+    }
+
+    const currentData = tab === "posts" ? [...posts] : [...menu];
+    const draggedItemData = currentData[draggedItem];
+    
+    // Remove dragged item
+    currentData.splice(draggedItem, 1);
+    
+    // Insert at new position
+    currentData.splice(dropIndex, 0, draggedItemData);
+
+    // Update state
+    if (tab === "posts") {
+      setPosts(currentData);
+      await updateOrder(currentData, "blogs");
+    } else {
+      setMenu(currentData);
+      await updateOrder(currentData, "dishes");
+    }
+
+    setDraggedItem(null);
+    setDragOverIndex(null);
+  };
 
   const handleLogout = async () => {
     if (!auth) return;
@@ -196,10 +277,14 @@ export default function Dashboard() {
       
       if (selectedType === "post") {
         await deleteDoc(doc(db, "blogs", selectedItem));
-        setPosts((prev) => prev.filter((p) => p.id !== selectedItem));
+        const updatedPosts = posts.filter((p) => p.id !== selectedItem);
+        setPosts(updatedPosts);
+        await updateOrder(updatedPosts, "blogs");
       } else if (selectedType === "dish") {
         await deleteDoc(doc(db, "dishes", selectedItem));
-        setMenu((prev) => prev.filter((d) => d.id !== selectedItem));
+        const updatedMenu = menu.filter((d) => d.id !== selectedItem);
+        setMenu(updatedMenu);
+        await updateOrder(updatedMenu, "dishes");
       }
       
       setModalOpen(false);
@@ -253,15 +338,15 @@ export default function Dashboard() {
       {/* Background Effects */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-20" />
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-orange-600/10 rounded-full blur-3xl" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#fac703]/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#e6b800]/10 rounded-full blur-3xl" />
       </div>
 
       {/* Mobile Header */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-zinc-900/90 backdrop-blur-lg border-b border-zinc-800">
         <div className="flex items-center justify-between p-4">
-          <h1 className="text-xl font-bold font">
-            Bukka<span className="text-amber-500">Island</span>
+          <h1 className="text-xl font-bold">
+            Bukka<span className="text-[#fac703]">Island</span>
           </h1>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -280,9 +365,9 @@ export default function Dashboard() {
         <div className="flex flex-col h-full p-6">
           <div className="mb-8 hidden lg:block">
             <div className="flex items-center gap-2 mb-2">
-              <Sparkles className="w-5 h-5 text-amber-500" />
-              <h1 className="text-2xl  font">
-                Bukka<span className="text-amber-500 font">Island</span>
+              {/* <Sparkles className="w-5 h-5 text-[#fac703]" /> */}
+              <h1 className="font text-2xl">
+                Bukka<span className="text-[#fac703] font">Island</span>
               </h1>
             </div>
             <p className="text-zinc-500 text-sm">Admin Dashboard</p>
@@ -291,9 +376,9 @@ export default function Dashboard() {
           <nav className="flex-1 space-y-2">
             <button
               onClick={() => { handleTabChange("posts"); setSidebarOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all ${
+              className={`cursor-pointer w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all ${
                 tab === "posts" 
-                  ? "bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg" 
+                  ? "bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800] text-white shadow-lg" 
                   : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
               }`}
             >
@@ -306,9 +391,9 @@ export default function Dashboard() {
 
             <button
               onClick={() => { handleTabChange("menu"); setSidebarOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all ${
+              className={`cursor-pointer w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all ${
                 tab === "menu" 
-                  ? "bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg" 
+                  ? "bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800] text-white shadow-lg" 
                   : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
               }`}
             >
@@ -318,21 +403,11 @@ export default function Dashboard() {
                 {menu.length}
               </span>
             </button>
-
-            <div className="pt-4">
-              <button
-                onClick={() => { handleCreate(); setSidebarOpen(false); }}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-amber-500 hover:bg-amber-500/10 border border-amber-500/20 transition-all"
-              >
-                <Plus className="w-5 h-5" />
-                <span>New {tab === "posts" ? "Post" : "Dish"}</span>
-              </button>
-            </div>
           </nav>
 
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-red-400 hover:bg-red-500/10 border border-red-500/20 transition-all"
+            className="cursor-pointer flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-red-400 hover:bg-red-500/10 border border-red-500/20 transition-all"
           >
             <LogOut className="w-5 h-5" />
             <span>Logout</span>
@@ -357,19 +432,30 @@ export default function Dashboard() {
               <div>
                 <h2 className="text-3xl font-bold mb-2 capitalize">{tab}</h2>
                 <p className="text-zinc-400">
-                  Manage your {tab === "posts" ? "blog posts" : "menu items"}
+                  Manage your {tab === "posts" ? "blog posts" : "menu items"} • Drag to reorder
                 </p>
               </div>
               
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-amber-500/50 transition-colors w-full sm:w-64"
-                />
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 pr-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-[#fac703]/50 transition-colors w-full sm:w-64"
+                  />
+                </div>
+                
+                <button
+                  onClick={handleCreate}
+                  className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800] text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-[#fac703]/40 transition-all whitespace-nowrap"
+                >
+                  <Plus className="w-5 h-5" />
+                  <span className="hidden sm:inline">New {tab === "posts" ? "Post" : "Dish"}</span>
+                  <span className="sm:hidden">New</span>
+                </button>
               </div>
             </div>
 
@@ -381,8 +467,8 @@ export default function Dashboard() {
                 { label: "Draft", value: 0 },
                 { label: "Active", value: currentData.length },
               ].map((stat, i) => (
-                <div key={i} className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-4 hover:border-amber-500/30 transition-all">
-                  <p className="text-2xl font-bold text-amber-500">{stat.value}</p>
+                <div key={i} className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-4 hover:border-[#fac703]/30 transition-all">
+                  <p className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800]">{stat.value}</p>
                   <p className="text-zinc-500 text-sm mt-1">{stat.label}</p>
                 </div>
               ))}
@@ -393,7 +479,7 @@ export default function Dashboard() {
           {loading ? (
             <div className="flex items-center justify-center min-h-[400px]">
               <div className="text-center">
-                <div className="w-16 h-16 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin mx-auto mb-4" />
+                <div className="w-16 h-16 border-4 border-[#fac703]/20 border-t-[#fac703] rounded-full animate-spin mx-auto mb-4" />
                 <p className="text-zinc-400">Loading {tab}...</p>
               </div>
             </div>
@@ -411,7 +497,7 @@ export default function Dashboard() {
               {!searchQuery && (
                 <button 
                   onClick={handleCreate}
-                  className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 rounded-lg font-semibold hover:shadow-lg transition-all"
+                  className="px-6 py-3 bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800] text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-[#fac703]/40 transition-all"
                 >
                   <Plus className="w-5 h-5 inline mr-2" />
                   Create {tab === "posts" ? "Post" : "Dish"}
@@ -420,15 +506,27 @@ export default function Dashboard() {
             </div>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredData.map((item) => (
-                <DashboardCard
+              {filteredData.map((item, index) => (
+                <div
                   key={item.id}
-                  item={item}
-                  type={tab === "posts" ? "post" : "dish"}
-                  onEdit={handleEdit}
-                  onDelete={(id) => handleDeleteClick(id, tab === "posts" ? "post" : "dish")}
-                  getImageUrl={getImageUrl}
-                />
+                  draggable={!searchQuery}
+                  onDragStart={(e) => handleDragStart(e, index)}
+                  onDragOver={(e) => handleDragOver(e, index)}
+                  onDragEnd={handleDragEnd}
+                  onDrop={(e) => handleDrop(e, index)}
+                  className={`relative transition-all duration-200 ${
+                    dragOverIndex === index ? 'scale-105' : ''
+                  }`}
+                >
+                  <DashboardCard
+                    item={item}
+                    type={tab === "posts" ? "post" : "dish"}
+                    onEdit={handleEdit}
+                    onDelete={(id) => handleDeleteClick(id, tab === "posts" ? "post" : "dish")}
+                    getImageUrl={getImageUrl}
+                    isDragging={draggedItem === index}
+                  />
+                </div>
               ))}
             </div>
           )}

@@ -201,7 +201,7 @@ export default function EditDishPage() {
         </button>
 
         <div className="flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-full text-amber-500 font-medium mb-4 w-fit backdrop-blur-sm">
-          <Sparkles className="w-4 h-4" />
+          {/* <Sparkles className="w-4 h-4" /> */}
           <span>Edit Dish</span>
         </div>
 

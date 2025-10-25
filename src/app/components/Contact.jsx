@@ -12,18 +12,18 @@ const contactMethods = [
     href: "mailto:contact@bukkaisland.com",
     color: "from-[#fac703] via-[#f6d303] to-[#e6b800]",
   },
-  {
-    icon: MessageCircle,
-    label: "WhatsApp",
-    value: "+1 (317) 459-3144",
-    href: "https://wa.me/2347000000000",
-    color: "from-[#fac703] via-[#f6d303] to-[#e6b800]",
-  },
+  // {
+  //   icon: MessageCircle,
+  //   label: "WhatsApp",
+  //   value: "+1 832-258-5071",
+  //   href: "https://wa.me/2347000000000",
+  //   color: "from-[#fac703] via-[#f6d303] to-[#e6b800]",
+  // },
   {
     icon: Phone,
     label: "Phone",
-    value: "+1 (317) 459-3144",
-    href: "tel:+1 (317) 459-3144",
+    value: "+1 832-258-5071",
+    href: "tel:+1 832-258-5071",
     color: "from-[#fac703] via-[#f6d303] to-[#e6b800]",
   },
   {
@@ -92,7 +92,7 @@ export default function Contact() {
               transition: { staggerChildren: 0.1, delayChildren: 0.1 },
             },
           }}
-          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16"
         >
           {contactMethods.map((method, idx) => {
             const Icon = method.icon;
