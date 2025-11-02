@@ -1,29 +1,37 @@
+// ===== src/components/ProtectedRoute.jsx =====
 "use client";
 
-import { useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/lib/firebaseClient";
-import { useRouter } from "next/navigation";
+import { useAuth } from '@/app/context/AuthContext';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function ProtectedRoute({ children }) {
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const { user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (!currentUser) {
-        router.push("/admin/login");
-      } else {
-        setUser(currentUser);
-      }
-      setLoading(false);
-    });
+    if (!loading && !user) {
+      // No user - redirect to login
+      router.push('/admin/login');
+    }
+  }, [user, loading, router]);
 
-    return () => unsubscribe();
-  }, [router]);
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
-  if (loading) return <div className="min-h-screen flex justify-center items-center text-gray-600">Loading...</div>;
+  // Check access conditions
+  if (!user) {
+    return null; // Will redirect in useEffect
+  }
 
-  return user ? children : null;
+  return children;
 }

@@ -15,6 +15,8 @@ import {
   Sparkles,
   GripVertical,
 } from "lucide-react";
+import { useAuth } from "@/app/context/AuthContext";
+import ProtectedRoute from "@/app/components/ProtectedRoute";
 
 // Memoized Card Component for Performance
 const DashboardCard = memo(({ item, type, onEdit, onDelete, getImageUrl, isDragging }) => {
@@ -89,7 +91,7 @@ const DashboardCard = memo(({ item, type, onEdit, onDelete, getImageUrl, isDragg
 
 DashboardCard.displayName = 'DashboardCard';
 
-export default function Dashboard() {
+function DashboardContent() {
   const [tab, setTab] = useState("posts");
   const [posts, setPosts] = useState([]);
   const [menu, setMenu] = useState([]);
@@ -103,6 +105,7 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [draggedItem, setDraggedItem] = useState(null);
   const [dragOverIndex, setDragOverIndex] = useState(null);
+  const { logout, user } = useAuth();
 
   // Initialize tab from URL
   useEffect(() => {
@@ -255,9 +258,7 @@ export default function Dashboard() {
   };
 
   const handleLogout = async () => {
-    if (!auth) return;
-    const { signOut } = await import("firebase/auth");
-    await signOut(auth);
+    await logout();
     if (typeof window !== "undefined") {
       window.location.href = "/admin/login";
     }
@@ -365,12 +366,14 @@ export default function Dashboard() {
         <div className="flex flex-col h-full p-6">
           <div className="mb-8 hidden lg:block">
             <div className="flex items-center gap-2 mb-2">
-              {/* <Sparkles className="w-5 h-5 text-[#fac703]" /> */}
               <h1 className="font text-2xl">
                 Bukka<span className="text-[#fac703] font">Island</span>
               </h1>
             </div>
             <p className="text-zinc-500 text-sm">Admin Dashboard</p>
+            {user && (
+              <p className="text-zinc-400 text-xs mt-1">Welcome, {user.email}</p>
+            )}
           </div>
 
           <nav className="flex-1 space-y-2">
@@ -463,9 +466,6 @@ export default function Dashboard() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {[
                 { label: "Total", value: currentData.length },
-                { label: "Published", value: currentData.length },
-                { label: "Draft", value: 0 },
-                { label: "Active", value: currentData.length },
               ].map((stat, i) => (
                 <div key={i} className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-4 hover:border-[#fac703]/30 transition-all">
                   <p className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800]">{stat.value}</p>
@@ -562,5 +562,14 @@ export default function Dashboard() {
         </div>
       )}
     </div>
+  );
+}
+
+// Wrap the dashboard with ProtectedRoute
+export default function Dashboard() {
+  return (
+    <ProtectedRoute >
+      <DashboardContent />
+    </ProtectedRoute>
   );
 }
