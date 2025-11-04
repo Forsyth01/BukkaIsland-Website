@@ -33,6 +33,12 @@ export default function About() {
   // Gallery media (images and videos)
   const galleryMedia = [
     {
+      id: 20,
+      type: "image",
+      src: "/gallery/image-20.jpg",
+      alt: "BukkaIsland founders indoors",
+    },
+    {
       id: 1,
       type: "image",
       src: "/gallery/image-1.jpg",

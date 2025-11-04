@@ -27,7 +27,7 @@ body {
   background-blend-mode: overlay;
 }
 
-a, button{
+a, button, li{
   cursor: pointer;
 }
 

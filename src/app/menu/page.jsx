@@ -190,12 +190,15 @@ export default function MenuPage() {
                           </button>
                         </Link>
                       ) : (
-                        <button
-                          disabled
-                          className="bg-zinc-800 text-zinc-500 px-4 py-2 rounded-full text-sm font-bold cursor-not-allowed"
-                        >
-                          Unavailable
-                        </button>
+                        // <button
+                        //   disabled
+                        //   className="bg-zinc-800 text-zinc-500 px-4 py-2 rounded-full text-sm font-bold cursor-not-allowed"
+                        // >
+                        //   Unavailable
+                        // </button>
+                        <div className="">
+                          
+                        </div>
                       )}
                     </div>
                   </div>
