@@ -25,14 +25,14 @@ export default function Footer() {
     // { icon: Twitter, href: "https://twitter.com/bukkaisland", label: "Twitter" },
     {
       icon: SiDoordash,
-      href: "https://www.doordash.com/store/bukkaisland",
+      href: "https://www.doordash.com/store/37159411?utm_source=mx_share&aw=0gezqv1I5isJJqeV",
       label: "DoorDash",
     },
-    {
-      icon: SiUbereats,
-      href: "https://www.ubereats.com/store/bukkaisland",
-      label: "Uber Eats",
-    },
+    // {
+    //   icon: SiUbereats,
+    //   href: "https://www.ubereats.com/store/bukkaisland",
+    //   label: "Uber Eats",
+    // },
   ];
 
   const quickLinks = [

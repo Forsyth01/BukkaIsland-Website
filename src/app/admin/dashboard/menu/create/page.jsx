@@ -83,15 +83,6 @@ export default function CreateDishPage() {
     }
   };
 
-  const isValidUrl = (url) => {
-    try {
-      new URL(url);
-      return true;
-    } catch {
-      return false;
-    }
-  };
-
   const handleImageChange = useCallback((e) => {
     const file = e.target.files[0];
     if (file) {
@@ -109,17 +100,10 @@ export default function CreateDishPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!dishName.trim()) return toast.error("Dish name is required");
-    if (!category.trim()) return toast.error("Category is required");
-    if (!price || isNaN(price)) return toast.error("Price must be a number");
-    if (orderLink && !isValidUrl(orderLink))
-      return toast.error("Order link must be a valid URL");
-    if (!image) return toast.error("Please select an image");
-
     setLoading(true);
 
     try {
-      const imageUrl = await uploadToCloudinary(image);
+      const imageUrl = image ? await uploadToCloudinary(image) : "";
 
       await addDoc(collection(db, "dishes"), {
         name: dishName,
@@ -177,7 +161,6 @@ export default function CreateDishPage() {
               value={dishName}
               onChange={(e) => setDishName(e.target.value)}
               className="w-full bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 text-white placeholder-zinc-500 focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 outline-none transition-all duration-200"
-              required
             />
 
             {/* Category dropdown */}
@@ -194,11 +177,8 @@ export default function CreateDishPage() {
                   }
                 }}
                 className="w-full bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 text-white placeholder-zinc-500 focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 outline-none transition-all duration-200"
-                required={!showNewCategoryInput}
               >
-                <option value="" disabled>
-                  Select a category
-                </option>
+                <option value="">Select a category</option>
                 {categories.map((cat, idx) => (
                   <option key={idx} value={cat}>
                     {cat}
@@ -215,7 +195,6 @@ export default function CreateDishPage() {
                     value={newCategory}
                     onChange={(e) => setNewCategory(e.target.value)}
                     className="flex-1 bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 text-white placeholder-zinc-500 focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 outline-none transition-all duration-200"
-                    required
                   />
                   <button
                     type="button"
@@ -234,7 +213,6 @@ export default function CreateDishPage() {
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               className="w-full bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 text-white placeholder-zinc-500 focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 outline-none transition-all duration-200"
-              required
             />
 
             <textarea

@@ -80,7 +80,7 @@ export default function AllergyNotice() {
               Your health is important to us
             </p>
             <p className="text-zinc-500 text-lg md:text-xl my-2">
-              please inform our team of any allergies before placing your order.
+              Please inform our team of any allergies before placing your order.
             </p>
           </div>
         </motion.div>

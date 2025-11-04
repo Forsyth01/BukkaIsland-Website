@@ -30,7 +30,7 @@ const contactMethods = [
     icon: MapPin,
     label: "Location",
     value: "4300 Old Spanish Trl, Houston, TX 77021",
-    href: "https://maps.app.goo.gl/QJABxSyByVbQWUBZ8",
+    href: "https://maps.app.goo.gl/AG2ToFQSvbRuXbkbA?g_st=ipc",
     color: "from-[#fac703] via-[#f6d303] to-[#e6b800]",
   },
 ];
@@ -102,7 +102,9 @@ export default function Contact() {
                 variants={fadeUp}
                 href={method.href}
                 target={method.href.startsWith("http") ? "_blank" : "_self"}
-                rel={method.href.startsWith("http") ? "noopener noreferrer" : ""}
+                rel={
+                  method.href.startsWith("http") ? "noopener noreferrer" : ""
+                }
                 whileHover={{ y: -4 }}
                 className="group relative bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-2xl p-6 border border-zinc-800 hover:border-[#fac703]/40 transition-all duration-300 overflow-hidden"
               >
@@ -162,7 +164,14 @@ export default function Contact() {
           variants={fadeUp}
           className="text-center mt-12 text-sm text-zinc-400"
         >
-          Follow us on Instagram <a href="https://www.instagram.com/bukkaisland" className="text-[#fac703]">@BukkaIsland</a> for daily location updates 🌴
+          Follow us on Instagram{" "}
+          <a
+            href="https://www.instagram.com/bukkaisland"
+            className="text-[#fac703]"
+          >
+            @BukkaIsland
+          </a>{" "}
+          for daily location updates 🌴
         </motion.p>
       </motion.div>
 

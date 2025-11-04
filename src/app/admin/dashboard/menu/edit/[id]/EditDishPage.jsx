@@ -99,15 +99,6 @@ export default function EditDishPage() {
     return data.secure_url;
   };
 
-  const isValidUrl = (url) => {
-    try {
-      new URL(url);
-      return true;
-    } catch {
-      return false;
-    }
-  };
-
   const handleImageChange = useCallback((e) => {
     const file = e.target.files[0];
     if (file) {
@@ -123,7 +114,6 @@ export default function EditDishPage() {
   }, [preview]);
 
   const handleAddCategory = async () => {
-    if (!newCategory.trim()) return;
     try {
       await addDoc(collection(db, "categories"), { name: newCategory });
       setCategories((prev) => [...prev, newCategory]);
@@ -139,12 +129,6 @@ export default function EditDishPage() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-
-    if (!dishName.trim()) return toast.error("Dish name is required");
-    if (!category.trim()) return toast.error("Category is required");
-    if (!price || isNaN(price)) return toast.error("Price must be a number");
-    if (orderLink && !isValidUrl(orderLink))
-      return toast.error("Order link must be valid");
 
     setUpdating(true);
 
@@ -201,23 +185,19 @@ export default function EditDishPage() {
         </button>
 
         <div className="flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-full text-amber-500 font-medium mb-4 w-fit backdrop-blur-sm">
-          {/* <Sparkles className="w-4 h-4" /> */}
           <span>Edit Dish</span>
         </div>
 
         <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl overflow-hidden">
           <form className="p-6 md:p-10 space-y-6" onSubmit={handleUpdate}>
-            {/* Dish Name */}
             <input
               type="text"
               placeholder="Dish Name"
               value={dishName}
               onChange={(e) => setDishName(e.target.value)}
               className="w-full bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 text-white placeholder-zinc-500 focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 outline-none transition-all duration-200"
-              required
             />
 
-            {/* Category Dropdown */}
             <div className="flex flex-col gap-2">
               <select
                 value={category}
@@ -231,11 +211,8 @@ export default function EditDishPage() {
                   }
                 }}
                 className="w-full bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 text-white placeholder-zinc-500 focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 outline-none transition-all duration-200"
-                required={!showNewCategoryInput}
               >
-                <option value="" disabled>
-                  Select a category
-                </option>
+                <option value="">Select a category</option>
                 {categories.map((cat, idx) => (
                   <option key={idx} value={cat}>
                     {cat}
@@ -264,17 +241,14 @@ export default function EditDishPage() {
               )}
             </div>
 
-            {/* Price */}
             <input
               type="text"
               placeholder="Price in $"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               className="w-full bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 text-white placeholder-zinc-500 focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 outline-none transition-all duration-200"
-              required
             />
 
-            {/* Description */}
             <textarea
               placeholder="Description"
               value={desc}
@@ -283,7 +257,6 @@ export default function EditDishPage() {
               className="w-full bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 text-white placeholder-zinc-500 focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 outline-none transition-all duration-200 resize-none"
             />
 
-            {/* Order Link */}
             <input
               type="text"
               placeholder="Order Link (optional)"
@@ -292,7 +265,6 @@ export default function EditDishPage() {
               className="w-full bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 text-white placeholder-zinc-500 focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 outline-none transition-all duration-200"
             />
 
-            {/* Popular */}
             <label className="flex items-center gap-2 text-white">
               <input
                 type="checkbox"
@@ -302,7 +274,6 @@ export default function EditDishPage() {
               Popular
             </label>
 
-            {/* Image Upload */}
             <div className="space-y-2">
               <p className="text-sm text-zinc-300">Dish Image:</p>
               {!preview ? (
@@ -328,7 +299,6 @@ export default function EditDishPage() {
               )}
             </div>
 
-            {/* Submit */}
             <button
               type="submit"
               disabled={updating}
