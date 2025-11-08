@@ -106,7 +106,7 @@ export default memo(function Hero() {
           </Link>
 
           <Link
-            href="https://maps.app.goo.gl/QJABxSyByVbQWUBZ8"
+            href="https://maps.app.goo.gl/AG2ToFQSvbRuXbkbA?g_st=ipc"
             target="_blank"
             rel="noopener noreferrer" // Security and performance
             className="px-8 py-4 bg-zinc-900 border-2 border-zinc-800 hover:border-[#fac703] rounded-full font-bold text-white text-lg transition-all duration-500 flex items-center gap-2 hover:scale-110 hover:-rotate-2 hover:bg-zinc-800 animate-bounce-in opacity-0 delay-700"

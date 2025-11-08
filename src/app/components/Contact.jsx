@@ -8,8 +8,8 @@ const contactMethods = [
   {
     icon: Mail,
     label: "Email",
-    value: "contact@bukkaisland.com",
-    href: "mailto:contact@bukkaisland.com",
+    value: "blockb.contact@gmail.com",
+    href: "mailto:blockb.contact@gmail.com",
     color: "from-[#fac703] via-[#f6d303] to-[#e6b800]",
   },
   // {

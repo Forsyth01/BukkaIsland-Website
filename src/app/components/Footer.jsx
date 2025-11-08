@@ -43,7 +43,7 @@ export default function Footer() {
   ];
 
   const contactInfo = [
-    { icon: Mail, text: "contact@bukkaisland.com" },
+    { icon: Mail, text: "blockb.contact@gmail.com" },
     { icon: Phone, text: "+1 832-258-5071" },
     { icon: MapPin, text: "4300 Old Spanish Trl, Houston, TX 77021" },
   ];
