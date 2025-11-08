@@ -141,7 +141,7 @@ export default function Contact() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="mailto:contact@bukkaisland.com"
+                href="mailto:blockb.contact@gmail.com"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800] text-white rounded-full font-bold shadow-lg shadow-[#fac703]/25 hover:shadow-[#fac703]/40 transition-all hover:scale-105"
               >
                 Send Email <ArrowRight className="w-4 h-4" />
