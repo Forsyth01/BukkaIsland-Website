@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mail, MapPin, Phone, MessageCircle, ArrowRight } from "lucide-react";
+import { Mail, MapPin, Phone, MessageCircle, ArrowRight,   Instagram, } from "lucide-react";
 import Link from "next/link";
 
 const contactMethods = [
@@ -24,6 +24,13 @@ const contactMethods = [
     label: "Phone",
     value: "+1 832-258-5071",
     href: "tel:+1 832-258-5071",
+    color: "from-[#fac703] via-[#f6d303] to-[#e6b800]",
+  },
+  {
+    icon: Instagram,
+    label: "Instagram",
+    value: "@bukkaisland",
+    href: "https://www.instagram.com/bukkaisland",
     color: "from-[#fac703] via-[#f6d303] to-[#e6b800]",
   },
   {
@@ -92,7 +99,7 @@ export default function Contact() {
               transition: { staggerChildren: 0.1, delayChildren: 0.1 },
             },
           }}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16"
+          className="grid md:grid-cols-4 lg:grid-cols-4 gap-6 mb-16"
         >
           {contactMethods.map((method, idx) => {
             const Icon = method.icon;
