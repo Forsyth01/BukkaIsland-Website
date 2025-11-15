@@ -50,9 +50,9 @@ export default memo(function Hero() {
         {/* Heading */}
         <div className="relative mb-6">
           <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 w-48 h-0.5 bg-gradient-to-r from-transparent via-[#fac703] to-[#e6b800]" />
-          
+
           <h1 className="text-7xl md:text-8xl xl:text-9xl font-black text-white tracking-tight relative">
-            <span className="font inline-block uppercase">Bukka</span> 
+            <span className="font inline-block uppercase">Bukka</span>
             <br />
             <span className="font inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] to-[#e6b800] relative -mt-5">
               Island
@@ -68,48 +68,15 @@ export default memo(function Hero() {
 
         {/* Subtitle */}
         <p className="text-xl md:text-2xl text-zinc-400 max-w-2xl mb-16 leading-relaxed">
-          Where <span className="text-[#fac703] font-semibold">street flavors</span>{" "}
+          Where{" "}
+          <span className="text-[#fac703] font-semibold">street flavors</span>{" "}
           meet Lagos vibes.
           <br />
           Your favorite Nigerian meals, rolling to you 🌴
         </p>
 
         {/* Central Circle - Optimized */}
-        <div className="relative mb-16 group">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#fac703]/20 to-[#e6b800]/20 rounded-full blur-2xl" />
-
-          <div className="relative w-72 h-72 md:w-96 md:h-96 rounded-full bg-gradient-to-br from-zinc-900 to-zinc-950 border-2 border-zinc-800 flex items-center justify-center overflow-visible transition-transform duration-700 hover:scale-110 hover:rotate-6 hover:border-[#fac703]/50">
-            {/* Border animations */}
-            <div className="absolute inset-0 rounded-full border-2 border-dashed border-zinc-700 scale-90" />
-            <div className="absolute inset-0 rounded-full border-2 border-dashed border-zinc-700 scale-75" />
-
-            <div className="w-48 h-48 md:w-64 md:h-64 bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-full flex items-center justify-center relative overflow-visible transition-transform duration-700 group-hover:scale-110">
-              <div className="absolute inset-0 bg-gradient-to-tr from-[#fac703]/10 via-transparent to-[#e6b800]/10 rounded-full" />
-              
-              {/* Optimized Food Image */}
-              <div className="absolute inset-0 flex items-center justify-center rounded-full overflow-hidden">
-                <Image 
-                  src="/suya.jpg" 
-                  alt="Delicious Nigerian suya"
-                  width={384}
-                  height={384}
-                  priority
-                  quality={85}
-                  className="object-cover rounded-full opacity-90 transition-opacity duration-700 group-hover:opacity-100"
-                  sizes="(max-width: 768px) 288px, 384px"
-                />
-                <div className="absolute inset-0 bg-black/20 rounded-full" />
-              </div>
-              
-              {/* Steam Effects */}
-              <div className="absolute inset-0 pointer-events-none overflow-visible">
-                <div className="absolute bottom-1/3 left-1/4 w-16 h-32 bg-gradient-to-t from-white/80 via-white/50 to-transparent rounded-full blur-xl" />
-                <div className="absolute bottom-1/3 left-1/2 -translate-x-1/2 w-20 h-40 bg-gradient-to-t from-white/90 via-white/60 to-transparent rounded-full blur-2xl" />
-                <div className="absolute bottom-1/3 right-1/4 w-14 h-28 bg-gradient-to-t from-white/75 via-white/45 to-transparent rounded-full blur-xl" />
-              </div>
-            </div>
-          </div>
-        </div>
+        
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 items-center">
@@ -139,11 +106,13 @@ export default memo(function Hero() {
             { label: "Fresh", value: "Daily" },
             { label: "Ingredients", value: "Local" },
           ].map((item, i) => (
-            <div 
-              key={i} 
+            <div
+              key={i}
               className="transition-all duration-500 hover:scale-125 hover:-translate-y-2 cursor-pointer group"
             >
-              <p className="text-2xl font-bold text-white transition-colors duration-500 group-hover:text-[#fac703]">{item.value}</p>
+              <p className="text-2xl font-bold text-white transition-colors duration-500 group-hover:text-[#fac703]">
+                {item.value}
+              </p>
               <p className="text-sm text-zinc-500 uppercase tracking-wide transition-colors duration-500 group-hover:text-zinc-300">
                 {item.label}
               </p>
@@ -157,8 +126,13 @@ export default memo(function Hero() {
 
       <style jsx>{`
         @keyframes orbit {
-          0%, 100% { transform: translate(0, 0); }
-          50% { transform: translate(20px, 20px); }
+          0%,
+          100% {
+            transform: translate(0, 0);
+          }
+          50% {
+            transform: translate(20px, 20px);
+          }
         }
         .animate-orbit {
           animation: orbit 8s ease-in-out infinite;
