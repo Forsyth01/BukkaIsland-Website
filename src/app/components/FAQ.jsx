@@ -13,8 +13,11 @@ const faqs = [
   q: "What are your operating hours?", 
   a:
 `Tuesday – Thursday: 5pm – 11pm
+
 Friday: 5pm – 2am
+
 Saturday: 2pm – 2am
+
 Sunday: 2pm – 9pm`
 },
   { q: "Is your food spicy?", a: "Most of our meals are mildly spicy, but we can always make it hotter or milder based on your preference!" },
