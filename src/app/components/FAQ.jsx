@@ -12,10 +12,10 @@ const faqs = [
   { 
   q: "What are your operating hours?", 
   a:
-Tuesday/Wednesday/Thursday: 5:00 PM – 11:00 PM  
-Friday: 5:00 PM – 2:00 AM  
-Saturday: 2:00 PM – 2:00 AM  
-Sunday: 2:00 PM – 9:00 PM` 
+`Tuesday – Thursday: 5pm – 11pm
+Friday: 5pm – 2am
+Saturday: 2pm – 2am
+Sunday: 2pm – 9pm`
 },
   { q: "Is your food spicy?", a: "Most of our meals are mildly spicy, but we can always make it hotter or milder based on your preference!" },
   { q: "Do you accept card and bank transfers?", a: "Of course. We accept transfers, and cash — whichever is easiest for you." },
