@@ -16,7 +16,7 @@ export default memo(function Hero() {
           autoPlay
           loop
           muted
-          playsInline
+          playsInline 
           preload="auto"
           onLoadedData={() => setVideoLoaded(true)}
           className="absolute inset-0 w-full h-full object-cover"
