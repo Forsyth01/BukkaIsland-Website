@@ -179,7 +179,7 @@ export default function MenuPage() {
 
                     <div className="flex justify-between items-center mt-4 pt-4 border-t border-zinc-800">
                       <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800]">
-                        ${dish.price}
+                        {/* ${dish.price} */}
                       </span>
 
                       {dish.orderLink ? (
