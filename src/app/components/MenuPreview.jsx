@@ -83,7 +83,7 @@ const DishCard = memo(({ dish, index }) => {
           </div>
           <div className="flex items-center gap-2">
             <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#e6b800] via-[#c49c00] to-[#b38f00]">
-              ${dish.price}
+              {/* ${dish.price} */}
             </span>
           </div>
         </div>

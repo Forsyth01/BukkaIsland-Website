@@ -175,7 +175,7 @@ export default function MenuPage() {
                         {dish.name}
                       </h3>
                       <p className="text-zinc-400 text-sm line-clamp-2 mb-3">{dish.desc}</p>
-                    </div>
+                    </div>  
 
                     <div className="flex justify-between items-center mt-4 pt-4 border-t border-zinc-800">
                       <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800]">
