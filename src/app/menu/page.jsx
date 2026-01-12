@@ -33,10 +33,14 @@ export default function MenuPage() {
           // If only one has order, prioritize it
           if (a.order !== undefined) return -1;
           if (b.order !== undefined) return 1;
-          
+
           // Fallback to createdAt
-          const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(0);
-          const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(0);
+          const dateA = a.createdAt?.toDate
+            ? a.createdAt.toDate()
+            : new Date(0);
+          const dateB = b.createdAt?.toDate
+            ? b.createdAt.toDate()
+            : new Date(0);
           return dateB - dateA;
         });
 
@@ -90,7 +94,8 @@ export default function MenuPage() {
             </span>
           </h1>
           <p className="text-base text-zinc-400 max-w-2xl mx-auto">
-            Discover our mouthwatering meals, freshly made every day with authentic Nigerian flavors
+            Discover our mouthwatering meals, freshly made every day with
+            authentic Nigerian flavors
           </p>
         </motion.div>
 
@@ -171,19 +176,28 @@ export default function MenuPage() {
 
                   <div className="p-5 flex flex-col justify-between flex-1">
                     <div>
+                      <div className="flex justify-between items-center mb-1">
                       <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#fac703] transition-colors">
                         {dish.name}
                       </h3>
-                      <p className="text-zinc-400 text-sm line-clamp-2 mb-3">{dish.desc}</p>
-                    </div>  
-
-                    <div className="flex justify-between items-center mt-4 pt-4 border-t border-zinc-800">
-                      <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800]">
-                        {/* ${dish.price} */}
+                       <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800]">
+                        ${dish.price}
                       </span>
+                      </div>
+                      <p className="text-zinc-400 text-sm line-clamp-2 mb-3">
+                        {dish.desc}
+                      </p>
+                    </div>
+
+                    <div className="flex justify-between items-center mt-4  border-zinc-800">
+                     
 
                       {dish.orderLink ? (
-                        <Link href={dish.orderLink} target="_blank" rel="noopener noreferrer">
+                        <Link
+                          href={dish.orderLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           <button className="bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800] text-white px-4 py-2 rounded-full text-sm font-bold hover:shadow-lg transition-all flex items-center gap-2">
                             Order
                             <ArrowRight className="w-4 h-4" />
@@ -196,9 +210,7 @@ export default function MenuPage() {
                         // >
                         //   Unavailable
                         // </button>
-                        <div className="">
-                          
-                        </div>
+                        <div className=""></div>
                       )}
                     </div>
                   </div>
@@ -215,7 +227,9 @@ export default function MenuPage() {
               className="text-center py-20"
             >
               <ChefHat className="w-16 h-16 text-zinc-700 mx-auto mb-4" />
-              <p className="text-lg text-zinc-400">No dishes in this category yet</p>
+              <p className="text-lg text-zinc-400">
+                No dishes in this category yet
+              </p>
             </motion.div>
           )}
         </div>
