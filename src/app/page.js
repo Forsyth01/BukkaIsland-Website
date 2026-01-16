@@ -9,6 +9,7 @@ import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import AllergyNotice from "./components/AllergyNotice";
+import NoticeSection from "./components/NoticeSection";
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
       {/* <About /> */}
       <MenuPreview />
       {/* <BlogPreview/> */}
+      <NoticeSection/>
       <AllergyNotice />
       <FAQ/>
       <Contact />
