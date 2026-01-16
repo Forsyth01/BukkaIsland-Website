@@ -139,6 +139,14 @@ export default function Navbar() {
             <div className="flex items-center gap-3">
               {/* Desktop CTAs */}
               <div className="hidden md:flex items-center gap-3">
+                <Link
+                  href="/menu"
+                  onClick={(e) => handleSmoothScroll(e, "/menu")}
+                  className="flex items-center gap-2 px-5 py-4 bg-zinc-800/60 text-white rounded-full font-bold text-sm border border-zinc-700/50 hover:bg-zinc-800 hover:scale-105 active:scale-95 transition-all duration-300"
+                >
+                  <UtensilsCrossed className="w-4 h-4" />
+                  Order Pickup
+                </Link>
                 <a
                   href="https://www.ubereats.com/store/bukka-island-4300-old-spanish-trail/1JmSaVp9WPiGyAIgPDm47g?diningMode=DELIVERY&mod=deliveryTime&modctx=%257B%2522entryPoint%2522%253A%2522global-delivery-details%2522%257D&next=%2Fstore%2Fbukka-island-4300-old-spanish-trail%2F1JmSaVp9WPiGyAIgPDm47g%3FdiningMode%3DDELIVERY%26pl%3DJTdCJTIyYWRkcmVzcyUyMiUzQSUyMkNyYXZlJTIwU3V5YSUyMiUyQyUyMnJlZmVyZW5jZSUyMiUzQSUyMmFhYmViYjc4LWU2Y2YtNGNkNC04YjY3LWNkNjljY2IxNTU4MiUyMiUyQyUyMnJlZmVyZW5jZVR5cGUlMjIlM0ElMjJ1YmVyX3BsYWNlcyUyMiUyQyUyMmxhdGl0dWRlJTIyJTNBMjkuNzM2NDQwNSUyQyUyMmxvbmdpdHVkZSUyMiUzQS05NS40NzYwMTM5JTdE&pl=JTdCJTIyYWRkcmVzcyUyMiUzQSUyMkNyYXZlJTIwU3V5YSUyMiUyQyUyMnJlZmVyZW5jZSUyMiUzQSUyMmFhYmViYjc4LWU2Y2YtNGNkNC04YjY3LWNkNjljY2IxNTU4MiUyMiUyQyUyMnJlZmVyZW5jZVR5cGUlMjIlM0ElMjJ1YmVyX3BsYWNlcyUyMiUyQyUyMmxhdGl0dWRlJTIyJTNBMjkuNzM2NDQwNSUyQyUyMmxvbmdpdHVkZSUyMiUzQS05NS40NzYwMTM5JTdE&ps=1"
                   target="_blank"
@@ -148,14 +156,6 @@ export default function Navbar() {
                   <MapPin className="w-4 h-4" />
                   Order Delivery
                 </a>
-                <Link
-                  href="/menu"
-                  onClick={(e) => handleSmoothScroll(e, "/menu")}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-zinc-800/60 text-white rounded-full font-bold text-sm border border-zinc-700/50 hover:bg-zinc-800 hover:scale-105 active:scale-95 transition-all duration-300"
-                >
-                  <UtensilsCrossed className="w-4 h-4" />
-                  Order Pickup
-                </Link>
               </div>
 
               {/* Mobile Hamburger */}
@@ -216,6 +216,20 @@ export default function Navbar() {
 
               {/* Mobile CTAs */}
               <div className="space-y-3 pt-4">
+                
+                <Link
+                  href="/menu"
+                  onClick={(e) => handleSmoothScroll(e, "/menu")}
+                  className={`flex items-center justify-center gap-2 w-full bg-zinc-800/60 text-white px-6 py-3.5 rounded-full font-bold border border-zinc-700/50 hover:bg-zinc-800 hover:scale-105 active:scale-95 transition-all duration-300 ${
+                    isClosing ? 'menu-cta-exit' : 'menu-cta-enter'
+                  }`}
+                  style={{
+                    animationDelay: isClosing ? '0s' : `${links.length * 0.08 + 0.15}s`
+                  }}
+                >
+                  <UtensilsCrossed className="w-5 h-5" />
+                  Order Pickup
+                </Link>
                 <a
                   href="https://www.ubereats.com/store/bukka-island-4300-old-spanish-trail/1JmSaVp9WPiGyAIgPDm47g?diningMode=DELIVERY&mod=deliveryTime&modctx=%257B%2522entryPoint%2522%253A%2522global-delivery-details%2522%257D&next=%2Fstore%2Fbukka-island-4300-old-spanish-trail%2F1JmSaVp9WPiGyAIgPDm47g%3FdiningMode%3DDELIVERY%26pl%3DJTdCJTIyYWRkcmVzcyUyMiUzQSUyMkNyYXZlJTIwU3V5YSUyMiUyQyUyMnJlZmVyZW5jZSUyMiUzQSUyMmFhYmViYjc4LWU2Y2YtNGNkNC04YjY3LWNkNjljY2IxNTU4MiUyMiUyQyUyMnJlZmVyZW5jZVR5cGUlMjIlM0ElMjJ1YmVyX3BsYWNlcyUyMiUyQyUyMmxhdGl0dWRlJTIyJTNBMjkuNzM2NDQwNSUyQyUyMmxvbmdpdHVkZSUyMiUzQS05NS40NzYwMTM5JTdE&pl=JTdCJTIyYWRkcmVzcyUyMiUzQSUyMkNyYXZlJTIwU3V5YSUyMiUyQyUyMnJlZmVyZW5jZSUyMiUzQSUyMmFhYmViYjc4LWU2Y2YtNGNkNC04YjY3LWNkNjljY2IxNTU4MiUyMiUyQyUyMnJlZmVyZW5jZVR5cGUlMjIlM0ElMjJ1YmVyX3BsYWNlcyUyMiUyQyUyMmxhdGl0dWRlJTIyJTNBMjkuNzM2NDQwNSUyQyUyMmxvbmdpdHVkZSUyMiUzQS05NS40NzYwMTM5JTdE&ps=1"
                   target="_blank"
@@ -230,19 +244,6 @@ export default function Navbar() {
                   <MapPin className="w-5 h-5" />
                   Order Delivery
                 </a>
-                <Link
-                  href="/menu"
-                  onClick={(e) => handleSmoothScroll(e, "/menu")}
-                  className={`flex items-center justify-center gap-2 w-full bg-zinc-800/60 text-white px-6 py-3.5 rounded-full font-bold border border-zinc-700/50 hover:bg-zinc-800 hover:scale-105 active:scale-95 transition-all duration-300 ${
-                    isClosing ? 'menu-cta-exit' : 'menu-cta-enter'
-                  }`}
-                  style={{
-                    animationDelay: isClosing ? '0s' : `${links.length * 0.08 + 0.15}s`
-                  }}
-                >
-                  <UtensilsCrossed className="w-5 h-5" />
-                  Order Pickup
-                </Link>
               </div>
 
               <div className="pt-4 border-t border-zinc-800/50">
