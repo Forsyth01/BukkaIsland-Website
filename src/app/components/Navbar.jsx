@@ -96,7 +96,7 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             {/* Logo */}
-                     <Link
+            <Link
               href="/"
               prefetch={false}
               onClick={(e) => handleSmoothScroll(e, "/")}
@@ -107,8 +107,12 @@ export default function Navbar() {
                   <h1 className="font text-3xl md:text-5xl text-white">B</h1>
                 </div>
                 <div className="text-lg md:text-2xl relative top-1 hidden md:block">
-                  <p className="font text-white transition-colors group-hover:text-[#e6b800]">Bukka</p>
-                  <p className="font text-[#e6b800] relative bottom-2 transition-colors group-hover:text-white">Island</p>
+                  <p className="font text-white transition-colors group-hover:text-[#e6b800]">
+                    Bukka
+                  </p>
+                  <p className="font text-[#e6b800] relative bottom-2 transition-colors group-hover:text-white">
+                    Island
+                  </p>
                 </div>
               </div>
             </Link>
@@ -138,24 +142,16 @@ export default function Navbar() {
             {/* CTA + Mobile Menu */}
             <div className="flex items-center gap-3">
               {/* Desktop CTAs */}
-              <div className="hidden md:flex items-center gap-3">
+              <div className="hidden lg:flex items-center gap-3">
                 <Link
-                  href="/menu"
-                  onClick={(e) => handleSmoothScroll(e, "/menu")}
-                  className="flex items-center gap-2 px-5 py-4 bg-zinc-800/60 text-white rounded-full font-bold text-sm border border-zinc-700/50 hover:bg-zinc-800 hover:scale-105 active:scale-95 transition-all duration-300"
-                >
-                  <UtensilsCrossed className="w-4 h-4" />
-                  Order Pickup
-                </Link>
-                <a
-                  href="https://www.ubereats.com/store/bukka-island-4300-old-spanish-trail/1JmSaVp9WPiGyAIgPDm47g?diningMode=DELIVERY&mod=deliveryTime&modctx=%257B%2522entryPoint%2522%253A%2522global-delivery-details%2522%257D&next=%2Fstore%2Fbukka-island-4300-old-spanish-trail%2F1JmSaVp9WPiGyAIgPDm47g%3FdiningMode%3DDELIVERY%26pl%3DJTdCJTIyYWRkcmVzcyUyMiUzQSUyMkNyYXZlJTIwU3V5YSUyMiUyQyUyMnJlZmVyZW5jZSUyMiUzQSUyMmFhYmViYjc4LWU2Y2YtNGNkNC04YjY3LWNkNjljY2IxNTU4MiUyMiUyQyUyMnJlZmVyZW5jZVR5cGUlMjIlM0ElMjJ1YmVyX3BsYWNlcyUyMiUyQyUyMmxhdGl0dWRlJTIyJTNBMjkuNzM2NDQwNSUyQyUyMmxvbmdpdHVkZSUyMiUzQS05NS40NzYwMTM5JTdE&pl=JTdCJTIyYWRkcmVzcyUyMiUzQSUyMkNyYXZlJTIwU3V5YSUyMiUyQyUyMnJlZmVyZW5jZSUyMiUzQSUyMmFhYmViYjc4LWU2Y2YtNGNkNC04YjY3LWNkNjljY2IxNTU4MiUyMiUyQyUyMnJlZmVyZW5jZVR5cGUlMjIlM0ElMjJ1YmVyX3BsYWNlcyUyMiUyQyUyMmxhdGl0dWRlJTIyJTNBMjkuNzM2NDQwNSUyQyUyMmxvbmdpdHVkZSUyMiUzQS05NS40NzYwMTM5JTdE&ps=1"
+                  href="https://maps.app.goo.gl/AG2ToFQSvbRuXbkbA?g_st=ipc"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 bg-zinc-800/60 text-white px-6 py-3.5 rounded-full font-bold border border-zinc-700/50 hover:bg-zinc-800 hover:scale-105 active:scale-95 transition-all duration-300"
+                  className="px-8 py-4 bg-zinc-900 border-2 border-zinc-800 hover:border-[#fac703] rounded-full font-bold text-white text-lg flex items-center gap-2 transition-all duration-500  hover:bg-zinc-800"
                 >
-                  <MapPin className="w-4 h-4" />
-                  Order Delivery
-                </a>
+                  <MapPin className="w-5 h-5 text-[#fac703] " />
+                  Find Us
+                </Link>
               </div>
 
               {/* Mobile Hamburger */}
@@ -181,7 +177,9 @@ export default function Navbar() {
       {open && (
         <div
           className={`fixed inset-0 z-40 lg:hidden ${
-            isClosing ? "animate-out fade-out duration-300" : "animate-in fade-in duration-300"
+            isClosing
+              ? "animate-out fade-out duration-300"
+              : "animate-in fade-in duration-300"
           }`}
         >
           <div
@@ -190,7 +188,9 @@ export default function Navbar() {
           />
           <div
             className={`absolute top-20 left-0 right-0 bg-zinc-950/98 backdrop-blur-xl border-b border-zinc-800/50 shadow-2xl ${
-              isClosing ? "animate-out slide-out-to-top duration-300" : "animate-in slide-in-from-top duration-300"
+              isClosing
+                ? "animate-out slide-out-to-top duration-300"
+                : "animate-in slide-in-from-top duration-300"
             }`}
           >
             <div className="max-w-7xl mx-auto px-4 py-6 space-y-2">
@@ -200,10 +200,12 @@ export default function Navbar() {
                   href="#"
                   onClick={(e) => handleSmoothScroll(e, link.href)}
                   className={`flex items-center justify-between px-4 py-3 rounded-xl text-zinc-300 hover:text-white hover:bg-zinc-900/60 transition-all duration-200 group ${
-                    isClosing ? 'menu-item-exit' : 'menu-item-enter'
+                    isClosing ? "menu-item-exit" : "menu-item-enter"
                   }`}
                   style={{
-                    animationDelay: isClosing ? `${index * 0.03}s` : `${index * 0.08}s`
+                    animationDelay: isClosing
+                      ? `${index * 0.03}s`
+                      : `${index * 0.08}s`,
                   }}
                 >
                   <div className="flex items-center gap-3">
@@ -216,34 +218,16 @@ export default function Navbar() {
 
               {/* Mobile CTAs */}
               <div className="space-y-3 pt-4">
-                
                 <Link
-                  href="/menu"
-                  onClick={(e) => handleSmoothScroll(e, "/menu")}
-                  className={`flex items-center justify-center gap-2 w-full bg-zinc-800/60 text-white px-6 py-3.5 rounded-full font-bold border border-zinc-700/50 hover:bg-zinc-800 hover:scale-105 active:scale-95 transition-all duration-300 ${
-                    isClosing ? 'menu-cta-exit' : 'menu-cta-enter'
-                  }`}
-                  style={{
-                    animationDelay: isClosing ? '0s' : `${links.length * 0.08 + 0.15}s`
-                  }}
-                >
-                  <UtensilsCrossed className="w-5 h-5" />
-                  Order Pickup
-                </Link>
-                <a
-                  href="https://www.ubereats.com/store/bukka-island-4300-old-spanish-trail/1JmSaVp9WPiGyAIgPDm47g?diningMode=DELIVERY&mod=deliveryTime&modctx=%257B%2522entryPoint%2522%253A%2522global-delivery-details%2522%257D&next=%2Fstore%2Fbukka-island-4300-old-spanish-trail%2F1JmSaVp9WPiGyAIgPDm47g%3FdiningMode%3DDELIVERY%26pl%3DJTdCJTIyYWRkcmVzcyUyMiUzQSUyMkNyYXZlJTIwU3V5YSUyMiUyQyUyMnJlZmVyZW5jZSUyMiUzQSUyMmFhYmViYjc4LWU2Y2YtNGNkNC04YjY3LWNkNjljY2IxNTU4MiUyMiUyQyUyMnJlZmVyZW5jZVR5cGUlMjIlM0ElMjJ1YmVyX3BsYWNlcyUyMiUyQyUyMmxhdGl0dWRlJTIyJTNBMjkuNzM2NDQwNSUyQyUyMmxvbmdpdHVkZSUyMiUzQS05NS40NzYwMTM5JTdE&pl=JTdCJTIyYWRkcmVzcyUyMiUzQSUyMkNyYXZlJTIwU3V5YSUyMiUyQyUyMnJlZmVyZW5jZSUyMiUzQSUyMmFhYmViYjc4LWU2Y2YtNGNkNC04YjY3LWNkNjljY2IxNTU4MiUyMiUyQyUyMnJlZmVyZW5jZVR5cGUlMjIlM0ElMjJ1YmVyX3BsYWNlcyUyMiUyQyUyMmxhdGl0dWRlJTIyJTNBMjkuNzM2NDQwNSUyQyUyMmxvbmdpdHVkZSUyMiUzQS05NS40NzYwMTM5JTdE&ps=1"
+                  href="https://maps.app.goo.gl/AG2ToFQSvbRuXbkbA?g_st=ipc"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`flex items-center justify-center gap-2  bg-zinc-800/60 text-white px-6 py-3.5 rounded-full font-bold border border-zinc-700/50 hover:bg-zinc-800 hover:scale-105 active:scale-95 transition-all duration-300${
-                    isClosing ? 'menu-cta-exit' : 'menu-cta-enter'
-                  }`}
-                  style={{
-                    animationDelay: isClosing ? '0s' : `${links.length * 0.08 + 0.1}s`
-                  }}
+                  className="px-8 text-center m-auto py-4 bg-zinc-900 border-2 border-zinc-800 hover:border-[#fac703] rounded-full font-bold text-white text-lg transition-all duration-500 flex items-center justify-center gap-2  hover:bg-zinc-800"
                 >
-                  <MapPin className="w-5 h-5" />
-                  Order Delivery
-                </a>
+                  <MapPin className="w-5 h-5 text-[#fac703] transition-transform  duration-500 hover:scale-125" />
+                  Find Us
+                </Link>
+                
               </div>
 
               <div className="pt-4 border-t border-zinc-800/50">
