@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import {
   Menu,
@@ -59,7 +58,6 @@ export default function Navbar() {
     setTimeout(() => {
       if (href.startsWith("/#")) {
         const id = href.split("#")[1];
-        
         if (pathname !== "/") {
           router.push("/");
           setTimeout(() => {
@@ -88,135 +86,17 @@ export default function Navbar() {
 
   return (
     <>
-      <style jsx global>{`
-        @keyframes slideDown {
-          from {
-            opacity: 0;
-            transform: translateY(-20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes slideUp {
-          from {
-            opacity: 1;
-            transform: translateY(0);
-          }
-          to {
-            opacity: 0;
-            transform: translateY(-20px);
-          }
-        }
-
-        @keyframes fadeInScale {
-          from {
-            opacity: 0;
-            transform: scale(0.9) translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-          }
-        }
-
-        @keyframes fadeOutScale {
-          from {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-          }
-          to {
-            opacity: 0;
-            transform: scale(0.9) translateY(-10px);
-          }
-        }
-
-        @keyframes slideInRight {
-          from {
-            opacity: 0;
-            transform: translateX(-30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        @keyframes slideOutRight {
-          from {
-            opacity: 1;
-            transform: translateX(0);
-          }
-          to {
-            opacity: 0;
-            transform: translateX(-30px);
-          }
-        }
-
-        .mobile-menu-enter {
-          animation: slideDown 0.3s ease-out forwards;
-        }
-
-        .mobile-menu-exit {
-          animation: slideUp 0.3s ease-out forwards;
-        }
-
-        .menu-item-enter {
-          animation: slideInRight 0.4s ease-out forwards;
-        }
-
-        .menu-item-exit {
-          animation: slideOutRight 0.3s ease-out forwards;
-        }
-
-        .menu-cta-enter {
-          animation: fadeInScale 0.5s ease-out forwards;
-        }
-
-        .menu-cta-exit {
-          animation: fadeOutScale 0.3s ease-out forwards;
-        }
-
-        .hamburger-rotate-open {
-          animation: rotateOpen 0.3s ease-out forwards;
-        }
-
-        .hamburger-rotate-close {
-          animation: rotateClose 0.3s ease-out forwards;
-        }
-
-        @keyframes rotateOpen {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(90deg);
-          }
-        }
-
-        @keyframes rotateClose {
-          from {
-            transform: rotate(90deg);
-          }
-          to {
-            transform: rotate(0deg);
-          }
-        }
-      `}</style>
-
-      <header
-        className={`fixed inset-x-0 top-0 z-50 bg-zinc-950/95 transition-all duration-300 ${
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all bg-zinc-950/95 duration-500 ${
           scrolled
-            ? "backdrop-blur-md  shadow-md shadow-black/20"
-            : ""
+            ? "bg-zinc-950/95 backdrop-blur-xl shadow-2xl shadow-black/20 border-b border-zinc-800/50"
+            : "bg-transparent"
         }`}
       >
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-20">
             {/* Logo */}
-            <Link
+                     <Link
               href="/"
               prefetch={false}
               onClick={(e) => handleSmoothScroll(e, "/")}
@@ -234,14 +114,13 @@ export default function Navbar() {
             </Link>
 
             {/* Desktop Nav */}
-            <div className="hidden lg:flex items-center gap-1">
+            <div className="hidden lg:flex items-center gap-2">
               {links.map((link) => {
                 const isActive = pathname === link.href;
                 return (
-                  <Link
+                  <a
                     key={link.href}
-                    href={link.href}
-                    prefetch={false}
+                    href="#"
                     onClick={(e) => handleSmoothScroll(e, link.href)}
                     className={`relative flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all hover:scale-105 active:scale-95 ${
                       isActive
@@ -251,53 +130,74 @@ export default function Navbar() {
                   >
                     {link.icon}
                     {link.label}
-                  </Link>
+                  </a>
                 );
               })}
             </div>
 
             {/* CTA + Mobile Menu */}
             <div className="flex items-center gap-3">
-              {/* Desktop CTA */}
-              <Link
-                href="/menu"
-                prefetch={false}
-                onClick={(e) => handleSmoothScroll(e, "/menu")}
-                className="hidden md:flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#e6b800] to-[#c49c00] text-white rounded-full font-bold text-sm shadow-lg shadow-[#c49c00]/25 hover:shadow-[#c49c00]/40 hover:scale-105 active:scale-95 transition-all duration-300"
-              >
-                <MapPin className="w-4 h-4" />
-                Order Now
-              </Link>
+              {/* Desktop CTAs */}
+              <div className="hidden md:flex items-center gap-3">
+                <a
+                  href="https://www.ubereats.com/store/bukka-island-4300-old-spanish-trail/1JmSaVp9WPiGyAIgPDm47g?diningMode=DELIVERY&mod=deliveryTime&modctx=%257B%2522entryPoint%2522%253A%2522global-delivery-details%2522%257D&next=%2Fstore%2Fbukka-island-4300-old-spanish-trail%2F1JmSaVp9WPiGyAIgPDm47g%3FdiningMode%3DDELIVERY%26pl%3DJTdCJTIyYWRkcmVzcyUyMiUzQSUyMkNyYXZlJTIwU3V5YSUyMiUyQyUyMnJlZmVyZW5jZSUyMiUzQSUyMmFhYmViYjc4LWU2Y2YtNGNkNC04YjY3LWNkNjljY2IxNTU4MiUyMiUyQyUyMnJlZmVyZW5jZVR5cGUlMjIlM0ElMjJ1YmVyX3BsYWNlcyUyMiUyQyUyMmxhdGl0dWRlJTIyJTNBMjkuNzM2NDQwNSUyQyUyMmxvbmdpdHVkZSUyMiUzQS05NS40NzYwMTM5JTdE&pl=JTdCJTIyYWRkcmVzcyUyMiUzQSUyMkNyYXZlJTIwU3V5YSUyMiUyQyUyMnJlZmVyZW5jZSUyMiUzQSUyMmFhYmViYjc4LWU2Y2YtNGNkNC04YjY3LWNkNjljY2IxNTU4MiUyMiUyQyUyMnJlZmVyZW5jZVR5cGUlMjIlM0ElMjJ1YmVyX3BsYWNlcyUyMiUyQyUyMmxhdGl0dWRlJTIyJTNBMjkuNzM2NDQwNSUyQyUyMmxvbmdpdHVkZSUyMiUzQS05NS40NzYwMTM5JTdE&ps=1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#e6b800] to-[#c49c00] text-white rounded-full font-bold text-sm shadow-lg shadow-[#c49c00]/25 hover:shadow-[#c49c00]/40 hover:scale-105 active:scale-95 transition-all duration-300"
+                >
+                  <MapPin className="w-4 h-4" />
+                  Order Delivery
+                </a>
+                <Link
+                  href="/menu"
+                  onClick={(e) => handleSmoothScroll(e, "/menu")}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-zinc-800/60 text-white rounded-full font-bold text-sm border border-zinc-700/50 hover:bg-zinc-800 hover:scale-105 active:scale-95 transition-all duration-300"
+                >
+                  <UtensilsCrossed className="w-4 h-4" />
+                  Order Pickup
+                </Link>
+              </div>
 
               {/* Mobile Hamburger */}
               <button
-                onClick={() => open ? closeMenu() : setOpen(true)}
+                onClick={() => (open ? closeMenu() : setOpen(true))}
                 className="lg:hidden p-2 rounded-full text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition-all duration-300 relative"
                 aria-label="Toggle menu"
               >
-                <div className={open ? "hamburger-rotate-open" : "hamburger-rotate-close"}>
+                <div className="relative w-6 h-6">
                   {open ? (
-                    <X className="w-6 h-6" />
+                    <X className="w-6 h-6 absolute inset-0 animate-in spin-in-180 duration-300" />
                   ) : (
-                    <Menu className="w-6 h-6" />
+                    <Menu className="w-6 h-6 absolute inset-0 animate-in fade-in duration-300" />
                   )}
                 </div>
               </button>
             </div>
           </div>
-        </nav>
+        </div>
+      </nav>
 
-        {/* Mobile Menu */}
-        {open && (
-          <div className={`lg:hidden border-t border-zinc-800/50 bg-zinc-950/98 backdrop-blur-xl overflow-hidden ${
-            isClosing ? 'mobile-menu-exit' : 'mobile-menu-enter'
-          }`}>
-            <div className="max-w-7xl mx-auto px-4 py-6 space-y-1">
+      {/* Mobile Menu */}
+      {open && (
+        <div
+          className={`fixed inset-0 z-40 lg:hidden ${
+            isClosing ? "animate-out fade-out duration-300" : "animate-in fade-in duration-300"
+          }`}
+        >
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={closeMenu}
+          />
+          <div
+            className={`absolute top-20 left-0 right-0 bg-zinc-950/98 backdrop-blur-xl border-b border-zinc-800/50 shadow-2xl ${
+              isClosing ? "animate-out slide-out-to-top duration-300" : "animate-in slide-in-from-top duration-300"
+            }`}
+          >
+            <div className="max-w-7xl mx-auto px-4 py-6 space-y-2">
               {links.map((link, index) => (
-                <Link
+                <a
                   key={link.href}
-                  href={link.href}
-                  prefetch={false}
+                  href="#"
                   onClick={(e) => handleSmoothScroll(e, link.href)}
                   className={`flex items-center justify-between px-4 py-3 rounded-xl text-zinc-300 hover:text-white hover:bg-zinc-900/60 transition-all duration-200 group ${
                     isClosing ? 'menu-item-exit' : 'menu-item-enter'
@@ -306,48 +206,54 @@ export default function Navbar() {
                     animationDelay: isClosing ? `${index * 0.03}s` : `${index * 0.08}s`
                   }}
                 >
-                  <span className="flex items-center gap-3">
-                    <span className="text-[#e6b800] group-hover:text-[#c49c00] transition-all duration-300 group-hover:scale-125 group-hover:rotate-12">
-                      {link.icon}
-                    </span>
+                  <div className="flex items-center gap-3">
+                    {link.icon}
                     <span className="font-medium">{link.label}</span>
-                  </span>
-                  <ChevronRight className="w-4 h-4 text-zinc-600 group-hover:text-[#e6b800] group-hover:translate-x-1 transition-all duration-300" />
-                </Link>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-zinc-600 group-hover:text-[#e6b800] group-hover:translate-x-1 transition-all" />
+                </a>
               ))}
 
-              {/* Mobile CTA */}
-              <Link
-                href="/menu"
-                prefetch={false}
-                onClick={(e) => handleSmoothScroll(e, "/menu")}
-                className={`flex items-center justify-center gap-2 w-full bg-gradient-to-r from-[#e6b800] to-[#c49c00] text-white px-6 py-3.5 rounded-full font-bold shadow-lg shadow-[#c49c00]/25 hover:shadow-[#c49c00]/40 hover:scale-105 active:scale-95 transition-all duration-300 ${
-                  isClosing ? 'menu-cta-exit' : 'menu-cta-enter'
-                }`}
-                style={{
-                  animationDelay: isClosing ? '0s' : `${links.length * 0.08 + 0.1}s`
-                }}
-              >
-                <MapPin className="w-5 h-5" />
-                Order Now
-              </Link>
+              {/* Mobile CTAs */}
+              <div className="space-y-3 pt-4">
+                <a
+                  href="https://www.ubereats.com/store/bukka-island-4300-old-spanish-trail/1JmSaVp9WPiGyAIgPDm47g?diningMode=DELIVERY&mod=deliveryTime&modctx=%257B%2522entryPoint%2522%253A%2522global-delivery-details%2522%257D&next=%2Fstore%2Fbukka-island-4300-old-spanish-trail%2F1JmSaVp9WPiGyAIgPDm47g%3FdiningMode%3DDELIVERY%26pl%3DJTdCJTIyYWRkcmVzcyUyMiUzQSUyMkNyYXZlJTIwU3V5YSUyMiUyQyUyMnJlZmVyZW5jZSUyMiUzQSUyMmFhYmViYjc4LWU2Y2YtNGNkNC04YjY3LWNkNjljY2IxNTU4MiUyMiUyQyUyMnJlZmVyZW5jZVR5cGUlMjIlM0ElMjJ1YmVyX3BsYWNlcyUyMiUyQyUyMmxhdGl0dWRlJTIyJTNBMjkuNzM2NDQwNSUyQyUyMmxvbmdpdHVkZSUyMiUzQS05NS40NzYwMTM5JTdE&pl=JTdCJTIyYWRkcmVzcyUyMiUzQSUyMkNyYXZlJTIwU3V5YSUyMiUyQyUyMnJlZmVyZW5jZSUyMiUzQSUyMmFhYmViYjc4LWU2Y2YtNGNkNC04YjY3LWNkNjljY2IxNTU4MiUyMiUyQyUyMnJlZmVyZW5jZVR5cGUlMjIlM0ElMjJ1YmVyX3BsYWNlcyUyMiUyQyUyMmxhdGl0dWRlJTIyJTNBMjkuNzM2NDQwNSUyQyUyMmxvbmdpdHVkZSUyMiUzQS05NS40NzYwMTM5JTdE&ps=1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex items-center justify-center gap-2 w-full bg-gradient-to-r from-[#e6b800] to-[#c49c00] text-white px-6 py-3.5 rounded-full font-bold shadow-lg shadow-[#c49c00]/25 hover:shadow-[#c49c00]/40 hover:scale-105 active:scale-95 transition-all duration-300 ${
+                    isClosing ? 'menu-cta-exit' : 'menu-cta-enter'
+                  }`}
+                  style={{
+                    animationDelay: isClosing ? '0s' : `${links.length * 0.08 + 0.1}s`
+                  }}
+                >
+                  <MapPin className="w-5 h-5" />
+                  Order Delivery
+                </a>
+                <Link
+                  href="/menu"
+                  onClick={(e) => handleSmoothScroll(e, "/menu")}
+                  className={`flex items-center justify-center gap-2 w-full bg-zinc-800/60 text-white px-6 py-3.5 rounded-full font-bold border border-zinc-700/50 hover:bg-zinc-800 hover:scale-105 active:scale-95 transition-all duration-300 ${
+                    isClosing ? 'menu-cta-exit' : 'menu-cta-enter'
+                  }`}
+                  style={{
+                    animationDelay: isClosing ? '0s' : `${links.length * 0.08 + 0.15}s`
+                  }}
+                >
+                  <UtensilsCrossed className="w-5 h-5" />
+                  Order Pickup
+                </Link>
+              </div>
 
-              <div 
-                className={`pt-6 border-t border-zinc-800/50 text-center ${
-                  isClosing ? 'menu-cta-exit' : 'menu-cta-enter'
-                }`}
-                style={{
-                  animationDelay: isClosing ? '0s' : `${links.length * 0.08 + 0.2}s`
-                }}
-              >
-                <p className="text-xs text-zinc-600">
+              <div className="pt-4 border-t border-zinc-800/50">
+                <p className="text-center text-sm text-zinc-500">
                   🌴 Authentic Nigerian Street Food
                 </p>
               </div>
             </div>
           </div>
-        )}
-      </header>
+        </div>
+      )}
 
       {/* Spacer */}
       <div className="h-20" />
