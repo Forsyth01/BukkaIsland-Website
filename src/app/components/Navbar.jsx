@@ -143,7 +143,7 @@ export default function Navbar() {
                   href="https://www.ubereats.com/store/bukka-island-4300-old-spanish-trail/1JmSaVp9WPiGyAIgPDm47g?diningMode=DELIVERY&mod=deliveryTime&modctx=%257B%2522entryPoint%2522%253A%2522global-delivery-details%2522%257D&next=%2Fstore%2Fbukka-island-4300-old-spanish-trail%2F1JmSaVp9WPiGyAIgPDm47g%3FdiningMode%3DDELIVERY%26pl%3DJTdCJTIyYWRkcmVzcyUyMiUzQSUyMkNyYXZlJTIwU3V5YSUyMiUyQyUyMnJlZmVyZW5jZSUyMiUzQSUyMmFhYmViYjc4LWU2Y2YtNGNkNC04YjY3LWNkNjljY2IxNTU4MiUyMiUyQyUyMnJlZmVyZW5jZVR5cGUlMjIlM0ElMjJ1YmVyX3BsYWNlcyUyMiUyQyUyMmxhdGl0dWRlJTIyJTNBMjkuNzM2NDQwNSUyQyUyMmxvbmdpdHVkZSUyMiUzQS05NS40NzYwMTM5JTdE&pl=JTdCJTIyYWRkcmVzcyUyMiUzQSUyMkNyYXZlJTIwU3V5YSUyMiUyQyUyMnJlZmVyZW5jZSUyMiUzQSUyMmFhYmViYjc4LWU2Y2YtNGNkNC04YjY3LWNkNjljY2IxNTU4MiUyMiUyQyUyMnJlZmVyZW5jZVR5cGUlMjIlM0ElMjJ1YmVyX3BsYWNlcyUyMiUyQyUyMmxhdGl0dWRlJTIyJTNBMjkuNzM2NDQwNSUyQyUyMmxvbmdpdHVkZSUyMiUzQS05NS40NzYwMTM5JTdE&ps=1"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#e6b800] to-[#c49c00] text-white rounded-full font-bold text-sm shadow-lg shadow-[#c49c00]/25 hover:shadow-[#c49c00]/40 hover:scale-105 active:scale-95 transition-all duration-300"
+                  className="flex items-center justify-center gap-2 bg-zinc-800/60 text-white px-6 py-3.5 rounded-full font-bold border border-zinc-700/50 hover:bg-zinc-800 hover:scale-105 active:scale-95 transition-all duration-300"
                 >
                   <MapPin className="w-4 h-4" />
                   Order Delivery
@@ -220,7 +220,7 @@ export default function Navbar() {
                   href="https://www.ubereats.com/store/bukka-island-4300-old-spanish-trail/1JmSaVp9WPiGyAIgPDm47g?diningMode=DELIVERY&mod=deliveryTime&modctx=%257B%2522entryPoint%2522%253A%2522global-delivery-details%2522%257D&next=%2Fstore%2Fbukka-island-4300-old-spanish-trail%2F1JmSaVp9WPiGyAIgPDm47g%3FdiningMode%3DDELIVERY%26pl%3DJTdCJTIyYWRkcmVzcyUyMiUzQSUyMkNyYXZlJTIwU3V5YSUyMiUyQyUyMnJlZmVyZW5jZSUyMiUzQSUyMmFhYmViYjc4LWU2Y2YtNGNkNC04YjY3LWNkNjljY2IxNTU4MiUyMiUyQyUyMnJlZmVyZW5jZVR5cGUlMjIlM0ElMjJ1YmVyX3BsYWNlcyUyMiUyQyUyMmxhdGl0dWRlJTIyJTNBMjkuNzM2NDQwNSUyQyUyMmxvbmdpdHVkZSUyMiUzQS05NS40NzYwMTM5JTdE&pl=JTdCJTIyYWRkcmVzcyUyMiUzQSUyMkNyYXZlJTIwU3V5YSUyMiUyQyUyMnJlZmVyZW5jZSUyMiUzQSUyMmFhYmViYjc4LWU2Y2YtNGNkNC04YjY3LWNkNjljY2IxNTU4MiUyMiUyQyUyMnJlZmVyZW5jZVR5cGUlMjIlM0ElMjJ1YmVyX3BsYWNlcyUyMiUyQyUyMmxhdGl0dWRlJTIyJTNBMjkuNzM2NDQwNSUyQyUyMmxvbmdpdHVkZSUyMiUzQS05NS40NzYwMTM5JTdE&ps=1"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`flex items-center justify-center gap-2 w-full bg-gradient-to-r from-[#e6b800] to-[#c49c00] text-white px-6 py-3.5 rounded-full font-bold shadow-lg shadow-[#c49c00]/25 hover:shadow-[#c49c00]/40 hover:scale-105 active:scale-95 transition-all duration-300 ${
+                  className={`flex items-center justify-center gap-2  bg-zinc-800/60 text-white px-6 py-3.5 rounded-full font-bold border border-zinc-700/50 hover:bg-zinc-800 hover:scale-105 active:scale-95 transition-all duration-300${
                     isClosing ? 'menu-cta-exit' : 'menu-cta-enter'
                   }`}
                   style={{
