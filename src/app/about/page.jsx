@@ -295,7 +295,7 @@ export default function About() {
 
                   <div className="relative h-80 overflow-hidden">
                     <Image
-                      src="/founder3.jpg"
+                      src="/Ola.jpg"
                       alt="Ola Kuforiji - Founder and CEO"
                       fill
                       sizes="(max-width: 768px) 100vw, 33vw"
@@ -311,12 +311,12 @@ export default function About() {
                     <p className="text-[#e6b800] font-medium mb-3">
                       Founder & CEO
                     </p>
-                    <p className="text-zinc-400 text-sm leading-relaxed">
+                    {/* <p className="text-zinc-400 text-sm leading-relaxed">
                       3+ Years of Economics, Accounting, and Finance at
                       Deloitte. Serving Clients in various industries such as
                       Hospitality, Oil & Gas, and Software Development. Co-Owner
                       of Above Average Hospitality Group.
-                    </p>
+                    </p> */}
                   </div>
                 </div>
               </motion.div>
@@ -350,7 +350,7 @@ export default function About() {
                     <p className="text-[#e6b800] font-medium mb-3">
                       Founder & COO
                     </p>
-                    <p className="text-zinc-400 text-sm leading-relaxed">
+                    {/* <p className="text-zinc-400 text-sm leading-relaxed">
                       3+ years of experience in Engineering, Management, and
                       Business Development. As a Key Account Manager in a
                       multinational specialties chemical company, Bolaji manages
@@ -358,7 +358,7 @@ export default function About() {
                       industry. He is also the co-founder of DealNest, a tech
                       startup delivering efficiency solutions for Real Estate
                       Development professionals.
-                    </p>
+                    </p> */}
                   </div>
                 </div>
               </motion.div>
@@ -390,9 +390,9 @@ export default function About() {
                       Dotun Oyediran
                     </h3>
                     <p className="text-[#e6b800] font-medium mb-3">
-                      Founder & CFO
+                      Founder & CMO
                     </p>
-                    <p className="text-zinc-400 text-sm leading-relaxed">
+                    {/* <p className="text-zinc-400 text-sm leading-relaxed">
                       Adewale has 4+ years of experience in Account Management,
                       Business Growth, and Strategy. He is currently an Account
                       Strategist at Google, helping businesses scale through
@@ -401,7 +401,7 @@ export default function About() {
                       worked at Expedia. He also founded HTX City Rentals, an
                       event rental startup in Houston, and serves in U.S. Army
                       reserve.
-                    </p>
+                    </p> */}
                   </div>
                 </div>
               </motion.div>
