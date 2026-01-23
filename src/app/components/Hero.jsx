@@ -41,7 +41,7 @@ export default memo(function Hero() {
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 py-10 text-center">
         {/* Top Badge */}
-        <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900/80 border border-[#fac703]/20 rounded-full mb-8 backdrop-blur-sm">
+        <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900/80 border border-[#fac703]/20 rounded-full mb-8 backdrop-blur-sm animate-bounce-in">
           <span className="text-sm text-zinc-300 font-medium">
             Authentic Nigerian Cuisine
           </span>
@@ -52,9 +52,9 @@ export default memo(function Hero() {
           <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 w-48 h-0.5 bg-gradient-to-r from-transparent via-[#fac703] to-[#e6b800]" />
 
           <h1 className="text-7xl md:text-8xl xl:text-9xl font-black text-white tracking-tight relative">
-            <span className="font inline-block uppercase">Bukka</span>
+            <span className="font inline-block uppercase animate-slide-left delay-100">Bukka</span>
             <br />
-            <span className="font inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] to-[#e6b800] relative -mt-5">
+            <span className="font inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] to-[#e6b800] relative -mt-5 animate-slide-right delay-300">
               Island
             </span>
           </h1>
@@ -67,7 +67,7 @@ export default memo(function Hero() {
         </div>
 
         {/* Subtitle */}
-        <p className="text-xl md:text-2xl text-zinc-400 max-w-2xl mb-16 leading-relaxed">
+        <p className="text-xl md:text-2xl text-zinc-400 max-w-2xl mb-16 leading-relaxed animate-scale-in delay-500">
           Where{" "}
           <span className="text-[#fac703] font-semibold">street flavors</span>{" "}
           meet Lagos vibes.
