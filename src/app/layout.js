@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Peralta, Raleway } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "./context/AuthContext";
@@ -11,6 +11,20 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const peralta = Peralta({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-peralta",
+  display: "swap",
+});
+
+const raleway = Raleway({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  variable: "--font-raleway",
+  display: "swap",
 });
 
 // ──────────────────────────────────────────────────────────────
@@ -68,17 +82,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
-        {/* Google Fonts */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link 
-          href="https://fonts.googleapis.com/css2?family=Peralta&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" 
-          rel="stylesheet"
-        />
-      </head>
-
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${peralta.variable} ${raleway.variable} antialiased`}>
         <AuthProvider>
           {children}
           <Toaster position="top-right" />

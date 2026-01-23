@@ -2,11 +2,11 @@
 
 * {
   scroll-behavior: smooth;
-   font-family: "Raleway", sans-serif;
+   font-family: var(--font-raleway), sans-serif;
 }
 
 .font{
- font-family: "Peralta", serif !important;
+ font-family: var(--font-peralta), serif !important;
 }
 
 html,
