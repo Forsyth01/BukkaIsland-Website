@@ -113,7 +113,7 @@ export default memo(function Hero() {
         {/* Stats */}
         <div className="mt-16 flex flex-wrap gap-8 justify-center text-center">
           {[
-            { label: "Authentic", value: "100%" },
+            { label: "Authentic", value: "100%" }, 
             { label: "Fresh", value: "Daily" },
             { label: "Ingredients", value: "Local" },
           ].map((item, i) => (
