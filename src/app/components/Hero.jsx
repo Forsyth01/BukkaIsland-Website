@@ -1,7 +1,13 @@
 "use client";
 
 import { memo, useState, useEffect } from "react";
-import { Utensils, MapPin, LocationEdit, LocationEditIcon, ShoppingBag } from "lucide-react";
+import {
+  Utensils,
+  MapPin,
+  LocationEdit,
+  LocationEditIcon,
+  ShoppingBag,
+} from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -16,7 +22,7 @@ export default memo(function Hero() {
           autoPlay
           loop
           muted
-          playsInline 
+          playsInline
           preload="auto"
           onLoadedData={() => setVideoLoaded(true)}
           className="absolute inset-0 w-full h-full object-cover"
@@ -52,7 +58,9 @@ export default memo(function Hero() {
           <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 w-48 h-0.5 bg-gradient-to-r from-transparent via-[#fac703] to-[#e6b800]" />
 
           <h1 className="text-7xl md:text-8xl xl:text-9xl font-black text-white tracking-tight relative">
-            <span className="font inline-block uppercase animate-slide-left delay-100">Bukka</span>
+            <span className="font inline-block uppercase animate-slide-left delay-100">
+              Bukka
+            </span>
             <br />
             <span className="font inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] to-[#e6b800] relative -mt-5 animate-slide-right delay-300">
               Island
@@ -76,22 +84,20 @@ export default memo(function Hero() {
         </p>
 
         {/* Central Circle - Optimized */}
-        
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 items-center">
-     <Link
-  href="/menu"
-  className="px-8 py-4 bg-gradient-to-r from-[#fac703] to-[#e6b800] rounded-full font-bold text-white text-lg shadow-lg transition-all duration-500 hover:scale-110 hover:rotate-2 hover:shadow-2xl hover:shadow-[#fac703]/40 relative overflow-hidden group flex items-center gap-3"
->
-  <span className="relative z-10 flex items-center gap-2">
-    <ShoppingBag className="w-5 h-5 transition-transform duration-500 group-hover:translate-x-1" />
-    Order Pickup
-  </span>
+          <Link
+            href="/menu"
+            className="px-8 py-4 bg-gradient-to-r from-[#fac703] to-[#e6b800] rounded-full font-bold text-white text-lg shadow-lg transition-all duration-500 hover:scale-110 hover:rotate-2 hover:shadow-2xl hover:shadow-[#fac703]/40 relative overflow-hidden group flex items-center gap-3"
+          >
+            <span className="relative z-10 flex items-center gap-2">
+              <ShoppingBag className="w-5 h-5 transition-transform duration-500 group-hover:translate-x-1" />
+              Order Pickup
+            </span>
 
-  <div className="absolute inset-0 bg-gradient-to-r from-[#e6b800] to-[#fac703] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-</Link>
-
+            <div className="absolute inset-0 bg-gradient-to-r from-[#e6b800] to-[#fac703] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          </Link>
 
           <Link
             href="https://www.ubereats.com/store/bukka-island-4300-old-spanish-trail/1JmSaVp9WPiGyAIgPDm47g?diningMode=DELIVERY&mod=deliveryTime&modctx=%257B%2522entryPoint%2522%253A%2522global-delivery-details%2522%257D&next=%2Fstore%2Fbukka-island-4300-old-spanish-trail%2F1JmSaVp9WPiGyAIgPDm47g%3FdiningMode%3DDELIVERY%26pl%3DJTdCJTIyYWRkcmVzcyUyMiUzQSUyMkNyYXZlJTIwU3V5YSUyMiUyQyUyMnJlZmVyZW5jZSUyMiUzQSUyMmFhYmViYjc4LWU2Y2YtNGNkNC04YjY3LWNkNjljY2IxNTU4MiUyMiUyQyUyMnJlZmVyZW5jZVR5cGUlMjIlM0ElMjJ1YmVyX3BsYWNlcyUyMiUyQyUyMmxhdGl0dWRlJTIyJTNBMjkuNzM2NDQwNSUyQyUyMmxvbmdpdHVkZSUyMiUzQS05NS40NzYwMTM5JTdE&pl=JTdCJTIyYWRkcmVzcyUyMiUzQSUyMkNyYXZlJTIwU3V5YSUyMiUyQyUyMnJlZmVyZW5jZSUyMiUzQSUyMmFhYmViYjc4LWU2Y2YtNGNkNC04YjY3LWNkNjljY2IxNTU4MiUyMiUyQyUyMnJlZmVyZW5jZVR5cGUlMjIlM0ElMjJ1YmVyX3BsYWNlcyUyMiUyQyUyMmxhdGl0dWRlJTIyJTNBMjkuNzM2NDQwNSUyQyUyMmxvbmdpdHVkZSUyMiUzQS05NS40NzYwMTM5JTdE&ps=1"
@@ -120,7 +126,7 @@ export default memo(function Hero() {
               </p>
               <p className="text-sm text-zinc-500 uppercase tracking-wide transition-colors duration-500 group-hover:text-zinc-300">
                 {item.label}
-              </p>
+              </p>  
             </div>
           ))}
         </div>
