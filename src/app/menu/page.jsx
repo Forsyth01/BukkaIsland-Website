@@ -187,7 +187,7 @@ export default function MenuPage() {
                             {dish.name}
                           </h3>
                           <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800]">
-                            ${dish.price}
+                           /* ${dish.price} */
                           </span>
                         </div>
                         <p className="text-zinc-400 text-sm line-clamp-2 mb-3">
