@@ -78,9 +78,11 @@ const DishCard = memo(
               <h3 className="text-xl font-bold text-white mb-2 line-clamp-1 group-hover:text-[#e6b800] transition-colors duration-300">
                 {dish.name}
               </h3>
-              <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#e6b800] via-[#c49c00] to-[#b38f00]">
-               /* ${dish.price} */
-              </span>
+              {/*
+<span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#e6b800] via-[#c49c00] to-[#b38f00]">
+  ${dish.price}
+</span>
+*/}
             </div>
             <p className="text-sm text-zinc-400 line-clamp-2 leading-relaxed">
               {dish.description}
