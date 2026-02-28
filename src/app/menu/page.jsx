@@ -186,9 +186,11 @@ export default function MenuPage() {
                           <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#fac703] transition-colors">
                             {dish.name}
                           </h3>
-                          <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800]">
-                           /* ${dish.price} */
-                          </span>
+                          {/*
+<span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#fac703] via-[#f6d303] to-[#e6b800]">
+  ${dish.price}
+</span>
+*/}
                         </div>
                         <p className="text-zinc-400 text-sm line-clamp-2 mb-3">
                           {dish.desc}
