@@ -79,7 +79,7 @@ const DishCard = memo(
                 {dish.name}
               </h3>
               <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#e6b800] via-[#c49c00] to-[#b38f00]">
-                ${dish.price}
+               /* ${dish.price} */
               </span>
             </div>
             <p className="text-sm text-zinc-400 line-clamp-2 leading-relaxed">
