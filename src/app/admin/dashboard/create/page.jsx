@@ -142,23 +142,25 @@ export default function CreateBlogPage() {
         `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
         { method: "POST", body: formData }
       );
-      
+
       if (!res.ok) throw new Error("Image upload failed");
-      
+
       const data = await res.json();
       const imageUrl = data.secure_url;
-      
+      const imagePublicId = data.public_id;
+
       setUploadProgress(60);
 
       // Add blog to Firestore
       const { addDoc, collection, Timestamp } = await import("firebase/firestore");
       const { db } = await import("@/lib/firebaseClient");
-      
+
       await addDoc(collection(db, "blogs"), {
         title,
         author,
         content,
         image: imageUrl,
+        imagePublicId,
         slug: generateSlug(title),
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),

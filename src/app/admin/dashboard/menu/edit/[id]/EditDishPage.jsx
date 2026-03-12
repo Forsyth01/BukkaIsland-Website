@@ -42,6 +42,8 @@ export default function EditDishPage() {
   const [updating, setUpdating] = useState(false);
   const [newCategory, setNewCategory] = useState("");
   const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
+  const [currentImageUrl, setCurrentImageUrl] = useState("");
+  const [currentImagePublicId, setCurrentImagePublicId] = useState("");
 
   // Fetch categories
   useEffect(() => {
@@ -70,6 +72,8 @@ export default function EditDishPage() {
           setPopular(data.popular || false);
           setOrderLink(data.orderLink || "");
           setPreview(data.imageUrl);
+          setCurrentImageUrl(data.imageUrl || "");
+          setCurrentImagePublicId(data.imagePublicId || "");
         } else {
           toast.error("Dish not found");
         }
@@ -90,13 +94,28 @@ export default function EditDishPage() {
       "upload_preset",
       process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
     );
+    formData.append("folder", "dishes/images");
 
     const res = await fetch(
       `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
       { method: "POST", body: formData }
     );
     const data = await res.json();
-    return data.secure_url;
+    return { url: data.secure_url, publicId: data.public_id };
+  };
+
+  // Helper function to delete old image from Cloudinary
+  const deleteFromCloudinary = async (publicId, imageUrl) => {
+    try {
+      const response = await fetch("/api/cloudinary/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ publicId, imageUrl }),
+      });
+      return await response.json();
+    } catch (error) {
+      console.error("Error deleting from Cloudinary:", error);
+    }
   };
 
   const handleImageChange = useCallback((e) => {
@@ -133,9 +152,19 @@ export default function EditDishPage() {
     setUpdating(true);
 
     try {
-      let imageUrl = preview;
+      let imageUrl = currentImageUrl;
+      let imagePublicId = currentImagePublicId;
+
       if (image) {
-        imageUrl = await uploadToCloudinary(image);
+        // Delete old image from Cloudinary if exists
+        if (currentImageUrl || currentImagePublicId) {
+          await deleteFromCloudinary(currentImagePublicId, currentImageUrl);
+        }
+
+        // Upload new image
+        const uploadResult = await uploadToCloudinary(image);
+        imageUrl = uploadResult.url;
+        imagePublicId = uploadResult.publicId;
       }
 
       const dishRef = doc(db, "dishes", id);
@@ -146,6 +175,7 @@ export default function EditDishPage() {
         desc,
         popular,
         imageUrl,
+        imagePublicId,
         orderLink,
         updatedAt: Timestamp.now(),
       });

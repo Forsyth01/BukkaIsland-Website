@@ -59,13 +59,14 @@ export default function CreateDishPage() {
       "upload_preset",
       process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
     );
+    formData.append("folder", "dishes/images");
 
     const res = await fetch(
       `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
       { method: "POST", body: formData }
     );
     const data = await res.json();
-    return data.secure_url;
+    return { url: data.secure_url, publicId: data.public_id };
   };
 
   const handleAddCategory = async () => {
@@ -103,7 +104,14 @@ export default function CreateDishPage() {
     setLoading(true);
 
     try {
-      const imageUrl = image ? await uploadToCloudinary(image) : "";
+      let imageUrl = "";
+      let imagePublicId = "";
+
+      if (image) {
+        const uploadResult = await uploadToCloudinary(image);
+        imageUrl = uploadResult.url;
+        imagePublicId = uploadResult.publicId;
+      }
 
       await addDoc(collection(db, "dishes"), {
         name: dishName,
@@ -112,6 +120,7 @@ export default function CreateDishPage() {
         desc,
         popular,
         imageUrl,
+        imagePublicId,
         orderLink,
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),

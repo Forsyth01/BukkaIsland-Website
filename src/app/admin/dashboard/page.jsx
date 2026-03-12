@@ -270,24 +270,57 @@ function DashboardContent() {
     setModalOpen(true);
   };
 
+  // Helper function to delete image from Cloudinary
+  const deleteFromCloudinary = async (publicId, imageUrl) => {
+    try {
+      const response = await fetch("/api/cloudinary/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ publicId, imageUrl }),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        console.warn("Cloudinary deletion warning:", result);
+      }
+      return result;
+    } catch (error) {
+      console.error("Error deleting from Cloudinary:", error);
+      // Continue with Firestore deletion even if Cloudinary fails
+    }
+  };
+
   const handleConfirmDelete = async () => {
     if (!db) return;
 
     try {
       const { deleteDoc, doc } = await import("firebase/firestore");
-      
+
       if (selectedType === "post") {
+        // Find the post to get image info
+        const postToDelete = posts.find((p) => p.id === selectedItem);
+        if (postToDelete) {
+          // Delete image from Cloudinary
+          await deleteFromCloudinary(postToDelete.imagePublicId, postToDelete.image);
+        }
+
         await deleteDoc(doc(db, "blogs", selectedItem));
         const updatedPosts = posts.filter((p) => p.id !== selectedItem);
         setPosts(updatedPosts);
         await updateOrder(updatedPosts, "blogs");
       } else if (selectedType === "dish") {
+        // Find the dish to get image info
+        const dishToDelete = menu.find((d) => d.id === selectedItem);
+        if (dishToDelete) {
+          // Delete image from Cloudinary
+          await deleteFromCloudinary(dishToDelete.imagePublicId, dishToDelete.imageUrl || dishToDelete.image);
+        }
+
         await deleteDoc(doc(db, "dishes", selectedItem));
         const updatedMenu = menu.filter((d) => d.id !== selectedItem);
         setMenu(updatedMenu);
         await updateOrder(updatedMenu, "dishes");
       }
-      
+
       setModalOpen(false);
     } catch (error) {
       console.error("Error deleting:", error);

@@ -93,6 +93,7 @@ export default function EditBlogClient() {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState("");
   const [currentImage, setCurrentImage] = useState("");
+  const [currentImagePublicId, setCurrentImagePublicId] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -112,6 +113,7 @@ export default function EditBlogClient() {
           setAuthor(data.author);
           setContent(data.content);
           setCurrentImage(data.image || "");
+          setCurrentImagePublicId(data.imagePublicId || "");
           setPreview(data.image || "");
         } else {
           toast.error("Blog not found");
@@ -144,6 +146,20 @@ export default function EditBlogClient() {
     setPreview(null); // allow selecting a new image
   }, [preview, currentImage]);
 
+  // Helper function to delete old image from Cloudinary
+  const deleteFromCloudinary = async (publicId, imageUrl) => {
+    try {
+      const response = await fetch("/api/cloudinary/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ publicId, imageUrl }),
+      });
+      return await response.json();
+    } catch (error) {
+      console.error("Error deleting from Cloudinary:", error);
+    }
+  };
+
   // Update blog
   const handleUpdate = async () => {
     if (!title || !author || !content) {
@@ -155,8 +171,14 @@ export default function EditBlogClient() {
 
     try {
       let imageUrl = currentImage;
+      let imagePublicId = currentImagePublicId;
 
       if (image) {
+        // Delete old image from Cloudinary if exists
+        if (currentImage || currentImagePublicId) {
+          await deleteFromCloudinary(currentImagePublicId, currentImage);
+        }
+
         const formData = new FormData();
         formData.append("file", image);
         formData.append("upload_preset", uploadPreset);
@@ -176,6 +198,7 @@ export default function EditBlogClient() {
           }
         );
         imageUrl = res.data.secure_url;
+        imagePublicId = res.data.public_id;
       }
 
       setUploadProgress(80);
@@ -186,6 +209,7 @@ export default function EditBlogClient() {
         author,
         content,
         image: imageUrl,
+        imagePublicId,
         updatedAt: Timestamp.now(),
       });
 
